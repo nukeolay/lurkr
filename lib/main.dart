@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'domain/account.dart';
+import 'domain/model/account.dart';
 
 main() async {
   List<String> accountList = [
