@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:html';
 import 'package:http/http.dart' as http;
 
 class AccountList {
@@ -15,7 +16,7 @@ class AccountList {
 
 class Account {
   final String username;
-  final String profilePicUrl;
+  final Uri profilePicUrl;
   final bool isPrivate;
   final String pk;
   final String fullName;
@@ -34,7 +35,7 @@ class Account {
   factory Account.fromJson(Map<String, dynamic> inputJson) {
     return Account(
         username: inputJson['username'] as String,
-        profilePicUrl: inputJson['profile_pic_url'] as String,
+        profilePicUrl: inputJson['profile_pic_url'] as Uri,
         isPrivate: inputJson['is_private'] as bool,
         pk: inputJson['pk'] as String,
         fullName: inputJson['full_name'] as String,
