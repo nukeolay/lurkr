@@ -1,19 +1,28 @@
 class NoAccountException implements Exception {
-  String getErrorMessage() {
-    return "No such account";
+  String message = "No such account";
+
+  @override
+  String toString() {
+    return message;
   }
 }
 
 class NoTriesLeftException implements Exception {
-  String getErrorMessage() {
-    return "No tries Left";
+  String message = "No tries Left";
+
+  @override
+  String toString() {
+    return message;
   }
 }
 
 class ConnectionException implements Exception {
   String errorText;
+
   ConnectionException(this.errorText);
-  String getErrorMessage() {
+
+  @override
+  String toString() {
     return "Connection error: $errorText";
   }
 }
