@@ -5,10 +5,10 @@ class AccountMapper {
   static Account fromApi(ApiAccount apiAccount) {
     return Account(username: apiAccount.username,
         profilePicUrl: Uri.parse(apiAccount.profilePicUrl),
-        isPrivate: apiAccount.isPrivate.toLowerCase() == "true",
+        isPrivate: apiAccount.isPrivate,
         pk: apiAccount.pk,
         fullName: apiAccount.fullName,
-        isVerified: apiAccount.isVerified.toLowerCase() == "true",
-        hasAnonymousProfilePicture: apiAccount.hasAnonymousProfilePicture.toLowerCase() == "true");
+        isVerified: apiAccount.isVerified,
+        hasAnonymousProfilePicture: apiAccount.hasAnonymousProfilePicture);
   }
 }

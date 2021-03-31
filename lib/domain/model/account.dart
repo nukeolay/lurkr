@@ -48,19 +48,3 @@ class Account {
     return 'name: $username, private: $isPrivate';
   }
 }
-
-Future<Account> getAccount(String accountName) async {
-  Account? account;
-  Uri uriSearch = Uri.https('instagram.com', '/web/search/topsearch', {'query': '$accountName'});
-  http.Response searchResponse = await http.get(uriSearch);
-  if (searchResponse.statusCode == 200) {
-    AccountList tempUsersMap = AccountList.fromJson(jsonDecode(searchResponse.body));
-    for (var user in tempUsersMap.accounts) {
-      if (user.username == accountName) account = user;
-    }
-    if (account == null) throw Exception('No such account');
-  } else {
-    throw Exception('Error getting data, status code: ${searchResponse.statusCode}');
-  }
-  return account;
-}
