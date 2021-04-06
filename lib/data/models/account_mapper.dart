@@ -1,5 +1,5 @@
-import 'package:instasnitch/data/api/model/api_account.dart';
-import 'package:instasnitch/domain/model/account.dart';
+import 'package:instasnitch/data/models/api_account.dart';
+import 'file:///D:/MyApps/MyProjects/FlutterProjects/instasnitch/lib/data/models/account.dart';
 
 class AccountMapper {
   static Account fromApi(ApiAccount apiAccount) {

@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:instasnitch/data/api/model/api_account.dart';
-import 'package:instasnitch/domain/exception/exception.dart';
+import 'package:instasnitch/data/models/api_account.dart';
+import 'package:instasnitch/data/models/exceptions.dart';
 
 class AccountService {
   static const authority = "instagram.com";
@@ -34,6 +34,6 @@ class AccountService {
         return item['user'] as Map<String, dynamic>;
       }
     }
-    throw NoAccountException();
+    throw NoAccountException();//todo сделать чтобы возвращал dummyAccount, у которого есть имя, а остальные поля 'error'
   }
 }

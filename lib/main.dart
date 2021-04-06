@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:instasnitch/data/api/model/api_account.dart';
-import 'package:instasnitch/domain/exception/exception.dart';
+import 'package:instasnitch/data/models/api_account.dart';
+import 'package:instasnitch/data/models/exceptions.dart';
 import 'package:instasnitch/presentation/theme/theme.dart';
 
-import 'data/api/service/account_service.dart';
+import 'data/providers/account_service.dart';
 
-main() {
+main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
@@ -23,12 +23,13 @@ main() {
 }
 
 class InstasnitchApp extends StatelessWidget {
-  const InstasnitchApp({
-    Key? key,
-  }) : super(key: key);
+  const InstasnitchApp({Key? key}) : super(key: key);
+  static List<String> accountList = ['1tv', 'nukeolay', 'kjhsdlmhxjmslkxhoi'];
 
   @override
   Widget build(BuildContext context) {
+    AccountService accountService = AccountService();
+
     return MaterialApp(
       title: 'Instasnitch',
       debugShowCheckedModeBanner: false,
@@ -49,47 +50,122 @@ class InstasnitchApp extends StatelessWidget {
                         color: Colors.white,
                         child: Image.asset('assets/top_logo.png'),
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(90)),
-                          color: Colors.black,
-                        ),
-                        child: Icon(
-                          Icons.brightness_2,
-                          size: 20,
-                          color: Colors.white,
+                      Transform.rotate(
+                        angle: 0.7,
+                        child: Container(
+                          child: GestureDetector(
+                            child: Icon(
+                              Icons.brightness_2_outlined,
+                              size: 25,
+                              color: Colors.black,
+                            ),
+                            onTap: () {},
+                          ),
                         ),
                       ),
                     ],
                   ),
                 ),
-                Container(
-                  height: 600,
-                  child: ListView.builder(
-                    padding: EdgeInsets.only(top: 5, bottom: 5),
-                    itemCount: 20,
-                    itemExtent: 90,
-                    addAutomaticKeepAlives: false,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        leading: Icon(
-                          Icons.check_circle_rounded,
-                          size: 55,
-                        ),
-                        title: Text('account name $index'),
-                        subtitle: Text('private status changed $index mins ago'),
-                        trailing: Icon(
-                          Icons.lock_outline_rounded,
-                          size: 30,
-                        ),
-                      );
-                    },
+                Expanded(
+                  child: Container(
+                    child: FutureBuilder(
+                      future: getAccountList(accountList),
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        } else {
+                          print('snapshot.data: ${snapshot.data}');
+                          return ListView.builder(
+                            padding: EdgeInsets.only(top: 5, bottom: 5),
+                            itemCount: accountList.length,
+                            itemExtent: 90,
+                            addAutomaticKeepAlives: true,
+                            itemBuilder: (context, index) {
+                              ApiAccount tempLoadedAccount;
+                              tempLoadedAccount = snapshot.data[index];
+                              return ListTile(
+                                  leading: Container(
+                                    height: 55.0,
+                                    width: 55.0,
+                                    decoration: new BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.all(const Radius.circular(50.0)),
+                                      border: tempLoadedAccount.isPrivate == true
+                                          ? Border.all(color: Colors.red, width: 3.0)
+                                          : Border.all(color: Colors.green, width: 3.0),
+                                    ),
+                                    child: tempLoadedAccount.profilePicUrl == 'error'
+                                        ? Icon(Icons.image_not_supported_outlined)
+                                        : tempLoadedAccount.isPrivate
+                                            ? Stack(
+                                                children: [
+                                                  ClipRRect(
+                                                    borderRadius: BorderRadius.circular(300.0),
+                                                    child: ColorFiltered(
+                                                      colorFilter: ColorFilter.mode(Colors.white30, BlendMode.lighten),
+                                                      child: Image.network(tempLoadedAccount.profilePicUrl),
+                                                    ),
+                                                  ),
+                                                  Center(
+                                                      child: Icon(
+                                                    Icons.lock_outline_rounded,
+                                                    color: Colors.red,
+                                                  ))
+                                                ],
+                                              )
+                                            : ClipRRect(
+                                                borderRadius: BorderRadius.circular(300.0),
+                                                child: Image.network(tempLoadedAccount.profilePicUrl),
+                                              ),
+                                  ),
+                                  title: Text(accountList[index]),
+                                  subtitle: tempLoadedAccount.fullName == 'error'
+                                      ? Text('error getting info', style: TextStyle(color: Colors.red))
+                                      : Text(tempLoadedAccount.fullName)
+                                  // trailing: Icon(
+                                  //   Icons.lock_outline_rounded,
+                                  //   size: 30,
+                                  // ),
+                                  );
+                            },
+                          );
+                        }
+                      },
+                    ),
                   ),
                 ),
               ],
             )
           ],
         ),
+        bottomNavigationBar: BottomAppBar(
+          elevation: 0.0,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              IconButton(
+                tooltip: 'Set refresh period',
+                icon: const Icon(Icons.hourglass_bottom_outlined, size: 25),
+                onPressed: () {},
+              ),
+              IconButton(
+                tooltip: 'Add account',
+                icon: const Icon(Icons.add_box_rounded, size: 30),
+                onPressed: () {},
+              ),
+              IconButton(
+                tooltip: 'Refresh',
+                icon: const Icon(Icons.refresh_rounded, size: 25),
+                onPressed: () {},
+              ),
+            ],
+          ),
+        ),
+        // floatingActionButton: FloatingActionButton(
+        //   child: Icon(Icons.add_circle),
+        //   onPressed: () {},
+        // ),
+        // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
     );
   }
@@ -112,3 +188,36 @@ class InstasnitchApp extends StatelessWidget {
 //     }
 //   }
 // }
+
+Future<List<ApiAccount>> getAccountList(List<String> accountList) async {
+  AccountService accountService = AccountService();
+  List<ApiAccount> accountDataList = [];
+
+  Map<String, dynamic> dummyAccount = {
+    'username': 'user',
+    'profile_pic_url': 'error',
+    'is_private': true,
+    'pk': 'error',
+    'full_name': 'error',
+    'is_verified': false,
+    'has_anonymous_profile_picture': false
+  };
+
+  for (String account in accountList) {
+    try {
+      ApiAccount tempAccount = await accountService.getAccount(accountName: account);
+      print('${tempAccount.username}: ${tempAccount.isPrivate ? 'private' : 'public'}');
+      accountDataList.add(tempAccount);
+    } on NoTriesLeftException {
+      dummyAccount['username'] = account;
+      dummyAccount['full_name'] = 'try again later';
+      accountDataList.add(ApiAccount.fromApi(dummyAccount));
+    }
+    on NoAccountException {
+      dummyAccount['username'] = account;
+      dummyAccount['full_name'] = 'account not found';
+      accountDataList.add(ApiAccount.fromApi(dummyAccount));
+    }
+  }
+  return accountDataList;
+}

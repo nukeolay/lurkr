@@ -15,4 +15,9 @@ class ApiAccount {
         this.fullName = map['full_name'] as String,
         this.isVerified = map['is_verified'] as bool,
         this.hasAnonymousProfilePicture = map['has_anonymous_profile_picture'] as bool;
+
+  @override
+  String toString() {
+    return 'username: $username, profilePicUrl: $profilePicUrl, isPrivate: $isPrivate, pk: $pk, fullName: $fullName, isVerified: $isVerified, hasAnonymousProfilePicture: $hasAnonymousProfilePicture';
+  }
 }
