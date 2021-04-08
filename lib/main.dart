@@ -1,10 +1,11 @@
+import 'package:Instasnitch/data/repositories/account_repositiory.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:instasnitch/data/models/api_account.dart';
-import 'package:instasnitch/data/models/exceptions.dart';
-import 'package:instasnitch/presentation/theme/theme.dart';
+import 'package:Instasnitch/data/models/exceptions.dart';
+import 'package:Instasnitch/presentation/theme/theme.dart';
 
-import 'data/providers/account_service.dart';
+import 'data/models/account.dart';
+import 'data/providers/account_api.dart';
 
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,12 +25,10 @@ main() async {
 
 class InstasnitchApp extends StatelessWidget {
   const InstasnitchApp({Key? key}) : super(key: key);
-  static List<String> accountList = ['1tv', 'nukeolay', 'kjhsdlmhxjmslkxhoi'];
+  static List<String> accountList = ['1tv', 'nukeolay', 'kjhsdlmhxjmslkxhoi', 'to_be_ksusha'];
 
   @override
   Widget build(BuildContext context) {
-    AccountService accountService = AccountService();
-
     return MaterialApp(
       title: 'Instasnitch',
       debugShowCheckedModeBanner: false,
@@ -73,15 +72,15 @@ class InstasnitchApp extends StatelessWidget {
                       builder: (BuildContext context, AsyncSnapshot snapshot) {
                         if (snapshot.connectionState == ConnectionState.waiting) {
                           return CircularProgressIndicator();
-                        } else {
-                          print('snapshot.data: ${snapshot.data}');
+                        }
+                        else {
                           return ListView.builder(
                             padding: EdgeInsets.only(top: 5, bottom: 5),
                             itemCount: accountList.length,
                             itemExtent: 90,
                             addAutomaticKeepAlives: true,
                             itemBuilder: (context, index) {
-                              ApiAccount tempLoadedAccount;
+                              Account tempLoadedAccount;
                               tempLoadedAccount = snapshot.data[index];
                               return ListTile(
                                   leading: Container(
@@ -94,7 +93,7 @@ class InstasnitchApp extends StatelessWidget {
                                           ? Border.all(color: Colors.red, width: 3.0)
                                           : Border.all(color: Colors.green, width: 3.0),
                                     ),
-                                    child: tempLoadedAccount.profilePicUrl == 'error'
+                                    child: tempLoadedAccount.profilePicUrl.toString() == 'error'
                                         ? Icon(Icons.image_not_supported_outlined)
                                         : tempLoadedAccount.isPrivate
                                             ? Stack(
@@ -102,8 +101,8 @@ class InstasnitchApp extends StatelessWidget {
                                                   ClipRRect(
                                                     borderRadius: BorderRadius.circular(300.0),
                                                     child: ColorFiltered(
-                                                      colorFilter: ColorFilter.mode(Colors.white30, BlendMode.lighten),
-                                                      child: Image.network(tempLoadedAccount.profilePicUrl),
+                                                      colorFilter: ColorFilter.mode(Colors.blueGrey, BlendMode.lighten),
+                                                      child: Image.network(tempLoadedAccount.profilePicUrl.toString()),
                                                     ),
                                                   ),
                                                   Center(
@@ -115,7 +114,7 @@ class InstasnitchApp extends StatelessWidget {
                                               )
                                             : ClipRRect(
                                                 borderRadius: BorderRadius.circular(300.0),
-                                                child: Image.network(tempLoadedAccount.profilePicUrl),
+                                                child: Image.network(tempLoadedAccount.profilePicUrl.toString()),
                                               ),
                                   ),
                                   title: Text(accountList[index]),
@@ -171,28 +170,9 @@ class InstasnitchApp extends StatelessWidget {
   }
 }
 
-// main() async {
-//   AccountService accountService = AccountService();
-//   List<String> accountList = [
-//     'nukeolay',
-//     'klhnjknhkjhkhblkj',
-//     'to_be_ksusha',
-//     '1tv',
-//   ];
-//   for (String account in accountList) {
-//     try {
-//       ApiAccount tempAccount = await accountService.getAccount(accountName: account);
-//       print('${tempAccount.username}: ${tempAccount.isPrivate ? 'private' : 'public'}');
-//     } catch (e) {
-//       print(e.toString());
-//     }
-//   }
-// }
-
-Future<List<ApiAccount>> getAccountList(List<String> accountList) async {
-  AccountService accountService = AccountService();
-  List<ApiAccount> accountDataList = [];
-
+Future<List<Account>> getAccountList(List<String> accountList) async {
+  AccountRepository accountRepository = AccountRepository();
+  List<Account> accountDataList = [];
   Map<String, dynamic> dummyAccount = {
     'username': 'user',
     'profile_pic_url': 'error',
@@ -205,18 +185,17 @@ Future<List<ApiAccount>> getAccountList(List<String> accountList) async {
 
   for (String account in accountList) {
     try {
-      ApiAccount tempAccount = await accountService.getAccount(accountName: account);
-      print('${tempAccount.username}: ${tempAccount.isPrivate ? 'private' : 'public'}');
+      Account tempAccount = await accountRepository.getAccountFromInternet(accountName: account);
       accountDataList.add(tempAccount);
     } on NoTriesLeftException {
       dummyAccount['username'] = account;
       dummyAccount['full_name'] = 'try again later';
-      accountDataList.add(ApiAccount.fromApi(dummyAccount));
+      accountDataList.add(Account.fromApi(dummyAccount));
     }
     on NoAccountException {
       dummyAccount['username'] = account;
       dummyAccount['full_name'] = 'account not found';
-      accountDataList.add(ApiAccount.fromApi(dummyAccount));
+      accountDataList.add(Account.fromApi(dummyAccount));
     }
   }
   return accountDataList;
