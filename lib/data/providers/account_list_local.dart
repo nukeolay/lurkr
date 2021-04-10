@@ -13,13 +13,3 @@ class AccountListLocal {
     await prefs.setString('accountList', accountList);
   }
 }
-
-// void setAccountListLocal(ApiSusaninData apiSusaninData) async {
-//   SharedPreferences prefs = await SharedPreferences.getInstance();
-//   await prefs.setString("lastTimeUpdated", int.parse(apiSusaninData.selectedLocationPointId));
-//   await prefs.setInt("savedLocationCounter", int.parse(apiSusaninData.locationCounter));
-//   await prefs.setBool("savedIsDarkTheme", apiSusaninData.isDarkTheme == "true" ? true : false);
-//   await prefs.setBool("savedIsFirstTime", apiSusaninData.isFirstTime == "true" ? true : false);
-//   await prefs.setString("savedLocationStorage", apiSusaninData.locationList);
-// }
-// }

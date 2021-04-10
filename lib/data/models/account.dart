@@ -1,15 +1,3 @@
-// class AccountList {
-//   List<Account> accounts;
-//
-//   AccountList({required this.accounts});
-//
-//   factory AccountList.fromJson(Map<String, dynamic> json) {
-//     List accountJson = json['users'] as List;
-//     List<Account> accountList = accountJson.map((i) => Account.fromJson(i['user'])).toList();
-//     return AccountList(accounts: accountList);
-//   }
-// }
-
 class Account {
   final String username;
   final Uri profilePicUrl;
@@ -19,7 +7,7 @@ class Account {
   final bool isVerified;
   final bool hasAnonymousProfilePicture;
   final bool isNew;
-  final DateTime lastTimeUpdated;
+  final int lastTimeUpdated;
 
   Account(
       {required this.username,
@@ -32,6 +20,11 @@ class Account {
       required this.isNew,
       required this.lastTimeUpdated});
 
+  @override
+  bool operator == (Object other) {
+    return other is Account && other.username == username;
+  }
+
   factory Account.fromApi(Map<String, dynamic> inputJson) {
     return Account(
         username: inputJson['username'] as String,
@@ -42,24 +35,38 @@ class Account {
         isVerified: inputJson['is_verified'] as bool,
         hasAnonymousProfilePicture: inputJson['has_anonymous_profile_picture'] as bool,
         isNew: false,
-        lastTimeUpdated: DateTime.now());
+        lastTimeUpdated: DateTime.now().microsecondsSinceEpoch);
   }
 
   factory Account.fromSharedPrefs(Map<String, dynamic> inputJson) {
     return Account(
-        username: inputJson['username'] as String,
-        profilePicUrl: Uri.parse(inputJson['profile_pic_url']),
-        isPrivate: inputJson['is_private'] as bool,
+        username: inputJson['userName'] as String,
+        profilePicUrl: Uri.parse(inputJson['profilePicUrl']),
+        isPrivate: inputJson['isPrivate'] == 'true'? true : false,
         pk: inputJson['pk'] as String,
-        fullName: inputJson['full_name'] as String,
-        isVerified: inputJson['is_verified'] as bool,
-        hasAnonymousProfilePicture: inputJson['has_anonymous_profile_picture'] as bool,
+        fullName: inputJson['fullName'] as String,
+        isVerified: inputJson['isVerified'] == 'true'? true : false,
+        hasAnonymousProfilePicture: inputJson['hasAnonymousProfilePicture'] == 'true'? true : false,
         isNew: false,
-        lastTimeUpdated: DateTime.parse(inputJson['lastTimeUpdated']));
+        lastTimeUpdated: int.parse(inputJson['lastTimeUpdated']));
   }
 
   @override
   String toString() {
-    return 'name: $username, private: $isPrivate, isNew: $isNew';
+    return 'name: $username, fullName: $fullName, isPrivate: $isPrivate';
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "userName": this.username,
+      "profilePicUrl": this.profilePicUrl.toString(),
+      "isPrivate": this.isPrivate.toString(),
+      "pk": this.pk,
+      "fullName": this.fullName,
+      "isVerified": this.isVerified.toString(),
+      "hasAnonymousProfilePicture": this.hasAnonymousProfilePicture.toString(),
+      "isNew": this.isNew.toString(),
+      "lastTimeUpdated": this.lastTimeUpdated.toString()
+    };
   }
 }

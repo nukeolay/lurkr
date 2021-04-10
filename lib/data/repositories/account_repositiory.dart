@@ -46,7 +46,7 @@ class AccountRepository {
     try {
       List<dynamic> tempList = jsonDecode(accountListLocalString!); //todo непонятно что за проверка '!'
       for (dynamic element in tempList) {
-        accountList.add(Account.fromSharedPrefs(element));
+          accountList.add(Account.fromSharedPrefs(element));
       }
       return accountList;
     } catch (e) {
@@ -54,7 +54,29 @@ class AccountRepository {
     }
   }
 
-  void saveAccountListToSharedprefs({required String accountList}) {
-    accountListLocal.setAccountListLocal(accountList: accountList);
+  void saveAccountListToSharedprefs({required List<Account> accountList}) {
+    accountListLocal.setAccountListLocal(accountList: jsonEncode(accountList));
+  }
+
+  static Account getDummyAccount({
+      String userName = 'dummy',
+      bool isPrivate = true,
+      String pk = 'error',
+      String fullName = 'error',
+      bool isVerified = false,
+      bool hasAnonymousProfilePicture = false,
+      bool isNew = false}) {
+    Uri profilePicUrl = Uri.http('', 'error');
+    int lastTimeUpdated = 0;
+    return Account(
+        username: userName,
+        profilePicUrl: profilePicUrl,
+        isPrivate: isPrivate,
+        pk: pk,
+        fullName: fullName,
+        isVerified: isVerified,
+        hasAnonymousProfilePicture: hasAnonymousProfilePicture,
+        isNew: isNew,
+        lastTimeUpdated: lastTimeUpdated);
   }
 }
