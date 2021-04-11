@@ -1,9 +1,12 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:Instasnitch/data/models/account.dart';
 import 'package:Instasnitch/data/models/exceptions.dart';
 import 'package:Instasnitch/data/providers/account_api.dart';
 import 'package:Instasnitch/data/providers/account_list_local.dart';
+import 'package:Instasnitch/data/providers/api_utils.dart';
+import 'package:flutter/services.dart';
 
 class AccountRepository {
   List<Account> accountList = [];
@@ -24,7 +27,14 @@ class AccountRepository {
     }
     for (Map<String, dynamic> element in tempInstagramResponse) {
       if (element['user']['username'] == accountName) {
-        return Account.fromApi(element['user']);
+        String stringImage;
+        if (!(element['user']['has_anonymous_profile_picture'] as bool)) {
+          //если у аккаунта есть аватар, тогда этот параметр false
+          stringImage = await ImageConverter.convertUriImageToString(element['user']['profile_pic_url']);
+        } else {
+          stringImage = 'error';
+        }
+        return Account.fromApi(element['user'], stringImage);
       }
     }
     throw NoAccountException();
@@ -46,7 +56,7 @@ class AccountRepository {
     try {
       List<dynamic> tempList = jsonDecode(accountListLocalString!); //todo непонятно что за проверка '!'
       for (dynamic element in tempList) {
-          accountList.add(Account.fromSharedPrefs(element));
+        accountList.add(Account.fromSharedPrefs(element));
       }
       return accountList;
     } catch (e) {
@@ -58,8 +68,9 @@ class AccountRepository {
     await accountListLocal.setAccountListLocal(accountList: jsonEncode(accountList));
   }
 
-  static Account getDummyAccount({
-      String userName = 'dummy',
+  static Account getDummyAccount(
+      {String userName = 'dummy',
+      String savedProfilePic = '',
       bool isPrivate = false,
       String pk = 'error',
       String fullName = 'error',
@@ -71,6 +82,7 @@ class AccountRepository {
     return Account(
         username: userName,
         profilePicUrl: profilePicUrl,
+        savedProfilePic: savedProfilePic,
         isPrivate: isPrivate,
         pk: pk,
         fullName: fullName,

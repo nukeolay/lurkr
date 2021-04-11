@@ -1,5 +1,5 @@
+import 'dart:typed_data';
 import 'dart:ui';
-
 import 'package:Instasnitch/data/models/account.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +18,7 @@ class AccountAvatar extends StatelessWidget {
       child: Container(
         width: 55.0,
         height: 55.0,
-        decoration: account.profilePicUrl.toString() == 'error'
+        decoration: account.savedProfilePic == ''
             ? BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.all(const Radius.circular(50.0)),
@@ -28,11 +28,11 @@ class AccountAvatar extends StatelessWidget {
                 image: DecorationImage(
                   image: account.hasAnonymousProfilePicture
                       ? AssetImage('assets/default_avatar.png') as ImageProvider
-                      : NetworkImage(account.profilePicUrl.toString()),
+                      : MemoryImage(Uint8List.fromList(account.savedProfilePic.codeUnits)), //NetworkImage(account.profilePicUrl.toString())
                   fit: BoxFit.cover,
                 ),
               ),
-        child: account.profilePicUrl.toString() == 'error'
+        child: account.savedProfilePic.toString() == ''
             ? Center(child: Icon(Icons.image_not_supported_outlined))
             : account.isPrivate
                 ? Center(

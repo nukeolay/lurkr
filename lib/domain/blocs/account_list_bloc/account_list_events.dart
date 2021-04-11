@@ -1,3 +1,5 @@
+import 'package:Instasnitch/data/models/account.dart';
+
 abstract class AccountListEvent {}
 
 class AccountListEventStart extends AccountListEvent {
@@ -17,6 +19,11 @@ class AccountListEventEdit extends AccountListEvent {
 class AccountListEventDelete extends AccountListEvent {
   String accountName;
   AccountListEventDelete({required this.accountName});
+}
+
+class AccountListEventDownload extends AccountListEvent {
+  Account account;
+  AccountListEventDownload({required this.account});
 }
 
 class AccountListEventRefresh extends AccountListEvent {

@@ -1,9 +1,14 @@
+import 'dart:typed_data';
+
 import 'package:Instasnitch/data/models/account.dart';
 import 'package:Instasnitch/data/models/exceptions.dart';
 import 'package:Instasnitch/data/repositories/account_repositiory.dart';
 import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_events.dart';
 import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_states.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 
 class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
   AccountRepository accountRepository = AccountRepository();
@@ -32,6 +37,7 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
           yield AccountListStateLoaded(accountList: state.accountList);
         } on NoTriesLeftException {
           state.accountList.insert(0, AccountRepository.getDummyAccount(userName: accountListEvent.accountName, fullName: 'not updated'));
+          await accountRepository.saveAccountListToSharedprefs(accountList: state.accountList);
           yield AccountListStateNoTriesLeft(accountList: state.accountList);
         } on NoAccountException {
           yield AccountListStateNotFound(accountList: state.accountList);
@@ -45,6 +51,14 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
       state.accountList.remove(AccountRepository.getDummyAccount(userName: accountListEvent.accountName));
       await accountRepository.saveAccountListToSharedprefs(accountList: state.accountList);
       yield AccountListStateLoaded(accountList: state.accountList);
+    }
+
+    //---------------СОХРАНЕМ АВАТАРКУ---------------//
+    if (accountListEvent is AccountListEventDownload) {
+      yield AccountListStateLoading(accountList: state.accountList);
+      Uint8List imageData = Uint8List.fromList(accountListEvent.account.savedProfilePic.codeUnits);
+      await ImageGallerySaver.saveImage(Uint8List.fromList(imageData), quality: 100, name: 'instasnitch_avatar_${accountListEvent.account.username}');
+      yield AccountListStateDownloaded(accountList: state.accountList);
     }
   }
 }

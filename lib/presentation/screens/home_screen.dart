@@ -41,6 +41,11 @@ class HomeScreen extends StatelessWidget {
               CustomSnackbar(text: 'Account not found', color: Colors.red),
             );
           }
+          if (state is AccountListStateDownloaded) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              CustomSnackbar(text: 'Picture saved to gallery', color: Colors.green.shade600),
+            );
+          }
         },
         child: ScrollConfiguration(
           //убираю подсветку границ при скролле
@@ -132,48 +137,61 @@ class HomeScreen extends StatelessWidget {
       ),
       bottomNavigationBar: BottomAppBar(
         elevation: 0.0,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            BlocBuilder<AccountListBloc, AccountListState>(builder: (context, state) {
-              if (state is AccountListStateLoading) {
-                return IconButton(
+        child: BlocBuilder<AccountListBloc, AccountListState>(builder: (context, state) {
+          if (state is AccountListStateLoading) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                IconButton(
                     tooltip: 'Refresh',
                     splashRadius: 22,
                     splashColor: Colors.purple,
                     highlightColor: Colors.deepPurple,
                     icon: RotatingRefreshIcon(),
-                    onPressed: () {});
-              }
-              return IconButton(
+                    onPressed: () {}),
+                IconButton(
+                  tooltip: 'Add account',
+                  splashRadius: 22,
+                  splashColor: Colors.purple,
+                  highlightColor: Colors.deepPurple,
+                  icon: const Icon(Icons.add_box_rounded, size: 30, color: Colors.grey),
+                  onPressed: null,
+                ),
+              ],
+            );
+          }
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              IconButton(
                   tooltip: 'Refresh',
                   splashRadius: 22,
                   splashColor: Colors.purple,
                   highlightColor: Colors.deepPurple,
                   icon: Icon(Icons.refresh_rounded, size: 30),
-                  onPressed: () {});
-            }),
-            IconButton(
-              tooltip: 'Add account',
-              splashRadius: 22,
-              splashColor: Colors.purple,
-              highlightColor: Colors.deepPurple,
-              icon: const Icon(Icons.add_box_rounded, size: 30),
-              onPressed: () {
-                showModalBottomSheet<void>(
-                  context: context,
-                  backgroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0)),
-                  ),
-                  builder: (BuildContext context) {
-                    return BottomSheetAdd();
-                  },
-                );
-              },
-            )
-          ],
-        ),
+                  onPressed: () {}),
+              IconButton(
+                tooltip: 'Add account',
+                splashRadius: 22,
+                splashColor: Colors.purple,
+                highlightColor: Colors.deepPurple,
+                icon: const Icon(Icons.add_box_rounded, size: 30),
+                onPressed: () {
+                  showModalBottomSheet<void>(
+                    context: context,
+                    backgroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0)),
+                    ),
+                    builder: (BuildContext context) {
+                      return BottomSheetAdd();
+                    },
+                  );
+                },
+              ),
+            ],
+          );
+        }),
       ),
     );
   }

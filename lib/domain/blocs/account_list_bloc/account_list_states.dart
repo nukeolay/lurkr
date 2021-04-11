@@ -41,3 +41,9 @@ class AccountListStateNotFound extends AccountListState {
 
   AccountListStateNotFound({required this.accountList}) : super(accountList: accountList);
 }
+
+class AccountListStateDownloaded extends AccountListState {
+  List<Account> accountList;
+
+  AccountListStateDownloaded({required this.accountList}) : super(accountList: accountList);
+}

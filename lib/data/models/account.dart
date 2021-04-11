@@ -1,3 +1,8 @@
+import 'dart:typed_data';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
 class Account {
   final String username;
   final Uri profilePicUrl;
@@ -10,47 +15,43 @@ class Account {
   final bool isNew;
   final int lastTimeUpdated;
 
-  Account(
-      {required this.username,
-      required this.profilePicUrl,
-      required this.savedProfilePic,
-      required this.isPrivate,
-      required this.pk,
-      required this.fullName,
-      required this.isVerified,
-      required this.hasAnonymousProfilePicture,
-      required this.isNew,
-      required this.lastTimeUpdated});
+  Account({required this.username,
+    required this.profilePicUrl,
+    required this.savedProfilePic,
+    required this.isPrivate,
+    required this.pk,
+    required this.fullName,
+    required this.isVerified,
+    required this.hasAnonymousProfilePicture,
+    required this.isNew,
+    required this.lastTimeUpdated});
 
   @override
   bool operator ==(Object other) {
     return other is Account && other.username == username;
   }
 
-  factory Account.fromApi(Map<String, dynamic> inputJson) {
-    //преобразуем картинку в String
-    if (!(inputJson['has_anonymous_profile_picture'] as bool)){//если у аккаунта есть аватар, тогда этот параметр false
-
-    }
-
-
+  factory Account.fromApi(Map<String, dynamic> inputJson, String stringImage) {
     return Account(
         username: inputJson['username'] as String,
         profilePicUrl: Uri.parse(inputJson['profile_pic_url']),
-        savedProfilePic: ,//todo тут перевожу Uint8List в String и только тогда отдаю экземпляр класса Account
+        savedProfilePic: stringImage, //тут храним преобразованную в Uint8List в String картинку
         isPrivate: inputJson['is_private'] as bool,
         pk: inputJson['pk'] as String,
         fullName: inputJson['full_name'] as String,
         isVerified: inputJson['is_verified'] as bool,
         hasAnonymousProfilePicture: inputJson['has_anonymous_profile_picture'] as bool,
         isNew: false,
-        lastTimeUpdated: DateTime.now().microsecondsSinceEpoch);
+        lastTimeUpdated: DateTime
+            .now()
+            .microsecondsSinceEpoch);
   }
 
   factory Account.fromSharedPrefs(Map<String, dynamic> inputJson) {
     return Account(
         username: inputJson['userName'] as String,
         profilePicUrl: Uri.parse(inputJson['profilePicUrl']),
+        savedProfilePic: inputJson['savedProfilePic'],
         isPrivate: inputJson['isPrivate'] == 'true' ? true : false,
         pk: inputJson['pk'] as String,
         fullName: inputJson['fullName'] as String,
@@ -69,6 +70,7 @@ class Account {
     return {
       "userName": this.username,
       "profilePicUrl": this.profilePicUrl.toString(),
+      "savedProfilePic": this.savedProfilePic,
       "isPrivate": this.isPrivate.toString(),
       "pk": this.pk,
       "fullName": this.fullName,

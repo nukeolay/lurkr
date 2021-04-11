@@ -82,36 +82,36 @@ class HomeScreen extends StatelessWidget {
                                   child: tempLoadedAccount.profilePicUrl.toString() == 'error'
                                       ? Icon(Icons.image_not_supported_outlined)
                                       : tempLoadedAccount.isPrivate
-                                      ? Stack(
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(300.0),
-                                        child: ColorFiltered(
-                                          colorFilter: ColorFilter.mode(Colors.blueGrey, BlendMode.lighten),
-                                          child: Image.network(tempLoadedAccount.profilePicUrl.toString()),
-                                        ),
-                                      ),
-                                      Center(
-                                          child: Icon(
-                                            Icons.lock_outline_rounded,
-                                            color: Colors.red,
-                                          ))
-                                    ],
-                                  )
-                                      : ClipRRect(
-                                    borderRadius: BorderRadius.circular(300.0),
-                                    child: Image.network(tempLoadedAccount.profilePicUrl.toString()),
-                                  ),
+                                          ? Stack(
+                                              children: [
+                                                ClipRRect(
+                                                  borderRadius: BorderRadius.circular(300.0),
+                                                  child: ColorFiltered(
+                                                    colorFilter: ColorFilter.mode(Colors.blueGrey, BlendMode.lighten),
+                                                    child: Image.network(tempLoadedAccount.profilePicUrl.toString()),
+                                                  ),
+                                                ),
+                                                Center(
+                                                    child: Icon(
+                                                  Icons.lock_outline_rounded,
+                                                  color: Colors.red,
+                                                ))
+                                              ],
+                                            )
+                                          : ClipRRect(
+                                              borderRadius: BorderRadius.circular(300.0),
+                                              child: Image.network(tempLoadedAccount.profilePicUrl.toString()),
+                                            ),
                                 ),
                                 title: Text(state.accountList[index].username),
                                 subtitle: tempLoadedAccount.fullName == 'error'
                                     ? Text('error getting info', style: TextStyle(color: Colors.red))
                                     : Text(tempLoadedAccount.fullName)
-                              // trailing: Icon(
-                              //   Icons.lock_outline_rounded,
-                              //   size: 30,
-                              // ),
-                            ),
+                                // trailing: Icon(
+                                //   Icons.lock_outline_rounded,
+                                //   size: 30,
+                                // ),
+                                ),
                           );
                         },
                       );
@@ -125,48 +125,61 @@ class HomeScreen extends StatelessWidget {
       ),
       bottomNavigationBar: BottomAppBar(
         elevation: 0.0,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            BlocBuilder<AccountListBloc, AccountListState>(builder: (context, state) {
-              if (state is AccountListStateLoading) {
-                return IconButton(
+        child: BlocBuilder<AccountListBloc, AccountListState>(builder: (context, state) {
+          if (state is AccountListStateLoading) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                IconButton(
                     tooltip: 'Refresh',
                     splashRadius: 22,
                     splashColor: Colors.purple,
                     highlightColor: Colors.deepPurple,
                     icon: RotatingRefreshIcon(),
-                    onPressed: () {});
-              }
-              return IconButton(
+                    onPressed: () {}),
+                IconButton(
+                  tooltip: 'Add account',
+                  splashRadius: 22,
+                  splashColor: Colors.purple,
+                  highlightColor: Colors.deepPurple,
+                  icon: const Icon(Icons.add_box_rounded, size: 30, color: Colors.white30),
+                  onPressed: null,
+                ),
+              ],
+            );
+          }
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              IconButton(
                   tooltip: 'Refresh',
                   splashRadius: 22,
                   splashColor: Colors.purple,
                   highlightColor: Colors.deepPurple,
                   icon: Icon(Icons.refresh_rounded, size: 30),
-                  onPressed: () {});
-            }),
-            IconButton(
-              tooltip: 'Add account',
-              splashRadius: 22,
-              splashColor: Colors.purple,
-              highlightColor: Colors.deepPurple,
-              icon: const Icon(Icons.add_box_rounded, size: 30),
-              onPressed: () {
-                showModalBottomSheet<void>(
-                  context: context,
-                  backgroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0)),
-                  ),
-                  builder: (BuildContext context) {
-                    return BottomSheetAdd();
-                  },
-                );
-              },
-            )
-          ],
-        ),
+                  onPressed: () {}),
+              IconButton(
+                tooltip: 'Add account',
+                splashRadius: 22,
+                splashColor: Colors.purple,
+                highlightColor: Colors.deepPurple,
+                icon: const Icon(Icons.add_box_rounded, size: 30),
+                onPressed: () {
+                  showModalBottomSheet<void>(
+                    context: context,
+                    backgroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0)),
+                    ),
+                    builder: (BuildContext context) {
+                      return BottomSheetAdd();
+                    },
+                  );
+                },
+              ),
+            ],
+          );
+        }),
       ),
     );
   }
