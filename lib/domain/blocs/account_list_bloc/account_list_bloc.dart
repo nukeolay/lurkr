@@ -27,7 +27,7 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
       yield AccountListStateLoading(accountList: state.accountList);
       //проверяем нет ли уже такого аккаунта в списке, для этого в классе Account переопределил опреатор '=='
       if (state.accountList.contains(AccountRepository.getDummyAccount(userName: accountListEvent.accountName))) {
-        yield AccountListStateExists(accountList: state.accountList);
+        yield AccountListStateError(accountList: state.accountList, errorText: 'Account already added');
       } else {
         try {
           Account tempAccount = await accountRepository.getAccountFromInternet(accountName: accountListEvent.accountName);
@@ -37,9 +37,9 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
         } on NoTriesLeftException {
           state.accountList.insert(0, AccountRepository.getDummyAccount(userName: accountListEvent.accountName, fullName: 'not updated'));
           await accountRepository.saveAccountListToSharedprefs(accountList: state.accountList);
-          yield AccountListStateNoTriesLeft(accountList: state.accountList);
+          yield AccountListStateError(accountList: state.accountList, errorText: 'Oops! No tries left, please try again later');
         } on NoAccountException {
-          yield AccountListStateNotFound(accountList: state.accountList);
+          yield AccountListStateError(accountList: state.accountList, errorText: 'Account not found');
         }
       }
     }

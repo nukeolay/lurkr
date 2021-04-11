@@ -26,21 +26,21 @@ class HomeScreen extends StatelessWidget {
       body: BlocListener(
         bloc: BlocProvider.of<AccountListBloc>(context),
         listener: (BuildContext context, AccountListState state) {
-          if (state is AccountListStateExists) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              CustomSnackbar(text: 'Account already added', color: Colors.red),
-            );
-          }
-          if (state is AccountListStateNoTriesLeft) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              CustomSnackbar(text: 'Oops! No tries left, please try again later', color: Colors.red),
-            );
-          }
-          if (state is AccountListStateNotFound) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              CustomSnackbar(text: 'Account not found', color: Colors.red),
-            );
-          }
+          // if (state is AccountListStateExists) {
+          //   ScaffoldMessenger.of(context).showSnackBar(
+          //     CustomSnackbar(text: 'Account already added', color: Colors.red),
+          //   );
+          // }
+          // if (state is AccountListStateNoTriesLeft) {
+          //   ScaffoldMessenger.of(context).showSnackBar(
+          //     CustomSnackbar(text: 'Oops! No tries left, please try again later', color: Colors.red),
+          //   );
+          // }
+          // if (state is AccountListStateNotFound) {
+          //   ScaffoldMessenger.of(context).showSnackBar(
+          //     CustomSnackbar(text: 'Account not found', color: Colors.red),
+          //   );
+          // }
           if (state is AccountListStateDownloaded) {
             ScaffoldMessenger.of(context).showSnackBar(
               CustomSnackbar(text: 'Picture saved to gallery', color: Colors.green.shade600),

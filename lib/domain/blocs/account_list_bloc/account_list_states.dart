@@ -24,23 +24,23 @@ class AccountListStateLoaded extends AccountListState {
   AccountListStateLoaded({required this.accountList}) : super(accountList: accountList);
 }
 
-class AccountListStateExists extends AccountListState {
-  List<Account> accountList;
+// class AccountListStateExists extends AccountListState {
+//   List<Account> accountList;
+//
+//   AccountListStateExists({required this.accountList}) : super(accountList: accountList);
+// }
 
-  AccountListStateExists({required this.accountList}) : super(accountList: accountList);
-}
+// class AccountListStateNoTriesLeft extends AccountListState {
+//   List<Account> accountList;
+//
+//   AccountListStateNoTriesLeft({required this.accountList}) : super(accountList: accountList);
+// }
 
-class AccountListStateNoTriesLeft extends AccountListState {
-  List<Account> accountList;
-
-  AccountListStateNoTriesLeft({required this.accountList}) : super(accountList: accountList);
-}
-
-class AccountListStateNotFound extends AccountListState {
-  List<Account> accountList;
-
-  AccountListStateNotFound({required this.accountList}) : super(accountList: accountList);
-}
+// class AccountListStateNotFound extends AccountListState {
+//   List<Account> accountList;
+//
+//   AccountListStateNotFound({required this.accountList}) : super(accountList: accountList);
+// }
 
 class AccountListStateDownloaded extends AccountListState {
   List<Account> accountList;
