@@ -47,3 +47,10 @@ class AccountListStateDownloaded extends AccountListState {
 
   AccountListStateDownloaded({required this.accountList}) : super(accountList: accountList);
 }
+
+class AccountListStateError extends AccountListState {
+  List<Account> accountList;
+  String errorText;
+
+  AccountListStateError({required this.accountList, required this.errorText}) : super(accountList: accountList);
+}

@@ -5,10 +5,9 @@ import 'package:Instasnitch/data/models/exceptions.dart';
 import 'package:Instasnitch/data/repositories/account_repositiory.dart';
 import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_events.dart';
 import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_states.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
   AccountRepository accountRepository = AccountRepository();
@@ -56,9 +55,20 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
     //---------------СОХРАНЕМ АВАТАРКУ---------------//
     if (accountListEvent is AccountListEventDownload) {
       yield AccountListStateLoading(accountList: state.accountList);
-      Uint8List imageData = Uint8List.fromList(accountListEvent.account.savedProfilePic.codeUnits);
-      await ImageGallerySaver.saveImage(Uint8List.fromList(imageData), quality: 100, name: 'instasnitch_avatar_${accountListEvent.account.username}');
-      yield AccountListStateDownloaded(accountList: state.accountList);
+      bool isPermissionGranted = await Permission.storage.status.isGranted;
+      if (isPermissionGranted) {
+        Uint8List imageData = Uint8List.fromList(accountListEvent.account.savedProfilePic.codeUnits);
+        await ImageGallerySaver.saveImage(Uint8List.fromList(imageData),
+            quality: 100, name: 'instasnitch_avatar_${accountListEvent.account.username}');
+        yield AccountListStateDownloaded(accountList: state.accountList);
+      } else {
+        PermissionStatus permissionStatus = await Permission.storage.request();
+        if (permissionStatus.isGranted) {
+          add(AccountListEventDownload(account: accountListEvent.account));
+        } else {
+          yield AccountListStateError(accountList: state.accountList, errorText: 'Permission to storage not granted');
+        }
+      }
     }
   }
 }

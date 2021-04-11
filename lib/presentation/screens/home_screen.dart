@@ -46,6 +46,11 @@ class HomeScreen extends StatelessWidget {
               CustomSnackbar(text: 'Picture saved to gallery', color: Colors.green.shade600),
             );
           }
+          if (state is AccountListStateError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              CustomSnackbar(text: state.errorText, color: Colors.red),
+            );
+          }
         },
         child: ScrollConfiguration(
           //убираю подсветку границ при скролле
