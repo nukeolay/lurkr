@@ -8,7 +8,7 @@ class AccountListLocal {
     return accountList;//todo когда получаю результат проверять на null
   }
 
-  void setAccountListLocal({required String accountList}) async {
+  Future<void> setAccountListLocal({required String accountList}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('accountList', accountList);
   }

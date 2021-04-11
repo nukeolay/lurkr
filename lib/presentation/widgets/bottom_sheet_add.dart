@@ -39,7 +39,7 @@ class BottomSheetAdd extends StatelessWidget {
               child: Container(
                 height: 50,
                 alignment: Alignment.center,
-                child: Text('Add account', style: TextStyle(color: Colors.white)),
+                child: Text('Add account', style: TextStyle(color: Colors.white, fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
               ),
               onPressed: () {
                 BlocProvider.of<AccountListBloc>(context).add(AccountListEventAdd(accountName: _textFieldController.value.text));

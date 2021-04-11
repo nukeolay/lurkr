@@ -54,13 +54,13 @@ class AccountRepository {
     }
   }
 
-  void saveAccountListToSharedprefs({required List<Account> accountList}) {
-    accountListLocal.setAccountListLocal(accountList: jsonEncode(accountList));
+  Future<void> saveAccountListToSharedprefs({required List<Account> accountList}) async {
+    await accountListLocal.setAccountListLocal(accountList: jsonEncode(accountList));
   }
 
   static Account getDummyAccount({
       String userName = 'dummy',
-      bool isPrivate = true,
+      bool isPrivate = false,
       String pk = 'error',
       String fullName = 'error',
       bool isVerified = false,

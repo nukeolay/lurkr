@@ -28,7 +28,7 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
         try {
           Account tempAccount = await accountRepository.getAccountFromInternet(accountName: accountListEvent.accountName);
           state.accountList.insert(0, tempAccount);
-          accountRepository.saveAccountListToSharedprefs(accountList: state.accountList);
+          await accountRepository.saveAccountListToSharedprefs(accountList: state.accountList);
           yield AccountListStateLoaded(accountList: state.accountList);
         } on NoTriesLeftException {
           state.accountList.insert(0, AccountRepository.getDummyAccount(userName: accountListEvent.accountName, fullName: 'not updated'));
@@ -37,6 +37,14 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
           yield AccountListStateNotFound(accountList: state.accountList);
         }
       }
+    }
+
+    //---------------УДАЛЯЕМ АККАУНТ---------------//
+    if (accountListEvent is AccountListEventDelete) {
+      yield AccountListStateLoading(accountList: state.accountList);
+      state.accountList.remove(AccountRepository.getDummyAccount(userName: accountListEvent.accountName));
+      await accountRepository.saveAccountListToSharedprefs(accountList: state.accountList);
+      yield AccountListStateLoaded(accountList: state.accountList);
     }
   }
 }

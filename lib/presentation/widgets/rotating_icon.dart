@@ -8,10 +8,12 @@ class RotatingRefreshIcon extends StatefulWidget {
   @override
   _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
 }
-class _MyStatefulWidgetState extends State<RotatingRefreshIcon>
-    with TickerProviderStateMixin {
+
+class _MyStatefulWidgetState extends State<RotatingRefreshIcon> with TickerProviderStateMixin {
   static const rotatingWidget = Icon(
-    Icons.refresh_rounded, size: 30,
+    Icons.refresh_rounded,
+    size: 30,
+    color: Colors.purple,
   );
   late final AnimationController _controller = AnimationController(
     duration: const Duration(seconds: 1),
@@ -30,8 +32,8 @@ class _MyStatefulWidgetState extends State<RotatingRefreshIcon>
       animation: _controller,
       child: Container(
           child: const Center(
-            child: rotatingWidget,
-          )),
+        child: rotatingWidget,
+      )),
       builder: (BuildContext context, Widget? child) {
         return Transform.rotate(
           angle: _controller.value * 2.0 * math.pi,

@@ -1,6 +1,7 @@
 class Account {
   final String username;
   final Uri profilePicUrl;
+  final String savedProfilePic;
   final bool isPrivate;
   final String pk;
   final String fullName;
@@ -12,6 +13,7 @@ class Account {
   Account(
       {required this.username,
       required this.profilePicUrl,
+      required this.savedProfilePic,
       required this.isPrivate,
       required this.pk,
       required this.fullName,
@@ -21,14 +23,21 @@ class Account {
       required this.lastTimeUpdated});
 
   @override
-  bool operator == (Object other) {
+  bool operator ==(Object other) {
     return other is Account && other.username == username;
   }
 
   factory Account.fromApi(Map<String, dynamic> inputJson) {
+    //преобразуем картинку в String
+    if (!(inputJson['has_anonymous_profile_picture'] as bool)){//если у аккаунта есть аватар, тогда этот параметр false
+
+    }
+
+
     return Account(
         username: inputJson['username'] as String,
         profilePicUrl: Uri.parse(inputJson['profile_pic_url']),
+        savedProfilePic: ,//todo тут перевожу Uint8List в String и только тогда отдаю экземпляр класса Account
         isPrivate: inputJson['is_private'] as bool,
         pk: inputJson['pk'] as String,
         fullName: inputJson['full_name'] as String,
@@ -42,11 +51,11 @@ class Account {
     return Account(
         username: inputJson['userName'] as String,
         profilePicUrl: Uri.parse(inputJson['profilePicUrl']),
-        isPrivate: inputJson['isPrivate'] == 'true'? true : false,
+        isPrivate: inputJson['isPrivate'] == 'true' ? true : false,
         pk: inputJson['pk'] as String,
         fullName: inputJson['fullName'] as String,
-        isVerified: inputJson['isVerified'] == 'true'? true : false,
-        hasAnonymousProfilePicture: inputJson['hasAnonymousProfilePicture'] == 'true'? true : false,
+        isVerified: inputJson['isVerified'] == 'true' ? true : false,
+        hasAnonymousProfilePicture: inputJson['hasAnonymousProfilePicture'] == 'true' ? true : false,
         isNew: false,
         lastTimeUpdated: int.parse(inputJson['lastTimeUpdated']));
   }
