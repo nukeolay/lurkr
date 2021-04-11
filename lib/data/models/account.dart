@@ -15,16 +15,17 @@ class Account {
   final bool isNew;
   final int lastTimeUpdated;
 
-  Account({required this.username,
-    required this.profilePicUrl,
-    required this.savedProfilePic,
-    required this.isPrivate,
-    required this.pk,
-    required this.fullName,
-    required this.isVerified,
-    required this.hasAnonymousProfilePicture,
-    required this.isNew,
-    required this.lastTimeUpdated});
+  Account(
+      {required this.username,
+      required this.profilePicUrl,
+      required this.savedProfilePic,
+      required this.isPrivate,
+      required this.pk,
+      required this.fullName,
+      required this.isVerified,
+      required this.hasAnonymousProfilePicture,
+      required this.isNew,
+      required this.lastTimeUpdated});
 
   @override
   bool operator ==(Object other) {
@@ -35,16 +36,15 @@ class Account {
     return Account(
         username: inputJson['username'] as String,
         profilePicUrl: Uri.parse(inputJson['profile_pic_url']),
-        savedProfilePic: stringImage, //тут храним преобразованную в Uint8List в String картинку
+        savedProfilePic: stringImage,
+        //тут храним преобразованную в Uint8List в String картинку
         isPrivate: inputJson['is_private'] as bool,
         pk: inputJson['pk'] as String,
         fullName: inputJson['full_name'] as String,
         isVerified: inputJson['is_verified'] as bool,
         hasAnonymousProfilePicture: inputJson['has_anonymous_profile_picture'] as bool,
         isNew: false,
-        lastTimeUpdated: DateTime
-            .now()
-            .microsecondsSinceEpoch);
+        lastTimeUpdated: DateTime.now().microsecondsSinceEpoch);
   }
 
   factory Account.fromSharedPrefs(Map<String, dynamic> inputJson) {

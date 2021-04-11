@@ -35,7 +35,7 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
           await accountRepository.saveAccountListToSharedprefs(accountList: state.accountList);
           yield AccountListStateLoaded(accountList: state.accountList);
         } on NoTriesLeftException {
-          state.accountList.insert(0, AccountRepository.getDummyAccount(userName: accountListEvent.accountName, fullName: 'not updated'));
+          state.accountList.insert(0, AccountRepository.getDummyAccount(userName: accountListEvent.accountName, fullName: 'info not loaded'));
           await accountRepository.saveAccountListToSharedprefs(accountList: state.accountList);
           yield AccountListStateError(accountList: state.accountList, errorText: 'Oops! No tries left, please try again later');
         } on NoAccountException {

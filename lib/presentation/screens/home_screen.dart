@@ -10,6 +10,7 @@ import 'package:Instasnitch/presentation/widgets/custom_scroll_behavoir.dart';
 import 'package:Instasnitch/presentation/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 import '../widgets/bottom_sheet_add.dart';
 
@@ -22,25 +23,12 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     print('state: ${context.watch<AccountListBloc>().state}');
     print(context.watch<AccountListBloc>().state.accountList);
+    final DateFormat formatter = DateFormat('dd.MM.yy H:m');
     return Scaffold(
       body: BlocListener(
+        //тут выводим сообщения в snackbar в зависимости от state
         bloc: BlocProvider.of<AccountListBloc>(context),
         listener: (BuildContext context, AccountListState state) {
-          // if (state is AccountListStateExists) {
-          //   ScaffoldMessenger.of(context).showSnackBar(
-          //     CustomSnackbar(text: 'Account already added', color: Colors.red),
-          //   );
-          // }
-          // if (state is AccountListStateNoTriesLeft) {
-          //   ScaffoldMessenger.of(context).showSnackBar(
-          //     CustomSnackbar(text: 'Oops! No tries left, please try again later', color: Colors.red),
-          //   );
-          // }
-          // if (state is AccountListStateNotFound) {
-          //   ScaffoldMessenger.of(context).showSnackBar(
-          //     CustomSnackbar(text: 'Account not found', color: Colors.red),
-          //   );
-          // }
           if (state is AccountListStateDownloaded) {
             ScaffoldMessenger.of(context).showSnackBar(
               CustomSnackbar(text: 'Picture saved to gallery', color: Colors.green.shade600),
@@ -94,6 +82,14 @@ class HomeScreen extends StatelessWidget {
                           return isNeedToRebuild;
                         },
                         builder: (context, state) {
+                          if (state.accountList.isEmpty) {
+                            return Center(
+                              child: Text(
+                                'давай @ добавляй',
+                                style: TextStyle(color: Colors.purple, fontSize: 28.0, fontFamily: 'Montserrat', fontWeight: FontWeight.w400),
+                              ),
+                            );
+                          }
                           return ListView.builder(
                             padding: EdgeInsets.only(top: 5, bottom: 5),
                             physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
@@ -119,9 +115,13 @@ class HomeScreen extends StatelessWidget {
                                     },
                                     leading: AccountAvatar(account: tempLoadedAccount),
                                     title: Text(state.accountList[index].username),
-                                    subtitle: tempLoadedAccount.fullName == 'error'
+                                    subtitle: tempLoadedAccount.fullName ==
+                                            'error' //todo посмотреть в каком случае может быть fullName error, может быть это удалить
                                         ? Text('error getting info', style: TextStyle(color: Colors.red))
-                                        : Text(tempLoadedAccount.fullName)
+                                        : tempLoadedAccount.lastTimeUpdated == 0
+                                            ? Text('info does not loaded')
+                                            : Text(
+                                                'updated ${formatter.format(DateTime.fromMicrosecondsSinceEpoch(tempLoadedAccount.lastTimeUpdated))}')
                                     // trailing: Icon(
                                     //   Icons.lock_outline_rounded,
                                     //   size: 30,
