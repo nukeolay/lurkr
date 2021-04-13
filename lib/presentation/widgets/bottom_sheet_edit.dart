@@ -42,7 +42,7 @@ class BottomSheetEdit extends StatelessWidget {
             : Container(
                 height: 50,
                 alignment: Alignment.center,
-                margin: const EdgeInsets.only(top: 5.0, bottom: 5.0, left: 10.0, right: 10.0),
+                margin: const EdgeInsets.only(top: 0.0, bottom: 10.0, left: 10.0, right: 10.0),
                 decoration: BoxDecoration(color: Colors.grey[600], borderRadius: BorderRadius.circular(10.0)),
                 child: MaterialButton(
                     shape: RoundedRectangleBorder(
@@ -63,10 +63,37 @@ class BottomSheetEdit extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
-                      BlocProvider.of<AccountListBloc>(context).add(AccountListEventDownload(account: account)); //todo написать
+                      BlocProvider.of<AccountListBloc>(context).add(AccountListEventDownload(account: account));
                       Navigator.pop(context);
                     }),
               ),
+        Container(
+          height: 50,
+          alignment: Alignment.center,
+          margin: const EdgeInsets.only(top: 0.0, bottom: 5.0, left: 10.0, right: 10.0),
+          decoration: BoxDecoration(color: Colors.grey[600], borderRadius: BorderRadius.circular(10.0)),
+          child: MaterialButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Container(
+                height: 50,
+                alignment: Alignment.center,
+                child: Center(
+                  child: Row(
+                    children: [
+                      Icon(Icons.refresh_rounded, size: 30.0, color: Colors.white),
+                      SizedBox(width: 20.0),
+                      Text('Refresh', style: TextStyle(color: Colors.white, fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
+                    ],
+                  ),
+                ),
+              ),
+              onPressed: () {
+                BlocProvider.of<AccountListBloc>(context).add(AccountListEventRefresh(accountName: account.username));
+                Navigator.pop(context);
+              }),
+        ),
         Container(
           height: 50,
           alignment: Alignment.center,

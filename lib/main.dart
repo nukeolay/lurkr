@@ -42,6 +42,7 @@ class InstasnitchApp extends StatelessWidget {
           themeMode: ThemeMode.light,
           home: BlocBuilder<AccountListBloc, AccountListState>(
             buildWhen: (previousState, state) {
+              // а то при каждом стейте будем перестраивать весь HomePage, а надо только те куски, которые я внутри определил
               bool isNeedToRebuild = previousState is AccountListStateStarting;
               return isNeedToRebuild;
             },
@@ -55,33 +56,3 @@ class InstasnitchApp extends StatelessWidget {
         ));
   }
 }
-
-// Future<List<Account>> getAccountList(List<String> accountList) async {
-//   AccountRepository accountRepository = AccountRepository();
-//   List<Account> accountDataList = [];
-//   Map<String, dynamic> dummyAccount = {
-//     'username': 'user',
-//     'profile_pic_url': 'error',
-//     'is_private': true,
-//     'pk': 'error',
-//     'full_name': 'error',
-//     'is_verified': false,
-//     'has_anonymous_profile_picture': false
-//   };
-//
-//   for (String account in accountList) {
-//     try {
-//       Account tempAccount = await accountRepository.getAccountFromInternet(accountName: account);
-//       accountDataList.add(tempAccount);
-//     } on NoTriesLeftException {
-//       dummyAccount['username'] = account;
-//       dummyAccount['full_name'] = 'try again later';
-//       accountDataList.add(Account.fromApi(dummyAccount));
-//     } on NoAccountException {
-//       dummyAccount['username'] = account;
-//       dummyAccount['full_name'] = 'account not found';
-//       accountDataList.add(Account.fromApi(dummyAccount));
-//     }
-//   }
-//   return accountDataList;
-// }

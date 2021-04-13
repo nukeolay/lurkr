@@ -1,12 +1,9 @@
 import 'dart:convert';
-import 'dart:typed_data';
-
 import 'package:Instasnitch/data/models/account.dart';
 import 'package:Instasnitch/data/models/exceptions.dart';
 import 'package:Instasnitch/data/providers/account_api.dart';
 import 'package:Instasnitch/data/providers/account_list_local.dart';
 import 'package:Instasnitch/data/providers/api_utils.dart';
-import 'package:flutter/services.dart';
 
 class AccountRepository {
   List<Account> accountList = [];
@@ -76,7 +73,7 @@ class AccountRepository {
       String fullName = 'error',
       bool isVerified = false,
       bool hasAnonymousProfilePicture = false,
-      bool isNew = false}) {
+      bool isChanged = false}) {
     Uri profilePicUrl = Uri.http('', 'error');
     int lastTimeUpdated = 0;
     return Account(
@@ -88,7 +85,7 @@ class AccountRepository {
         fullName: fullName,
         isVerified: isVerified,
         hasAnonymousProfilePicture: hasAnonymousProfilePicture,
-        isNew: isNew,
+        isChanged: isChanged,
         lastTimeUpdated: lastTimeUpdated);
   }
 }

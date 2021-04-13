@@ -26,8 +26,9 @@ class AccountListStateLoaded extends AccountListState {
 
 class AccountListStateDownloaded extends AccountListState {
   List<Account> accountList;
+  String snackbarText;
 
-  AccountListStateDownloaded({required this.accountList}) : super(accountList: accountList);
+  AccountListStateDownloaded({required this.accountList, required this.snackbarText}) : super(accountList: accountList);
 }
 
 class AccountListStateError extends AccountListState {

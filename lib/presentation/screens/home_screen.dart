@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:Instasnitch/data/models/account.dart';
 import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_bloc.dart';
+import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_events.dart';
 import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_states.dart';
 import 'package:Instasnitch/presentation/widgets/account_avatar.dart';
 import 'package:Instasnitch/presentation/widgets/bottom_sheet_edit.dart';
@@ -11,7 +12,6 @@ import 'package:Instasnitch/presentation/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-
 import '../widgets/bottom_sheet_add.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -23,7 +23,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     print('state: ${context.watch<AccountListBloc>().state}');
     print(context.watch<AccountListBloc>().state.accountList);
-    final DateFormat formatter = DateFormat('dd.MM.yy H:m');
+    final DateFormat formatter = DateFormat('dd.MM.yy HH:mm');
     return Scaffold(
       body: BlocListener(
         //тут выводим сообщения в snackbar в зависимости от state
@@ -31,7 +31,7 @@ class HomeScreen extends StatelessWidget {
         listener: (BuildContext context, AccountListState state) {
           if (state is AccountListStateDownloaded) {
             ScaffoldMessenger.of(context).showSnackBar(
-              CustomSnackbar(text: 'Picture saved to gallery', color: Colors.green.shade600),
+              CustomSnackbar(text: state.snackbarText, color: Colors.green.shade600),
             );
           }
           if (state is AccountListStateError) {
@@ -101,32 +101,43 @@ class HomeScreen extends StatelessWidget {
                               tempLoadedAccount = state.accountList[index];
                               return Center(
                                 child: ListTile(
-                                    onLongPress: () {
-                                      showModalBottomSheet<void>(
-                                        context: context,
-                                        backgroundColor: Colors.white,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.only(topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0)),
-                                        ),
-                                        builder: (BuildContext context) {
-                                          return BottomSheetEdit(account: tempLoadedAccount);
-                                        },
-                                      );
-                                    },
-                                    leading: AccountAvatar(account: tempLoadedAccount),
-                                    title: Text(state.accountList[index].username),
-                                    subtitle: tempLoadedAccount.fullName ==
-                                            'error' //todo посмотреть в каком случае может быть fullName error, может быть это удалить
-                                        ? Text('error getting info', style: TextStyle(color: Colors.red))
-                                        : tempLoadedAccount.lastTimeUpdated == 0
-                                            ? Text('info does not loaded')
-                                            : Text(
-                                                'updated ${formatter.format(DateTime.fromMicrosecondsSinceEpoch(tempLoadedAccount.lastTimeUpdated))}')
-                                    // trailing: Icon(
-                                    //   Icons.lock_outline_rounded,
-                                    //   size: 30,
-                                    // ),
-                                    ),
+                                  onLongPress: () {
+                                    showModalBottomSheet<void>(
+                                      context: context,
+                                      backgroundColor: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0)),
+                                      ),
+                                      builder: (BuildContext context) {
+                                        return BottomSheetEdit(account: tempLoadedAccount);
+                                      },
+                                    );
+                                  },
+                                  onTap: tempLoadedAccount.isChanged
+                                      ? () {
+                                          BlocProvider.of<AccountListBloc>(context).add(AccountListEventUnCheck(account: tempLoadedAccount));
+                                        }
+                                      : null,
+                                  leading: AccountAvatar(account: tempLoadedAccount),
+                                  title: Text(state.accountList[index].username),
+                                  subtitle: tempLoadedAccount.fullName ==
+                                          'error' //todo посмотреть в каком случае может быть fullName error, может быть это удалить
+                                      ? Text('error getting info', style: TextStyle(color: Colors.red))
+                                      : tempLoadedAccount.lastTimeUpdated == 0
+                                          ? Text('info does not loaded')
+                                          : Text(
+                                              'updated ${formatter.format(DateTime.fromMicrosecondsSinceEpoch(tempLoadedAccount.lastTimeUpdated))}'),
+                                  trailing: Icon(
+                                    state.accountList[index].isChanged ? Icons.new_releases_rounded : null,
+                                    size: 30,
+                                    color: state.accountList[index].isChanged
+                                        ? state.accountList[index].isPrivate
+                                            ? Colors.red
+                                            : Colors.green
+                                        : Colors.purple,
+                                    semanticLabel: 'profile status changed',
+                                  ),
+                                ),
                               );
                             },
                           );
@@ -153,7 +164,7 @@ class HomeScreen extends StatelessWidget {
                     splashColor: Colors.purple,
                     highlightColor: Colors.deepPurple,
                     icon: RotatingRefreshIcon(),
-                    onPressed: () {}),
+                    onPressed: null),
                 IconButton(
                   tooltip: 'Add account',
                   splashRadius: 22,
@@ -174,7 +185,9 @@ class HomeScreen extends StatelessWidget {
                   splashColor: Colors.purple,
                   highlightColor: Colors.deepPurple,
                   icon: Icon(Icons.refresh_rounded, size: 30),
-                  onPressed: () {}),
+                  onPressed: () {
+                    BlocProvider.of<AccountListBloc>(context).add(AccountListEventRefreshAll());
+                  }),
               IconButton(
                 tooltip: 'Add account',
                 splashRadius: 22,

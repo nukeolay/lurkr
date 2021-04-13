@@ -67,9 +67,7 @@ class _BottomSheetAddState extends State<BottomSheetAdd> {
                 _textFieldController.clear();
                 Navigator.pop(context);
               }),
-        ),
-        SizedBox(height: 50), //todo удалить если на самунге не помогло
-        Divider() //todo удалить если на самсунге не помогло
+        )
       ],
     );
   }

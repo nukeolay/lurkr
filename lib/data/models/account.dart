@@ -12,7 +12,7 @@ class Account {
   final String fullName;
   final bool isVerified;
   final bool hasAnonymousProfilePicture;
-  final bool isNew;
+  bool isChanged;
   final int lastTimeUpdated;
 
   Account(
@@ -24,7 +24,7 @@ class Account {
       required this.fullName,
       required this.isVerified,
       required this.hasAnonymousProfilePicture,
-      required this.isNew,
+      required this.isChanged,
       required this.lastTimeUpdated});
 
   @override
@@ -43,7 +43,7 @@ class Account {
         fullName: inputJson['full_name'] as String,
         isVerified: inputJson['is_verified'] as bool,
         hasAnonymousProfilePicture: inputJson['has_anonymous_profile_picture'] as bool,
-        isNew: false,
+        isChanged: false,
         lastTimeUpdated: DateTime.now().microsecondsSinceEpoch);
   }
 
@@ -57,13 +57,13 @@ class Account {
         fullName: inputJson['fullName'] as String,
         isVerified: inputJson['isVerified'] == 'true' ? true : false,
         hasAnonymousProfilePicture: inputJson['hasAnonymousProfilePicture'] == 'true' ? true : false,
-        isNew: false,
+        isChanged: inputJson['isChanged'] == 'true' ? true : false,
         lastTimeUpdated: int.parse(inputJson['lastTimeUpdated']));
   }
 
   @override
   String toString() {
-    return 'name: $username, fullName: $fullName, isPrivate: $isPrivate';
+    return 'name: $username, fullName: $fullName, isPrivate: $isPrivate, isChanged: $isChanged';
   }
 
   Map<String, dynamic> toJson() {
@@ -76,8 +76,11 @@ class Account {
       "fullName": this.fullName,
       "isVerified": this.isVerified.toString(),
       "hasAnonymousProfilePicture": this.hasAnonymousProfilePicture.toString(),
-      "isNew": this.isNew.toString(),
+      "isChanged": this.isChanged.toString(),
       "lastTimeUpdated": this.lastTimeUpdated.toString()
     };
+  }
+  void change(){
+    isChanged = true;
   }
 }
