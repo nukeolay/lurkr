@@ -41,6 +41,8 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
           yield AccountListStateError(accountList: state.accountList, errorText: 'Oops! No tries left, please try again later');
         } on NoAccountException {
           yield AccountListStateError(accountList: state.accountList, errorText: 'Account not found');
+        } on ConnectionException {
+          yield AccountListStateError(accountList: state.accountList, errorText: 'Network error');
         }
       }
     }
@@ -82,10 +84,6 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
       try {
         Account tempAccount = await accountRepository.getAccountFromInternet(accountName: accountListEvent.accountName);
         int accountNumber = state.accountList.indexOf(AccountRepository.getDummyAccount(userName: accountListEvent.accountName));
-        // if (state.accountList[accountNumber].isChanged == true) {// если аккаунт менял до этого обновления, isChanged у него не отменяли, то его нужно оставить true
-        //   tempAccount.change();
-        //   state.accountList[accountNumber] = tempAccount;
-        // }
         if (tempAccount.isPrivate != state.accountList[accountNumber].isPrivate || state.accountList[accountNumber].isChanged == true) {
           //ставим isChanged в true, если статус приватности изменился. А отключить его можно только по тапу (включается при изменении статуса, а отключается по тапу)
           //или если аккаунт уже менял статус приватности до этого обновления, но isChanged у него не отменяли, то его нужно оставить true
@@ -100,6 +98,9 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
         yield AccountListStateError(accountList: state.accountList, errorText: 'Oops! No tries left, please try again later');
       } on NoAccountException {
         yield AccountListStateError(accountList: state.accountList, errorText: 'Account not found');
+      }
+      on ConnectionException {
+        yield AccountListStateError(accountList: state.accountList, errorText: 'Network error');
       }
     }
 
