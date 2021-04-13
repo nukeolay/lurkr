@@ -40,7 +40,7 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
           await accountRepository.saveAccountListToSharedprefs(accountList: state.accountList);
           yield AccountListStateError(accountList: state.accountList, errorText: 'Oops! No tries left, please try again later');
         } on NoAccountException {
-          yield AccountListStateError(accountList: state.accountList, errorText: 'Account not found');
+          yield AccountListStateError(accountList: state.accountList, errorText: 'Account not found: ${accountListEvent.accountName}');
         } on ConnectionException {
           yield AccountListStateError(accountList: state.accountList, errorText: 'Network error');
         }
@@ -97,9 +97,8 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
       } on NoTriesLeftException {
         yield AccountListStateError(accountList: state.accountList, errorText: 'Oops! No tries left, please try again later');
       } on NoAccountException {
-        yield AccountListStateError(accountList: state.accountList, errorText: 'Account not found');
-      }
-      on ConnectionException {
+        yield AccountListStateError(accountList: state.accountList, errorText: 'Account not found: ${accountListEvent.accountName}');
+      } on ConnectionException {
         yield AccountListStateError(accountList: state.accountList, errorText: 'Network error');
       }
     }
@@ -107,10 +106,35 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
     //--------------- ОБНОВЛЯЕМ ВЕСЬ СПИСОК ---------------//
     if (accountListEvent is AccountListEventRefreshAll) {
       yield AccountListStateLoading(accountList: state.accountList);
+      // List<Account> accountList = state.accountList;
+      // for (Account currentAccount in accountList) {
+      //   add(AccountListEventRefresh(accountName: currentAccount.username));
+      // }
       List<Account> accountList = state.accountList;
       for (Account currentAccount in accountList) {
-        add(AccountListEventRefresh(accountName: currentAccount.username));
+        try {
+          Account tempAccount = await accountRepository.getAccountFromInternet(accountName: currentAccount.username);
+          int accountNumber = state.accountList.indexOf(AccountRepository.getDummyAccount(userName: currentAccount.username));
+          if (tempAccount.isPrivate != state.accountList[accountNumber].isPrivate || state.accountList[accountNumber].isChanged == true) {
+            //ставим isChanged в true, если статус приватности изменился. А отключить его можно только по тапу (включается при изменении статуса, а отключается по тапу)
+            //или если аккаунт уже менял статус приватности до этого обновления, но isChanged у него не отменяли, то его нужно оставить true
+            tempAccount.change();
+            state.accountList[accountNumber] = tempAccount;
+          } else {
+            state.accountList[accountNumber] = tempAccount;
+          }
+          await accountRepository.saveAccountListToSharedprefs(accountList: state.accountList);
+        } on NoTriesLeftException {
+          yield AccountListStateError(accountList: state.accountList, errorText: 'Oops! No tries left, please try again later');
+          break;
+        } on NoAccountException {
+          yield AccountListStateError(accountList: state.accountList, errorText: 'Account not found: ${currentAccount.username}');
+        } on ConnectionException {
+          yield AccountListStateError(accountList: state.accountList, errorText: 'Network error');
+          break;
+        }
       }
+      yield AccountListStateLoaded(accountList: state.accountList);
     }
 
     //--------------- УБИРАЕМ ОТМЕТКУ С АККАУНТА ---------------//
