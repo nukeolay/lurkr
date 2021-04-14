@@ -11,14 +11,9 @@ class AccountListEventAdd extends AccountListEvent {
   AccountListEventAdd({required this.accountName});
 }
 
-class AccountListEventEdit extends AccountListEvent { //todo передавать сюда аккаунт,а не имя, тогда можно сократить код в блоке, не использовать dummy
-  String accountName;
-  AccountListEventEdit({required this.accountName});
-}
-
 class AccountListEventDelete extends AccountListEvent { //todo передавать сюда аккаунт,а не имя, тогда можно сократить код в блоке, не использовать dummy
-  String accountName;
-  AccountListEventDelete({required this.accountName});
+  Account account;
+  AccountListEventDelete({required this.account});
 }
 
 class AccountListEventDownload extends AccountListEvent {
@@ -27,8 +22,8 @@ class AccountListEventDownload extends AccountListEvent {
 }
 
 class AccountListEventRefresh extends AccountListEvent { //todo передавать сюда аккаунт,а не имя, тогда можно сократить код в блоке, не использовать dummy
-  String accountName;
-  AccountListEventRefresh({required this.accountName});
+  Account account;
+  AccountListEventRefresh({required this.account});
 }
 
 class AccountListEventRefreshAll extends AccountListEvent {}

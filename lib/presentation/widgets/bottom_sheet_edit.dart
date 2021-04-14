@@ -17,9 +17,14 @@ class BottomSheetEdit extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Container(
+          margin: EdgeInsets.only(top: 10.0),
+          decoration: BoxDecoration(color: Colors.grey[600], borderRadius: BorderRadius.circular(10.0)),
+          child: SizedBox(width: 40.0, height: 5.0),
+        ),
+        Container(
           height: 50,
           //alignment: Alignment.center,
-          margin: const EdgeInsets.only(top: 5, bottom: 0, left: 0, right: 34),
+          margin: const EdgeInsets.only(top: 5.0, bottom: 0.0, left: 0.0, right: 34.0),
           //padding: const EdgeInsets.only(left: 5),
           child: Container(
             height: 50,
@@ -90,7 +95,7 @@ class BottomSheetEdit extends StatelessWidget {
                 ),
               ),
               onPressed: () {
-                BlocProvider.of<AccountListBloc>(context).add(AccountListEventRefresh(accountName: account.username));
+                BlocProvider.of<AccountListBloc>(context).add(AccountListEventRefresh(account: account));
                 Navigator.pop(context);
               }),
         ),
@@ -117,7 +122,7 @@ class BottomSheetEdit extends StatelessWidget {
                 ),
               ),
               onPressed: () {
-                BlocProvider.of<AccountListBloc>(context).add(AccountListEventDelete(accountName: account.username));
+                BlocProvider.of<AccountListBloc>(context).add(AccountListEventDelete(account: account));
                 Navigator.pop(context);
               }),
         )

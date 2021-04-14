@@ -50,7 +50,7 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
     //--------------- УДАЛЯЕМ АККАУНТ ---------------//
     if (accountListEvent is AccountListEventDelete) {
       yield AccountListStateLoading(accountList: state.accountList);
-      state.accountList.remove(AccountRepository.getDummyAccount(userName: accountListEvent.accountName));
+      state.accountList.remove(accountListEvent.account);
       await accountRepository.saveAccountListToSharedprefs(accountList: state.accountList);
       yield AccountListStateLoaded(accountList: state.accountList);
     }
@@ -82,8 +82,8 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
     if (accountListEvent is AccountListEventRefresh) {
       yield AccountListStateLoading(accountList: state.accountList);
       try {
-        Account tempAccount = await accountRepository.getAccountFromInternet(accountName: accountListEvent.accountName);
-        int accountNumber = state.accountList.indexOf(AccountRepository.getDummyAccount(userName: accountListEvent.accountName));
+        Account tempAccount = await accountRepository.getAccountFromInternet(accountName: accountListEvent.account.username);
+        int accountNumber = state.accountList.indexOf(accountListEvent.account);
         if (tempAccount.isPrivate != state.accountList[accountNumber].isPrivate || state.accountList[accountNumber].isChanged == true) {
           //ставим isChanged в true, если статус приватности изменился. А отключить его можно только по тапу (включается при изменении статуса, а отключается по тапу)
           //или если аккаунт уже менял статус приватности до этого обновления, но isChanged у него не отменяли, то его нужно оставить true
@@ -97,7 +97,7 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
       } on NoTriesLeftException {
         yield AccountListStateError(accountList: state.accountList, errorText: 'Oops! No tries left, please try again later');
       } on NoAccountException {
-        yield AccountListStateError(accountList: state.accountList, errorText: 'Account not found: ${accountListEvent.accountName}');
+        yield AccountListStateError(accountList: state.accountList, errorText: 'Account not found: ${accountListEvent.account.username}');
       } on ConnectionException {
         yield AccountListStateError(accountList: state.accountList, errorText: 'Network error');
       }
@@ -114,7 +114,7 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
       for (Account currentAccount in accountList) {
         try {
           Account tempAccount = await accountRepository.getAccountFromInternet(accountName: currentAccount.username);
-          int accountNumber = state.accountList.indexOf(AccountRepository.getDummyAccount(userName: currentAccount.username));
+          int accountNumber = state.accountList.indexOf(currentAccount);
           if (tempAccount.isPrivate != state.accountList[accountNumber].isPrivate || state.accountList[accountNumber].isChanged == true) {
             //ставим isChanged в true, если статус приватности изменился. А отключить его можно только по тапу (включается при изменении статуса, а отключается по тапу)
             //или если аккаунт уже менял статус приватности до этого обновления, но isChanged у него не отменяли, то его нужно оставить true
