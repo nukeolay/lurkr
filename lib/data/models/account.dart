@@ -1,8 +1,3 @@
-import 'dart:typed_data';
-
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
 class Account {
   final String username;
   final Uri profilePicUrl;

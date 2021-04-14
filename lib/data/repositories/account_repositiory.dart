@@ -37,17 +37,6 @@ class AccountRepository {
     throw NoAccountException();
   }
 
-  // Future<Account?> getAccountFromSharedprefs({required String accountName}) async {
-  //   //todo может быть такой метод мне и не нужен
-  //   accountList = await getAccountListFromSharedprefs();
-  //   for (Account element in accountList) {
-  //     if (element.username == accountName)
-  //       return element;
-  //     else
-  //       return null;
-  //   }
-  // }
-
   Future<List<Account>> getAccountListFromSharedprefs() async {
     final String? accountListLocalString = await accountListLocal.getAccountListLocal();
     try {

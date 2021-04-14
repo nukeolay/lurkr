@@ -106,10 +106,6 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
     //--------------- ОБНОВЛЯЕМ ВЕСЬ СПИСОК ---------------//
     if (accountListEvent is AccountListEventRefreshAll) {
       yield AccountListStateLoading(accountList: state.accountList);
-      // List<Account> accountList = state.accountList;
-      // for (Account currentAccount in accountList) {
-      //   add(AccountListEventRefresh(accountName: currentAccount.username));
-      // }
       List<Account> accountList = state.accountList;
       for (Account currentAccount in accountList) {
         try {
