@@ -55,7 +55,7 @@ class _BottomSheetAddState extends State<BottomSheetAdd> {
         Container(
           height: 50,
           alignment: Alignment.center,
-          margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+          margin: const EdgeInsets.only(top: 0.0, bottom: 15.0, left: 10.0, right: 10.0),
           decoration: BoxDecoration(color: Colors.purple, borderRadius: BorderRadius.circular(10)),
           child: MaterialButton(
               shape: RoundedRectangleBorder(

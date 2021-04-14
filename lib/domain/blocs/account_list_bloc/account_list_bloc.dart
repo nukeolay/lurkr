@@ -144,6 +144,7 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
       int accountNumber = state.accountList.indexOf(accountListEvent.account);
       accountListEvent.account.isChanged = false;
       state.accountList[accountNumber] = accountListEvent.account;
+      await accountRepository.saveAccountListToSharedprefs(accountList: state.accountList);
       yield AccountListStateLoaded(accountList: state.accountList);
     }
   }

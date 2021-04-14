@@ -1,12 +1,12 @@
 import 'package:Instasnitch/presentation/screens/home_screen.dart';
 import 'package:Instasnitch/presentation/screens/splash_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:Instasnitch/presentation/theme/theme.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'domain/blocs/account_list_bloc/account_list_bloc.dart';
 import 'domain/blocs/account_list_bloc/account_list_states.dart';
 import 'domain/blocs/connection_bloc/connection_bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 main() async {
   WidgetsFlutterBinding.ensureInitialized();

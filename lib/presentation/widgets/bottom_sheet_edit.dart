@@ -23,9 +23,7 @@ class BottomSheetEdit extends StatelessWidget {
         ),
         Container(
           height: 50,
-          //alignment: Alignment.center,
           margin: const EdgeInsets.only(top: 5.0, bottom: 0.0, left: 0.0, right: 34.0),
-          //padding: const EdgeInsets.only(left: 5),
           child: Container(
             height: 50,
             alignment: Alignment.center,
@@ -102,7 +100,7 @@ class BottomSheetEdit extends StatelessWidget {
         Container(
           height: 50,
           alignment: Alignment.center,
-          margin: const EdgeInsets.only(top: 5.0, bottom: 10.0, left: 10.0, right: 10.0),
+          margin: const EdgeInsets.only(top: 5.0, bottom: 15.0, left: 10.0, right: 10.0),
           decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(10.0)),
           child: MaterialButton(
               shape: RoundedRectangleBorder(
