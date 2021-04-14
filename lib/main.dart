@@ -26,7 +26,6 @@ main() async {
 
 class InstasnitchApp extends StatelessWidget {
   const InstasnitchApp({Key? key}) : super(key: key);
-  static List<String> accountList = ['1tv', 'nukeolay', 'kjhsdlmhxjmslkxhoi', 'to_be_ksusha'];
 
   @override
   Widget build(BuildContext context) {

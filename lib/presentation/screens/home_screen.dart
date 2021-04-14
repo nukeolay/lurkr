@@ -22,7 +22,6 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print('state: ${context.watch<AccountListBloc>().state}');
-    print(context.watch<AccountListBloc>().state.accountList);
     final DateFormat formatter = DateFormat('dd.MM.yy HH:mm');
     return Scaffold(
       body: BlocListener(
