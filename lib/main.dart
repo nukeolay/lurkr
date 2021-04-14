@@ -1,4 +1,4 @@
-import 'file:///D:/MyApps/MyProjects/FlutterProjects/instasnitch/lib/presentation/screens/home_screen.dart';
+import 'package:Instasnitch/presentation/screens/home_screen.dart';
 import 'package:Instasnitch/presentation/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
