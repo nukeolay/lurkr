@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:Instasnitch/data/models/account.dart';
 import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_bloc.dart';
 import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_events.dart';
@@ -31,7 +32,11 @@ class BottomSheetEdit extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.account_circle_rounded, color: Colors.grey[600], size: 24,),
+                  Icon(
+                    Icons.account_circle_rounded,
+                    color: Colors.grey[600],
+                    size: 24,
+                  ),
                   SizedBox(width: 10.0),
                   Text(account.username,
                       style: TextStyle(color: Colors.grey[600], fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
@@ -100,7 +105,7 @@ class BottomSheetEdit extends StatelessWidget {
         Container(
           height: 50,
           alignment: Alignment.center,
-          margin: const EdgeInsets.only(top: 5.0, bottom: 15.0, left: 10.0, right: 10.0),
+          margin: EdgeInsets.only(top: 5.0, bottom: Platform.isIOS ? 20.0 : 10.0, left: 10.0, right: 10.0),
           decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(10.0)),
           child: MaterialButton(
               shape: RoundedRectangleBorder(
