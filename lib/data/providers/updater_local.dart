@@ -6,6 +6,7 @@ class UpdaterLocal {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     int lastTimeUpdated;
     int? refreshPeriod;
+    bool isDark;
     try {
       lastTimeUpdated = prefs.getInt('lastTimeUpdated')!;
     } catch (e) {
@@ -16,7 +17,12 @@ class UpdaterLocal {
     } catch (e) {
       refreshPeriod = 3600000000;
     }
-    return Updater(lastTimeUpdated: lastTimeUpdated, refreshPeriod: refreshPeriod); //todo когда получаю результат проверять на null
+    try {
+      isDark = prefs.getBool('isDark')!;
+    } catch (e) {
+      isDark = false;
+    }
+    return Updater(lastTimeUpdated: lastTimeUpdated, refreshPeriod: refreshPeriod, isDark: isDark); //todo когда получаю результат проверять на null
   }
 
   Future<void> setUpdater({required int lastTimeUpdated, required int refreshPeriod}) async {

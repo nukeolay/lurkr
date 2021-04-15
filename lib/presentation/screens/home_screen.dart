@@ -26,6 +26,7 @@ class HomeScreen extends StatelessWidget {
     print('state: ${context.watch<AccountListBloc>().state}');
     print('updated on: ${formatter.format(DateTime.fromMicrosecondsSinceEpoch(context.watch<AccountListBloc>().state.updater.lastTimeUpdated))}');
     print('refresh period: ${context.watch<AccountListBloc>().state.updater.refreshPeriod / 60000000}');
+    print('isDark: ${context.watch<AccountListBloc>().state.updater.isDark}');
 
     return Scaffold(
       body: BlocListener(
@@ -69,7 +70,11 @@ class HomeScreen extends StatelessWidget {
                               highlightColor: Colors.deepPurple,
                               icon: const Icon(Icons.settings, size: 25),
                               onPressed: () {
-                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => SettingsScreen()));
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (settingsContext) => BlocProvider.value(
+                                          value: BlocProvider.of<AccountListBloc>(context),
+                                          child: SettingsScreen(),
+                                        )));
                               },
                             ),
                             onTap: () {},

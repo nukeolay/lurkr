@@ -13,7 +13,7 @@ import 'package:permission_handler/permission_handler.dart';
 class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
   Repository repository = Repository();
 
-  AccountListBloc() : super(AccountListStateStarting(accountList: [], updater: Updater(lastTimeUpdated: 0, refreshPeriod: 0)));
+  AccountListBloc() : super(AccountListStateStarting(accountList: [], updater: Updater(lastTimeUpdated: 0, refreshPeriod: 0, isDark: false)));
 
   @override
   Stream<AccountListState> mapEventToState(AccountListEvent accountListEvent) async* {
@@ -36,7 +36,7 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
           Account tempAccount = await repository.getAccountFromInternet(accountName: accountListEvent.accountName);
           state.accountList.insert(0, tempAccount);
           await repository.saveAccountListToSharedprefs(accountList: state.accountList);
-          state.updater = Updater(lastTimeUpdated: DateTime.now().microsecondsSinceEpoch, refreshPeriod: state.updater.refreshPeriod);
+          state.updater = Updater(lastTimeUpdated: DateTime.now().microsecondsSinceEpoch, refreshPeriod: state.updater.refreshPeriod, isDark: state.updater.isDark);
           await repository.saveUpdater(updater: state.updater);
           yield AccountListStateLoaded(accountList: state.accountList, updater: state.updater);
         } on NoTriesLeftException {
@@ -128,7 +128,7 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
             state.accountList[accountNumber] = tempAccount;
           }
           await repository.saveAccountListToSharedprefs(accountList: state.accountList);
-          state.updater = Updater(lastTimeUpdated: DateTime.now().microsecondsSinceEpoch, refreshPeriod: state.updater.refreshPeriod);
+          state.updater = Updater(lastTimeUpdated: DateTime.now().microsecondsSinceEpoch, refreshPeriod: state.updater.refreshPeriod, isDark: state.updater.isDark);
           await repository.saveUpdater(updater: state.updater);
         } on NoTriesLeftException {
           yield AccountListStateError(
@@ -155,5 +155,19 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
       await repository.saveAccountListToSharedprefs(accountList: state.accountList);
       yield AccountListStateLoaded(accountList: state.accountList, updater: state.updater);
     }
+
+    //--------------- ВЫБИРАЕМ ПЕРИОД ОБНОВЛЕНИЯ ---------------//
+    if (accountListEvent is AccountListEventSetPeriod) {
+      state.updater = Updater(lastTimeUpdated: state.updater.lastTimeUpdated, refreshPeriod: accountListEvent.period!, isDark: state.updater.isDark);
+      await repository.saveUpdater(updater: state.updater);
+      yield AccountListStateLoaded(accountList: state.accountList, updater: state.updater);
+    }
+
+    //--------------- ПЕРЕКЛЮЧАЕМ ТЕМУ ---------------//
+    // if (accountListEvent is AccountListEventSetTheme) {
+    //   state.updater = Updater(lastTimeUpdated: state.updater.lastTimeUpdated, refreshPeriod: state.updater.refreshPeriod, isDark: accountListEvent.isDark);
+    //   await repository.saveUpdater(updater: state.updater);
+    //   yield AccountListStateLoaded(accountList: state.accountList, updater: state.updater);
+    // }
   }
 }

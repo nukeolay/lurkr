@@ -4,7 +4,7 @@ class CustomTheme {
   static ThemeData get lightTheme {
     return ThemeData(
       primaryColor: Colors.white,
-      accentColor: Colors.green,
+      accentColor: Colors.purple,
       scaffoldBackgroundColor: Colors.white,
       primaryColorLight: Colors.white,
       primaryColorDark: Colors.black,

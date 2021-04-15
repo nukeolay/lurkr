@@ -32,3 +32,13 @@ class AccountListEventUnCheck extends AccountListEvent {
   Account account;
   AccountListEventUnCheck({required this.account});
 }
+
+class AccountListEventSetPeriod extends AccountListEvent {
+  int? period;
+  AccountListEventSetPeriod({required this.period});
+}
+
+class AccountListEventSetTheme extends AccountListEvent {
+  bool isDark;
+  AccountListEventSetTheme({required this.isDark});
+}
