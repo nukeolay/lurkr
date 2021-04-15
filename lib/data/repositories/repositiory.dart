@@ -1,18 +1,20 @@
 import 'dart:convert';
 import 'package:Instasnitch/data/models/account.dart';
 import 'package:Instasnitch/data/models/exceptions.dart';
+import 'package:Instasnitch/data/models/updater.dart';
 import 'package:Instasnitch/data/providers/account_api.dart';
 import 'package:Instasnitch/data/providers/account_list_local.dart';
 import 'package:Instasnitch/data/providers/api_utils.dart';
+import 'package:Instasnitch/data/providers/updater_local.dart';
 
-class AccountRepository {
-  List<Account> accountList = [];
-
-  final AccountListLocal accountListLocal = AccountListLocal();
-  final AccountApi accountApi = AccountApi();
+class Repository {
+  List<Account> _accountList = [];
+  final AccountListLocal _accountListLocal = AccountListLocal();
+  final AccountApi _accountApi = AccountApi();
+  final UpdaterLocal _updaterLocal = UpdaterLocal();
 
   Future<Account> getAccountFromInternet({required String accountName}) async {
-    final String apiAccountString = await accountApi.getAccount(accountName: accountName);
+    final String apiAccountString = await _accountApi.getAccount(accountName: accountName);
     List tempInstagramResponse;
     try {
       tempInstagramResponse = jsonDecode(apiAccountString)['users'] as List;
@@ -37,21 +39,30 @@ class AccountRepository {
     throw NoAccountException();
   }
 
+  Future<Updater> getUpdater() async {
+    final Updater updater = await _updaterLocal.getUpdater();
+    return updater;
+  }
+
+  Future<void> saveUpdater({required Updater updater}) async {
+    _updaterLocal.setUpdater(lastTimeUpdated: updater.lastTimeUpdated, refreshPeriod: updater.refreshPeriod);
+  }
+
   Future<List<Account>> getAccountListFromSharedprefs() async {
-    final String? accountListLocalString = await accountListLocal.getAccountListLocal();
+    final String? accountListLocalString = await _accountListLocal.getAccountListLocal();
     try {
-      List<dynamic> tempList = jsonDecode(accountListLocalString!); //todo непонятно что за проверка '!'
+      List<dynamic> tempList = jsonDecode(accountListLocalString!); // '!' значит пообещать, то тут не будет null
       for (dynamic element in tempList) {
-        accountList.add(Account.fromSharedPrefs(element));
+        _accountList.add(Account.fromSharedPrefs(element));
       }
-      return accountList;
+      return _accountList;
     } catch (e) {
-      return accountList;
+      return _accountList;
     }
   }
 
   Future<void> saveAccountListToSharedprefs({required List<Account> accountList}) async {
-    await accountListLocal.setAccountListLocal(accountList: jsonEncode(accountList));
+    await _accountListLocal.setAccountListLocal(accountList: jsonEncode(accountList));
   }
 
   static Account getDummyAccount(

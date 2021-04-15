@@ -1,9 +1,9 @@
 import 'dart:ui';
-
 import 'package:Instasnitch/data/models/account.dart';
 import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_bloc.dart';
 import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_events.dart';
 import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_states.dart';
+import 'package:Instasnitch/presentation/screens/settings_screen.dart';
 import 'package:Instasnitch/presentation/widgets/account_avatar.dart';
 import 'package:Instasnitch/presentation/widgets/bottom_sheet_edit.dart';
 import 'package:Instasnitch/presentation/widgets/rotating_icon.dart';
@@ -21,8 +21,12 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('state: ${context.watch<AccountListBloc>().state}');
     final DateFormat formatter = DateFormat('dd.MM.yy HH:mm');
+
+    print('state: ${context.watch<AccountListBloc>().state}');
+    print('updated on: ${formatter.format(DateTime.fromMicrosecondsSinceEpoch(context.watch<AccountListBloc>().state.updater.lastTimeUpdated))}');
+    print('refresh period: ${context.watch<AccountListBloc>().state.updater.refreshPeriod / 60000000}');
+
     return Scaffold(
       body: BlocListener(
         //тут выводим сообщения в snackbar в зависимости от state
@@ -64,7 +68,9 @@ class HomeScreen extends StatelessWidget {
                               splashColor: Colors.purple,
                               highlightColor: Colors.deepPurple,
                               icon: const Icon(Icons.settings, size: 25),
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => SettingsScreen()));
+                              },
                             ),
                             onTap: () {},
                           ),
