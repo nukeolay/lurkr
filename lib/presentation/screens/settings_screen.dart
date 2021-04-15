@@ -21,7 +21,7 @@ class SettingsScreen extends StatelessWidget {
                       Container(
                         child: GestureDetector(
                           child: IconButton(
-                            tooltip: 'Settings',
+                            tooltip: 'Back',
                             splashRadius: 22,
                             splashColor: Colors.purple,
                             highlightColor: Colors.deepPurple,
@@ -41,7 +41,7 @@ class SettingsScreen extends StatelessWidget {
                           color: Colors.white,
                           child: Text(
                             'Settings',
-                            style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0, fontWeight: FontWeight.w400),
+                            style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0, fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),
@@ -54,7 +54,7 @@ class SettingsScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
+                        padding: const EdgeInsets.only(top: 12.0),
                         child: Text('Theme',
                             style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.bold)),
                       ),
@@ -67,8 +67,8 @@ class SettingsScreen extends StatelessWidget {
                         ],
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Text('Refresh period',
+                        padding: const EdgeInsets.symmetric(vertical: 12.0),
+                        child: Text('Automatic refresh period',
                             style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.bold)),
                       ),
                       Row(

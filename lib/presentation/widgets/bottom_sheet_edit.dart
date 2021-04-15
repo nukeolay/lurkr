@@ -105,7 +105,7 @@ class BottomSheetEdit extends StatelessWidget {
         Container(
           height: 50,
           alignment: Alignment.center,
-          margin: EdgeInsets.only(top: 5.0, bottom: Platform.isIOS ? 20.0 : 10.0, left: 10.0, right: 10.0),
+          margin: EdgeInsets.only(top: 5.0, bottom: Platform.isIOS ? 50.0 : 10.0, left: 10.0, right: 10.0),
           decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(10.0)),
           child: MaterialButton(
               shape: RoundedRectangleBorder(

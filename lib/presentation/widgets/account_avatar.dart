@@ -25,6 +25,8 @@ class AccountAvatar extends StatelessWidget {
                 border: Border.all(color: Colors.grey, width: 1.0),
               )
             : BoxDecoration(
+                borderRadius: BorderRadius.all(const Radius.circular(50.0)), //todo пробую
+                border: Border.all(color: Colors.grey, width: 0.1), //todo пробую
                 image: DecorationImage(
                   image: account.hasAnonymousProfilePicture
                       ? AssetImage('assets/default_avatar.png') as ImageProvider
