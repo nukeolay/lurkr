@@ -164,10 +164,10 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
     }
 
     //--------------- ПЕРЕКЛЮЧАЕМ ТЕМУ ---------------//
-    // if (accountListEvent is AccountListEventSetTheme) {
-    //   state.updater = Updater(lastTimeUpdated: state.updater.lastTimeUpdated, refreshPeriod: state.updater.refreshPeriod, isDark: accountListEvent.isDark);
-    //   await repository.saveUpdater(updater: state.updater);
-    //   yield AccountListStateLoaded(accountList: state.accountList, updater: state.updater);
-    // }
+    if (accountListEvent is AccountListEventSetTheme) {
+      state.updater = Updater(lastTimeUpdated: state.updater.lastTimeUpdated, refreshPeriod: state.updater.refreshPeriod, isDark: accountListEvent.isDark);
+      await repository.saveUpdater(updater: state.updater);
+      yield AccountListStateLoaded(accountList: state.accountList, updater: state.updater);
+    }
   }
 }
