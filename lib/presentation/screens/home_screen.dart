@@ -26,7 +26,7 @@ class HomeScreen extends StatelessWidget {
 
     print('state: ${context.watch<AccountListBloc>().state}');
     print('updated on: ${formatter.format(DateTime.fromMicrosecondsSinceEpoch(context.watch<AccountListBloc>().state.updater.lastTimeUpdated))}');
-    print('refresh period: ${context.watch<AccountListBloc>().state.updater.refreshPeriod / 60000000}');
+    print('refresh period (minutes): ${context.watch<AccountListBloc>().state.updater.refreshPeriod / 60000000}');
     print('isDark: ${context.watch<AccountListBloc>().state.updater.isDark}');
 
     return Scaffold(

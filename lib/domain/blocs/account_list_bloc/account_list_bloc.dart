@@ -143,6 +143,8 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
           break;
         }
       }
+      print('===state.accountList===');
+      print(state.accountList);
       yield AccountListStateLoaded(accountList: state.accountList, updater: state.updater);
     }
 

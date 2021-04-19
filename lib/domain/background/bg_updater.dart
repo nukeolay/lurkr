@@ -4,8 +4,8 @@ import 'package:Instasnitch/data/models/updater.dart';
 import 'package:Instasnitch/data/repositories/repositiory.dart';
 
 class BgUpdater {
-  static final BgUpdater _instance = BgUpdater._privateConstructor();
   int refreshPeriod = 900000000; //todo перед релизом исправить на 30 минут
+  static final BgUpdater _instance = BgUpdater._privateConstructor();
 
   BgUpdater._privateConstructor();
 
@@ -20,8 +20,8 @@ class BgUpdater {
   static Future<List<Account>> updateAccounts() async {
     Repository repository = Repository();
     List<Account> oldAccountList = await repository.getAccountListFromSharedprefs();
-    List<Account> updatedAccountList = await repository.getAccountListFromSharedprefs();
-    List<Account> notificationAccountList = [];
+    List<Account> updatedAccountList = []..addAll(oldAccountList); //клонирю список чтобы можно было его обновлять, не трогая оригинальный список
+    List<Account> notificationAccountList = []; //создаем пустой список для уведомлений
     Updater updater = await repository.getUpdater();
     _instance.refreshPeriod = updater.refreshPeriod; //установил тот период обновления, который был выбран и сохранен в sharedprefs
     for (Account currentAccount in oldAccountList) {
@@ -43,10 +43,9 @@ class BgUpdater {
         updater = Updater(lastTimeUpdated: DateTime.now().microsecondsSinceEpoch, refreshPeriod: updater.refreshPeriod, isDark: updater.isDark);
         await repository.saveUpdater(updater: updater);
       } on NoTriesLeftException {
+        //если не осталось попыток для обновления, то прерываем цикл и не обновляем больше
         break;
-      } on NoAccountException {} on ConnectionException {
-        break;
-      }
+      } on NoAccountException {} on ConnectionException {} //если аккаунт не найден, тогда просто перехоим к следущему, но обновление не прекращаем
     }
     return notificationAccountList;
   }

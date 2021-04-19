@@ -13,7 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:workmanager/workmanager.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-//todo в pubspec.yaml испольозовал форм workmanager, потому что основной не имеет поддержки null safety, нужно отследить, когда появится поддержка и убрать ссылку на этот форк а строке dependency_overrides
+//todo в pubspec.yaml испольозовал форк workmanager, потому что основной не имеет поддержки null safety, нужно отследить, когда появится поддержка и убрать ссылку на этот форк а строке dependency_overrides
 //todo для ios нужно настоить podfile, но он появится только на Маке, инструкция по настройке тут https://github.com/fluttercommunity/flutter_workmanager/blob/master/IOS_SETUP.md
 //todo для ios нужно настроить AppDelegate.swift, инструкция по настройке тут https://pub.dev/packages/flutter_local_notifications#custom-notification-icons-and-sounds
 
@@ -36,8 +36,8 @@ main() async {
   BgUpdater bgUpdater = BgUpdater();
   await Workmanager.initialize(callbackDispatcher, isInDebugMode: true); //todo сделать false
   await Workmanager.registerPeriodicTask('instasnitch_task', 'instasnitch_task',
-      inputData: {}, frequency: Duration(microseconds: bgUpdater.refreshPeriod), initialDelay: Duration(microseconds: bgUpdater.refreshPeriod));
-
+      inputData: {}, frequency: Duration(minutes: 15), initialDelay: Duration(minutes: 15));
+//todo!!!!!!!!!!!!frequency: Duration(microseconds: bgUpdater.refreshPeriod), initialDelay: Duration(microseconds: bgUpdater.refreshPeriod)
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
