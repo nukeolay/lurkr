@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:Instasnitch/data/models/account.dart';
+import 'package:Instasnitch/domain/background/notification.dart';
 import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_bloc.dart';
 import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_events.dart';
 import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_states.dart';

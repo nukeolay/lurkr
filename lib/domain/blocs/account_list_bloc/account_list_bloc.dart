@@ -4,6 +4,7 @@ import 'package:Instasnitch/data/models/account.dart';
 import 'package:Instasnitch/data/models/exceptions.dart';
 import 'package:Instasnitch/data/models/updater.dart';
 import 'package:Instasnitch/data/repositories/repositiory.dart';
+import 'package:Instasnitch/domain/background/bg_updater.dart';
 import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_events.dart';
 import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_states.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -160,6 +161,8 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
     if (accountListEvent is AccountListEventSetPeriod) {
       state.updater = Updater(lastTimeUpdated: state.updater.lastTimeUpdated, refreshPeriod: accountListEvent.period!, isDark: state.updater.isDark);
       await repository.saveUpdater(updater: state.updater);
+      BgUpdater bgUpdater = BgUpdater();
+      bgUpdater.setRefreshPeriod(accountListEvent.period!);
       yield AccountListStateLoaded(accountList: state.accountList, updater: state.updater);
     }
 
