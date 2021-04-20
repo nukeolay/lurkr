@@ -29,6 +29,7 @@ class Repository {
         String stringImage;
         if (!(element['user']['has_anonymous_profile_picture'] as bool)) {
           //если у аккаунта есть аватар, тогда этот параметр false
+          //преобразовываем аватарку в строку, чтобы хранить ее в sharedprefs
           stringImage = await ImageConverter.convertUriImageToString(element['user']['profile_pic_url']);
         } else {
           stringImage = 'error';
