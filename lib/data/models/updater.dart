@@ -1,17 +1,18 @@
 class Updater {
-  final int lastTimeUpdated;
   final int refreshPeriod;
   final bool isDark;
 
-  Updater({required this.lastTimeUpdated, required this.refreshPeriod, required this.isDark});
+  Updater({required this.refreshPeriod, required this.isDark});
 
   factory Updater.fromSharedPrefs(Map<String, dynamic> inputJson) {
-    return Updater(lastTimeUpdated: inputJson['lastTimeUpdated'] as int, refreshPeriod: inputJson['refreshPeriod'] as int, isDark: inputJson['isDark'] == 'true' ? true : false);
+    return Updater(refreshPeriod: inputJson['refreshPeriod'] as int, isDark: inputJson['isDark'] == 'true' ? true : false);
   }
 }
 
 enum Period {
   off,
+  minutes15,
+  minutes20,
   minutes30,
   hour1,
   hour2,
@@ -23,6 +24,10 @@ enum Period {
 int getPeriod(Period period) {
   const int hour = 3600000000;
   switch (period) {
+    case Period.minutes15:
+      return 900000000;
+    case Period.minutes20:
+      return 1200000000;
     case Period.minutes30:
       return 1800000000;
     case Period.hour1:

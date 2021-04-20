@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:Instasnitch/data/models/account.dart';
-import 'package:Instasnitch/domain/background/notification.dart';
 import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_bloc.dart';
 import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_events.dart';
 import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_states.dart';
@@ -26,8 +25,8 @@ class HomeScreen extends StatelessWidget {
 
     print('state: ${context.watch<AccountListBloc>().state}');
     //print('updated on: ${formatter.format(DateTime.fromMicrosecondsSinceEpoch(context.watch<AccountListBloc>().state.updater.lastTimeUpdated))}');
-    print('refresh period (minutes): ${context.watch<AccountListBloc>().state.updater.refreshPeriod / 60000000}');
-    print('isDark: ${context.watch<AccountListBloc>().state.updater.isDark}');
+    print('refresh period in state (minutes): ${context.watch<AccountListBloc>().state.updater.refreshPeriod / 60000000}');
+    //print('isDark: ${context.watch<AccountListBloc>().state.updater.isDark}');
 
     return Scaffold(
       body: BlocListener(

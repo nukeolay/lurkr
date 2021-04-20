@@ -42,7 +42,3 @@ class AccountListEventSetTheme extends AccountListEvent {
   bool isDark;
   AccountListEventSetTheme({required this.isDark});
 }
-
-// class AccountListEventRefreshUi extends AccountListEvent {
-//   AccountListEventRefreshUi();
-// }

@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'package:Instasnitch/main.dart';
 
 import 'package:Instasnitch/data/models/account.dart';
 import 'package:Instasnitch/data/models/exceptions.dart';
@@ -10,12 +11,12 @@ import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_states.d
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:workmanager/workmanager.dart';
 
 class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
   Repository repository = Repository();
-  BgUpdater bgUpdater = BgUpdater();
 
-  AccountListBloc() : super(AccountListStateStarting(accountList: [], updater: Updater(lastTimeUpdated: 0, refreshPeriod: 0, isDark: false)));
+  AccountListBloc() : super(AccountListStateStarting(accountList: [], updater: Updater(refreshPeriod: 0, isDark: false)));
 
   @override
   Stream<AccountListState> mapEventToState(AccountListEvent accountListEvent) async* {
@@ -26,13 +27,6 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
       Updater updater = await repository.getUpdater();
       yield AccountListStateLoaded(accountList: tempAccountList, updater: updater);
     }
-
-    // //--------------- ОБНОВЛЯЕМ СПИСОК ПОСЛЕ ПОВТОРНОГО ОТКРЫТИЯ ---------------//
-    // if (accountListEvent is AccountListEventRefreshUi) {
-    //   List<Account> tempAccountList = await repository.getAccountListFromSharedprefs();
-    //   Updater updater = await repository.getUpdater();
-    //   yield AccountListStateLoaded(accountList: tempAccountList, updater: updater);
-    // }
 
     //--------------- ДОБАВЛЯЕМ АККАУНТ ---------------//
     if (accountListEvent is AccountListEventAdd) {
@@ -45,7 +39,7 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
           Account tempAccount = await repository.getAccountFromInternet(accountName: accountListEvent.accountName);
           state.accountList.insert(0, tempAccount);
           await repository.saveAccountListToSharedprefs(accountList: state.accountList);
-          state.updater = Updater(lastTimeUpdated: DateTime.now().microsecondsSinceEpoch, refreshPeriod: state.updater.refreshPeriod, isDark: state.updater.isDark);
+          state.updater = Updater(refreshPeriod: state.updater.refreshPeriod, isDark: state.updater.isDark);
           await repository.saveUpdater(updater: state.updater);
           yield AccountListStateLoaded(accountList: state.accountList, updater: state.updater);
         } on NoTriesLeftException {
@@ -137,7 +131,7 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
             state.accountList[accountNumber] = tempAccount;
           }
           await repository.saveAccountListToSharedprefs(accountList: state.accountList);
-          state.updater = Updater(lastTimeUpdated: DateTime.now().microsecondsSinceEpoch, refreshPeriod: state.updater.refreshPeriod, isDark: state.updater.isDark);
+          state.updater = Updater(refreshPeriod: state.updater.refreshPeriod, isDark: state.updater.isDark);
           await repository.saveUpdater(updater: state.updater);
         } on NoTriesLeftException {
           yield AccountListStateError(
@@ -169,15 +163,23 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
 
     //--------------- ВЫБИРАЕМ ПЕРИОД ОБНОВЛЕНИЯ ---------------//
     if (accountListEvent is AccountListEventSetPeriod) {
-      state.updater = Updater(lastTimeUpdated: state.updater.lastTimeUpdated, refreshPeriod: accountListEvent.period!, isDark: state.updater.isDark);
+      state.updater = Updater(refreshPeriod: accountListEvent.period!, isDark: state.updater.isDark);
       await repository.saveUpdater(updater: state.updater);
-      bgUpdater.setRefreshPeriod(accountListEvent.period!);// todo может это не надо? Мы будем пирод обновления изменять?
+      BgUpdater(refreshPeriod: accountListEvent.period!);// todo может это не надо? Мы будем пирод обновления изменять?
+      Workmanager.cancelAll();
+      if(accountListEvent.period! > 0) {
+        await Workmanager.initialize(callbackDispatcher, isInDebugMode: true); //todo сделать false
+        await Workmanager.registerPeriodicTask('instasnitch_task', 'instasnitch_task',
+            inputData: {},
+            frequency: Duration(microseconds: accountListEvent.period!),
+            initialDelay: Duration(microseconds: accountListEvent.period!));
+      }
       yield AccountListStateLoaded(accountList: state.accountList, updater: state.updater);
     }
 
     //--------------- ПЕРЕКЛЮЧАЕМ ТЕМУ ---------------//
     if (accountListEvent is AccountListEventSetTheme) {
-      state.updater = Updater(lastTimeUpdated: state.updater.lastTimeUpdated, refreshPeriod: state.updater.refreshPeriod, isDark: accountListEvent.isDark);
+      state.updater = Updater(refreshPeriod: state.updater.refreshPeriod, isDark: accountListEvent.isDark);
       await repository.saveUpdater(updater: state.updater);
       yield AccountListStateLoaded(accountList: state.accountList, updater: state.updater);
     }

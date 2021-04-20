@@ -62,108 +62,132 @@ class SettingsScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          // Padding(
+                          //   padding: const EdgeInsets.symmetric(vertical: 14.5),
+                          //   child: Text('Theme', style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.bold)),
+                          // ),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //   children: [
+                          //     Text('Dark mode', style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
+                          //     Switch.adaptive(value: _isDark, onChanged: (value) {
+                          //       BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetTheme(isDark: value));
+                          //     }),
+                          //   ],
+                          // ),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 14.5),
-                            child: Text('Theme', style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.bold)),
+                            child: Text('Automatic refresh period',
+                                style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.bold)),
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('Dark mode', style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
-                              Switch.adaptive(value: _isDark, onChanged: (value) {
-                                BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetTheme(isDark: value));
-                              }),
+                              Text('Never (off)', style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
+                              Radio(
+                                  value: getPeriod(Period.off),
+                                  groupValue: _groupValue,
+                                  onChanged: (int? value) {
+                                    BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value));
+                                  }),
                             ],
                           ),
-                          // Padding(
-                          //   padding: const EdgeInsets.symmetric(vertical: 14.5),
-                          //   child: Text('Automatic refresh period',
-                          //       style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.bold)),
-                          // ),
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //   children: [
-                          //     Text('Never (off)', style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
-                          //     Radio(
-                          //         value: getPeriod(Period.off),
-                          //         groupValue: _groupValue,
-                          //         onChanged: (int? value) {
-                          //           BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value));
-                          //         }),
-                          //   ],
-                          // ),
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //   children: [
-                          //     Text('30 minutes', style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
-                          //     Radio(
-                          //         value: getPeriod(Period.minutes30),
-                          //         groupValue: _groupValue,
-                          //         onChanged: (int? value) {
-                          //           BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value));
-                          //         }),
-                          //   ],
-                          // ),
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //   children: [
-                          //     Text('1 hour', style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
-                          //     Radio(
-                          //         value: getPeriod(Period.hour1),
-                          //         groupValue: _groupValue,
-                          //         onChanged: (int? value) {
-                          //           BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value));
-                          //         }),
-                          //   ],
-                          // ),
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //   children: [
-                          //     Text('2 hour', style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
-                          //     Radio(
-                          //         value: getPeriod(Period.hour2),
-                          //         groupValue: _groupValue,
-                          //         onChanged: (int? value) {
-                          //           BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value));
-                          //         }),
-                          //   ],
-                          // ),
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //   children: [
-                          //     Text('6 hours', style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
-                          //     Radio(
-                          //         value: getPeriod(Period.hour6),
-                          //         groupValue: _groupValue,
-                          //         onChanged: (int? value) {
-                          //           BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value));
-                          //         }),
-                          //   ],
-                          // ),
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //   children: [
-                          //     Text('12 hours', style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
-                          //     Radio(
-                          //         value: getPeriod(Period.hour12),
-                          //         groupValue: _groupValue,
-                          //         onChanged: (int? value) {
-                          //           BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value));
-                          //         }),
-                          //   ],
-                          // ),
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //   children: [
-                          //     Text('24 hours', style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
-                          //     Radio(
-                          //         value: getPeriod(Period.hour24),
-                          //         groupValue: _groupValue,
-                          //         onChanged: (int? value) {
-                          //           BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value));
-                          //         }),
-                          //   ],
-                          // )
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('15 minutes', style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
+                              Radio(
+                                  value: getPeriod(Period.minutes15),
+                                  groupValue: _groupValue,
+                                  onChanged: (int? value) {
+                                    BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value));
+                                  }),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('20 minutes', style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
+                              Radio(
+                                  value: getPeriod(Period.minutes20),
+                                  groupValue: _groupValue,
+                                  onChanged: (int? value) {
+                                    BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value));
+                                  }),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('30 minutes', style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
+                              Radio(
+                                  value: getPeriod(Period.minutes30),
+                                  groupValue: _groupValue,
+                                  onChanged: (int? value) {
+                                    BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value));
+                                  }),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('1 hour', style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
+                              Radio(
+                                  value: getPeriod(Period.hour1),
+                                  groupValue: _groupValue,
+                                  onChanged: (int? value) {
+                                    BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value));
+                                  }),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('2 hour', style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
+                              Radio(
+                                  value: getPeriod(Period.hour2),
+                                  groupValue: _groupValue,
+                                  onChanged: (int? value) {
+                                    BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value));
+                                  }),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('6 hours', style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
+                              Radio(
+                                  value: getPeriod(Period.hour6),
+                                  groupValue: _groupValue,
+                                  onChanged: (int? value) {
+                                    BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value));
+                                  }),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('12 hours', style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
+                              Radio(
+                                  value: getPeriod(Period.hour12),
+                                  groupValue: _groupValue,
+                                  onChanged: (int? value) {
+                                    BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value));
+                                  }),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('24 hours', style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
+                              Radio(
+                                  value: getPeriod(Period.hour24),
+                                  groupValue: _groupValue,
+                                  onChanged: (int? value) {
+                                    BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value));
+                                  }),
+                            ],
+                          )
                         ],
                       ),
                     ),
