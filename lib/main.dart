@@ -56,7 +56,7 @@ main() async {
   int refreshPeriod = (await Repository().getUpdater()).refreshPeriod;
   BgUpdater bgUpdater = BgUpdater(refreshPeriod: refreshPeriod);
   print('refreshPeriod in main: ${bgUpdater.refreshPeriod/60000000}');
-  await Workmanager.initialize(callbackDispatcher, isInDebugMode: true); //todo сделать false
+  await Workmanager.initialize(callbackDispatcher, isInDebugMode: false); //todo сделать false
   await Workmanager.registerPeriodicTask('instasnitch_task', 'instasnitch_task',
       inputData: {}, frequency: Duration(microseconds: bgUpdater.refreshPeriod), initialDelay: Duration(microseconds: bgUpdater.refreshPeriod));
   SystemChrome.setSystemUIOverlayStyle(
