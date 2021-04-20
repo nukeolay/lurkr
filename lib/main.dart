@@ -1,3 +1,4 @@
+import 'package:Instasnitch/data/repositories/repositiory.dart';
 import 'package:Instasnitch/domain/background/bg_updater.dart';
 import 'package:Instasnitch/presentation/screens/home_screen.dart';
 import 'package:Instasnitch/presentation/screens/splash_screen.dart';
@@ -20,8 +21,6 @@ import 'package:workmanager/workmanager.dart';
 void callbackDispatcher() {
   Workmanager.executeTask((taskName, inputData) async {
     List<Account> accountList = await BgUpdater.updateAccounts(); //обновляем в фоне данные аккаунтов
-    //todo написать чтобы список в приложении обновлялся из sharedprefs
-
     String result;
     switch (accountList.length) {
       case 0:
@@ -54,13 +53,13 @@ void callbackDispatcher() {
 }
 
 main() async {
-  //todo узнать для чего async
   WidgetsFlutterBinding.ensureInitialized();
-  BgUpdater bgUpdater = BgUpdater();
+  int refreshPeriod = (await Repository().getUpdater()).refreshPeriod;
+  BgUpdater bgUpdater = BgUpdater(refreshPeriod: refreshPeriod);
+  print('refreshPeriod in main: ${bgUpdater.refreshPeriod/60000000}');
   await Workmanager.initialize(callbackDispatcher, isInDebugMode: true); //todo сделать false
   await Workmanager.registerPeriodicTask('instasnitch_task', 'instasnitch_task',
       inputData: {}, frequency: Duration(microseconds: bgUpdater.refreshPeriod), initialDelay: Duration(microseconds: bgUpdater.refreshPeriod));
-//todo!!!!!!!!!!!!frequency: Duration(microseconds: bgUpdater.refreshPeriod), initialDelay: Duration(microseconds: bgUpdater.refreshPeriod)
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
@@ -114,13 +113,12 @@ class _InstasnitchAppState extends State<InstasnitchApp> with WidgetsBindingObse
           title: 'Instasnitch',
           debugShowCheckedModeBanner: false,
           theme: CustomTheme.lightTheme,
-          darkTheme: CustomTheme.darkTheme,
-          themeMode: ThemeMode.light,
+          //darkTheme: CustomTheme.darkTheme,
+          //themeMode: ThemeMode.light,
           home: BlocBuilder<AccountListBloc, AccountListState>(
             buildWhen: (previousState, state) {
               // а то при каждом стейте будем перестраивать весь HomePage, а надо только те куски, которые я внутри определил
-              bool isNeedToRebuild = previousState is AccountListStateStarting ||
-                  _appLifecycleState == AppLifecycleState.resumed;
+              bool isNeedToRebuild = previousState is AccountListStateStarting || _appLifecycleState == AppLifecycleState.resumed;
               return isNeedToRebuild;
             },
             builder: (context, state) {

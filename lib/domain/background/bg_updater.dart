@@ -3,13 +3,15 @@ import 'package:Instasnitch/data/models/exceptions.dart';
 import 'package:Instasnitch/data/models/updater.dart';
 import 'package:Instasnitch/data/repositories/repositiory.dart';
 
+//это класс синглтон для обновления информации в фоновом режиме
 class BgUpdater {
-  int refreshPeriod = 900000000; //todo перед релизом исправить на 30 минут
+  late int refreshPeriod;
   static final BgUpdater _instance = BgUpdater._privateConstructor();
 
   BgUpdater._privateConstructor();
 
-  factory BgUpdater() {
+  factory BgUpdater({required int refreshPeriod}) {
+    _instance.refreshPeriod = refreshPeriod;
     return _instance;
   }
 
@@ -40,7 +42,7 @@ class BgUpdater {
           updatedAccountList[accountNumber] = updatedAccount;
         }
         await repository.saveAccountListToSharedprefs(accountList: updatedAccountList);
-        updater = Updater(lastTimeUpdated: DateTime.now().microsecondsSinceEpoch, refreshPeriod: updater.refreshPeriod, isDark: updater.isDark);
+        updater = Updater(refreshPeriod: updater.refreshPeriod, isDark: updater.isDark);
         await repository.saveUpdater(updater: updater);
       } on NoTriesLeftException {
         //если не осталось попыток для обновления, то прерываем цикл и не обновляем больше

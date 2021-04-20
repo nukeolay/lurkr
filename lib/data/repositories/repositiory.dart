@@ -45,7 +45,7 @@ class Repository {
   }
 
   Future<void> saveUpdater({required Updater updater}) async {
-    _updaterLocal.setUpdater(lastTimeUpdated: updater.lastTimeUpdated, refreshPeriod: updater.refreshPeriod);
+    _updaterLocal.setUpdater(refreshPeriod: updater.refreshPeriod);
   }
 
   Future<List<Account>> getAccountListFromSharedprefs() async {
