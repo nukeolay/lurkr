@@ -52,6 +52,7 @@ class Repository {
     final String? accountListLocalString = await _accountListLocal.getAccountListLocal();
     try {
       List<dynamic> tempList = jsonDecode(accountListLocalString!); // '!' значит пообещать, то тут не будет null
+      _accountList = []; //обнуляю список, а то он начинает дублироваться
       for (dynamic element in tempList) {
         _accountList.add(Account.fromSharedPrefs(element));
       }
