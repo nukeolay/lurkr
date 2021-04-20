@@ -13,6 +13,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
   Repository repository = Repository();
+  BgUpdater bgUpdater = BgUpdater();
 
   AccountListBloc() : super(AccountListStateStarting(accountList: [], updater: Updater(lastTimeUpdated: 0, refreshPeriod: 0, isDark: false)));
 
@@ -25,6 +26,13 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
       Updater updater = await repository.getUpdater();
       yield AccountListStateLoaded(accountList: tempAccountList, updater: updater);
     }
+
+    // //--------------- ОБНОВЛЯЕМ СПИСОК ПОСЛЕ ПОВТОРНОГО ОТКРЫТИЯ ---------------//
+    // if (accountListEvent is AccountListEventRefreshUi) {
+    //   List<Account> tempAccountList = await repository.getAccountListFromSharedprefs();
+    //   Updater updater = await repository.getUpdater();
+    //   yield AccountListStateLoaded(accountList: tempAccountList, updater: updater);
+    // }
 
     //--------------- ДОБАВЛЯЕМ АККАУНТ ---------------//
     if (accountListEvent is AccountListEventAdd) {
@@ -163,8 +171,7 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
     if (accountListEvent is AccountListEventSetPeriod) {
       state.updater = Updater(lastTimeUpdated: state.updater.lastTimeUpdated, refreshPeriod: accountListEvent.period!, isDark: state.updater.isDark);
       await repository.saveUpdater(updater: state.updater);
-      BgUpdater bgUpdater = BgUpdater();
-      bgUpdater.setRefreshPeriod(accountListEvent.period!);
+      bgUpdater.setRefreshPeriod(accountListEvent.period!);// todo может это не надо? Мы будем пирод обновления изменять?
       yield AccountListStateLoaded(accountList: state.accountList, updater: state.updater);
     }
 

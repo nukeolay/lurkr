@@ -11,7 +11,7 @@ class AccountListEventAdd extends AccountListEvent {
   AccountListEventAdd({required this.accountName});
 }
 
-class AccountListEventDelete extends AccountListEvent { //todo передавать сюда аккаунт,а не имя, тогда можно сократить код в блоке, не использовать dummy
+class AccountListEventDelete extends AccountListEvent {
   Account account;
   AccountListEventDelete({required this.account});
 }
@@ -21,7 +21,7 @@ class AccountListEventDownload extends AccountListEvent {
   AccountListEventDownload({required this.account});
 }
 
-class AccountListEventRefresh extends AccountListEvent { //todo передавать сюда аккаунт,а не имя, тогда можно сократить код в блоке, не использовать dummy
+class AccountListEventRefresh extends AccountListEvent {
   Account account;
   AccountListEventRefresh({required this.account});
 }
@@ -42,3 +42,7 @@ class AccountListEventSetTheme extends AccountListEvent {
   bool isDark;
   AccountListEventSetTheme({required this.isDark});
 }
+
+// class AccountListEventRefreshUi extends AccountListEvent {
+//   AccountListEventRefreshUi();
+// }

@@ -5,7 +5,7 @@ import 'api_utils.dart';
 class AccountApi {
   Future<String> getAccount({required String accountName}) async {
     try {
-      final Uri accountUri = ApiAddress.getFake(accountName); //todo для fake не забыть включить mockoon
+      final Uri accountUri = ApiAddress.getReal(accountName); //todo для fake не забыть включить mockoon
       final http.Response searchResponse = await http.get(accountUri);
       if (searchResponse.statusCode == 200) {
         return searchResponse.body;
