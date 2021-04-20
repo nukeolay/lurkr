@@ -12,23 +12,21 @@ class AccountApi {
       } else {
         throw ConnectionException('status code: ${searchResponse.statusCode}');
       }
-    }
-    catch (e) {
+    } catch (e) {
       throw ConnectionException('error: $e');
     }
   }
 
-  Future<String> getHdPic({required String accountName}) async {
+  Future<String> getGraphQl({required String accountName}) async {
     try {
-      final Uri accountUri = ApiAddress.getHdPic(accountName);
+      final Uri accountUri = ApiAddress.getGraphQl(accountName);
       final http.Response searchResponse = await http.get(accountUri);
       if (searchResponse.statusCode == 200) {
         return searchResponse.body;
       } else {
         throw ConnectionException('status code: ${searchResponse.statusCode}');
       }
-    }
-    catch (e) {
+    } catch (e) {
       throw ConnectionException('error: $e');
     }
   }

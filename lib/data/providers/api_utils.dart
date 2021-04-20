@@ -13,7 +13,7 @@ class ApiAddress {
     return Uri.http(authority, unencodedPath, {'query': '$username'});
   }
 
-  static Uri getHdPic(String username) {
+  static Uri getGraphQl(String username) {
     const authority = "instagram.com";
     String unencodedPath = "/$username";
     return Uri.https(authority, unencodedPath, {'__a': '1'});

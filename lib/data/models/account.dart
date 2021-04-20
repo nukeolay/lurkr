@@ -75,7 +75,8 @@ class Account {
       "lastTimeUpdated": this.lastTimeUpdated.toString()
     };
   }
-  void change(){
+
+  void change() {
     isChanged = true;
   }
 }

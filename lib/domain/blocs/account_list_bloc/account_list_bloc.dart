@@ -1,6 +1,6 @@
 import 'dart:typed_data';
+import 'package:Instasnitch/data/providers/api_utils.dart';
 import 'package:Instasnitch/main.dart';
-
 import 'package:Instasnitch/data/models/account.dart';
 import 'package:Instasnitch/data/models/exceptions.dart';
 import 'package:Instasnitch/data/models/updater.dart';
@@ -65,19 +65,28 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
     }
 
     //--------------- СОХРАНЕМ АВАТАРКУ ---------------//
-    //['graphql']['user']['profile_pic_url_hd']
     if (accountListEvent is AccountListEventDownload) {
       yield AccountListStateLoading(accountList: state.accountList, updater: state.updater);
       bool isPermissionGranted = await Permission.storage.status.isGranted;
       if (isPermissionGranted) {
-        Uint8List imageData = Uint8List.fromList(accountListEvent.account.savedProfilePic.codeUnits);
-        dynamic result = await ImageGallerySaver.saveImage(Uint8List.fromList(imageData),
-            quality: 100, name: 'instasnitch_avatar_${accountListEvent.account.username}');
-        if (result['error'] != null) {
-          yield AccountListStateError(
-              accountList: state.accountList, updater: state.updater, errorText: 'Image was not saved: ${result['error'].toString()}');
-        } else {
+        try {
+          //пытаемся скачать аватар hd по сслыке вида https://www.instagram.com/username/?__a=1
+          String hdPicUri = await repository.getHdPicUri(accountName: accountListEvent.account.username);
+          String stringImage = await ImageConverter.convertUriImageToString(hdPicUri);
+          await ImageGallerySaver.saveImage(Uint8List.fromList(stringImage.codeUnits),
+              quality: 100, name: 'instasnitch_avatar_hd_${accountListEvent.account.username}');
           yield AccountListStateDownloaded(accountList: state.accountList, updater: state.updater, snackbarText: 'Image saved');
+        } catch (e) {
+          //если в hd не получается скачать, то сохраняем аватар в низком разрешении из строки, сохраненной в account
+          Uint8List imageData = Uint8List.fromList(accountListEvent.account.savedProfilePic.codeUnits);
+          dynamic result = await ImageGallerySaver.saveImage(Uint8List.fromList(imageData),
+              quality: 100, name: 'instasnitch_avatar_${accountListEvent.account.username}');
+          if (result['error'] != null) {
+            yield AccountListStateError(
+                accountList: state.accountList, updater: state.updater, errorText: 'Image was not saved: ${result['error'].toString()}');
+          } else {
+            yield AccountListStateDownloaded(accountList: state.accountList, updater: state.updater, snackbarText: 'Image saved');
+          }
         }
       } else {
         PermissionStatus permissionStatus = await Permission.storage.request();
@@ -166,10 +175,10 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
     if (accountListEvent is AccountListEventSetPeriod) {
       state.updater = Updater(refreshPeriod: accountListEvent.period!, isDark: state.updater.isDark);
       await repository.saveUpdater(updater: state.updater);
-      BgUpdater(refreshPeriod: accountListEvent.period!);// todo может это не надо? Мы будем пирод обновления изменять?
+      BgUpdater(refreshPeriod: accountListEvent.period!);
       Workmanager.cancelAll();
-      if(accountListEvent.period! > 0) {
-        await Workmanager.initialize(callbackDispatcher, isInDebugMode: true); //todo сделать false перед релизом
+      if (accountListEvent.period! > 0) {
+        await Workmanager.initialize(callbackDispatcher, isInDebugMode: false); //todo сделать false перед релизом
         await Workmanager.registerPeriodicTask('instasnitch_task', 'instasnitch_task',
             inputData: {},
             frequency: Duration(microseconds: accountListEvent.period!),

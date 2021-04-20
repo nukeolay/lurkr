@@ -39,6 +39,15 @@ class Repository {
     throw NoAccountException();
   }
 
+  Future<String> getHdPicUri({required String accountName}) async {
+    final String apiAccountString = await _accountApi.getGraphQl(accountName: accountName);
+    try {
+      return jsonDecode(apiAccountString)['graphql']['user']['profile_pic_url_hd'] as String;
+    } catch (e) {
+      throw NoTriesLeftException();
+    }
+  }
+
   Future<Updater> getUpdater() async {
     final Updater updater = await _updaterLocal.getUpdater();
     return updater;
