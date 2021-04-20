@@ -17,4 +17,19 @@ class AccountApi {
       throw ConnectionException('error: $e');
     }
   }
+
+  Future<String> getHdPic({required String accountName}) async {
+    try {
+      final Uri accountUri = ApiAddress.getHdPic(accountName);
+      final http.Response searchResponse = await http.get(accountUri);
+      if (searchResponse.statusCode == 200) {
+        return searchResponse.body;
+      } else {
+        throw ConnectionException('status code: ${searchResponse.statusCode}');
+      }
+    }
+    catch (e) {
+      throw ConnectionException('error: $e');
+    }
+  }
 }

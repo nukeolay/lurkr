@@ -65,6 +65,7 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
     }
 
     //--------------- СОХРАНЕМ АВАТАРКУ ---------------//
+    //['graphql']['user']['profile_pic_url_hd']
     if (accountListEvent is AccountListEventDownload) {
       yield AccountListStateLoading(accountList: state.accountList, updater: state.updater);
       bool isPermissionGranted = await Permission.storage.status.isGranted;
@@ -168,7 +169,7 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
       BgUpdater(refreshPeriod: accountListEvent.period!);// todo может это не надо? Мы будем пирод обновления изменять?
       Workmanager.cancelAll();
       if(accountListEvent.period! > 0) {
-        await Workmanager.initialize(callbackDispatcher, isInDebugMode: true); //todo сделать false
+        await Workmanager.initialize(callbackDispatcher, isInDebugMode: true); //todo сделать false перед релизом
         await Workmanager.registerPeriodicTask('instasnitch_task', 'instasnitch_task',
             inputData: {},
             frequency: Duration(microseconds: accountListEvent.period!),
