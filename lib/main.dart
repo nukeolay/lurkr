@@ -8,7 +8,6 @@ import 'domain/background/notification.dart';
 import 'domain/blocs/account_list_bloc/account_list_bloc.dart';
 import 'domain/blocs/account_list_bloc/account_list_events.dart';
 import 'domain/blocs/account_list_bloc/account_list_states.dart';
-import 'domain/blocs/connection_bloc/connection_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -107,7 +106,6 @@ class _InstasnitchAppState extends State<InstasnitchApp> with WidgetsBindingObse
     return MultiBlocProvider(
         providers: [
           BlocProvider<AccountListBloc>(create: (context) => AccountListBloc()),
-          BlocProvider<ConnectionBloc>(create: (context) => ConnectionBloc()),
         ],
         child: MaterialApp(
           title: 'Instasnitch',

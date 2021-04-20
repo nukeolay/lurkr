@@ -12,6 +12,12 @@ class ApiAddress {
     const unencodedPath = "/users";
     return Uri.http(authority, unencodedPath, {'query': '$username'});
   }
+
+  static Uri getHdPic(String username) {
+    const authority = "instagram.com";
+    String unencodedPath = "/$username";
+    return Uri.https(authority, unencodedPath, {'__a': '1'});
+  }
 }
 
 class ImageConverter {
