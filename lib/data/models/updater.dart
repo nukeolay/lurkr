@@ -24,6 +24,8 @@ enum Period {
 int getPeriod(Period period) {
   const int hour = 3600000000;
   switch (period) {
+    case Period.off:
+      return 0;
     case Period.minutes15:
       return 900000000;
     case Period.minutes20:

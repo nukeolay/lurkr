@@ -4,6 +4,7 @@ import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_events.d
 import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_states.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({
@@ -30,7 +31,7 @@ class SettingsScreen extends StatelessWidget {
                           Container(
                             child: GestureDetector(
                               child: IconButton(
-                                tooltip: 'Back',
+                                tooltip: 'button_back'.tr(),
                                 splashRadius: 22,
                                 splashColor: Colors.purple,
                                 highlightColor: Colors.deepPurple,
@@ -49,7 +50,7 @@ class SettingsScreen extends StatelessWidget {
                               height: 30,
                               color: Colors.white,
                               child: Text(
-                                'Settings',
+                                'title_settings'.tr(),
                                 style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0, fontWeight: FontWeight.bold),
                               ),
                             ),
@@ -77,25 +78,25 @@ class SettingsScreen extends StatelessWidget {
                           // ),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 14.5),
-                            child: Text('Automatic refresh period',
+                            child: Text('title_refresh_period'.tr(),
                                 style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.bold)),
                           ),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //   children: [
+                          //     Text('period_off'.tr(), style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
+                          //     Radio(
+                          //         value: getPeriod(Period.off),
+                          //         groupValue: _groupValue,
+                          //         onChanged: (int? value) {
+                          //           BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value));
+                          //         }),
+                          //   ],
+                          // ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('Never (off)', style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
-                              Radio(
-                                  value: getPeriod(Period.off),
-                                  groupValue: _groupValue,
-                                  onChanged: (int? value) {
-                                    BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value));
-                                  }),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('15 minutes', style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
+                              Text('period_15minutes'.tr(), style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
                               Radio(
                                   value: getPeriod(Period.minutes15),
                                   groupValue: _groupValue,
@@ -104,22 +105,22 @@ class SettingsScreen extends StatelessWidget {
                                   }),
                             ],
                           ),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //   children: [
+                          //     Text('period_20minutes'.tr(), style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
+                          //     Radio(
+                          //         value: getPeriod(Period.minutes20),
+                          //         groupValue: _groupValue,
+                          //         onChanged: (int? value) {
+                          //           BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value));
+                          //         }),
+                          //   ],
+                          // ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('20 minutes', style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
-                              Radio(
-                                  value: getPeriod(Period.minutes20),
-                                  groupValue: _groupValue,
-                                  onChanged: (int? value) {
-                                    BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value));
-                                  }),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('30 minutes', style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
+                              Text('period_30minutes'.tr(), style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
                               Radio(
                                   value: getPeriod(Period.minutes30),
                                   groupValue: _groupValue,
@@ -131,7 +132,7 @@ class SettingsScreen extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('1 hour', style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
+                              Text('period_1hour'.tr(), style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
                               Radio(
                                   value: getPeriod(Period.hour1),
                                   groupValue: _groupValue,
@@ -143,7 +144,7 @@ class SettingsScreen extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('2 hour', style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
+                              Text('period_2hour'.tr(), style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
                               Radio(
                                   value: getPeriod(Period.hour2),
                                   groupValue: _groupValue,
@@ -155,7 +156,7 @@ class SettingsScreen extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('6 hours', style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
+                              Text('period_6hours'.tr(), style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
                               Radio(
                                   value: getPeriod(Period.hour6),
                                   groupValue: _groupValue,
@@ -167,7 +168,7 @@ class SettingsScreen extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('12 hours', style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
+                              Text('period_12hours'.tr(), style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
                               Radio(
                                   value: getPeriod(Period.hour12),
                                   groupValue: _groupValue,
@@ -179,7 +180,7 @@ class SettingsScreen extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('24 hours', style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
+                              Text('period_24hours'.tr(), style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
                               Radio(
                                   value: getPeriod(Period.hour24),
                                   groupValue: _groupValue,

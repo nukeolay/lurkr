@@ -12,6 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:workmanager/workmanager.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
   Repository repository = Repository();
@@ -33,8 +34,12 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
       yield AccountListStateLoading(accountList: state.accountList, updater: state.updater);
       //проверяем нет ли уже такого аккаунта в списке, для этого в классе Account переопределил опреатор '=='
       if (state.accountList.contains(Repository.getDummyAccount(userName: accountListEvent.accountName))) {
-        yield AccountListStateError(accountList: state.accountList, updater: state.updater, errorText: 'Account already added');
-      } else {
+        yield AccountListStateError(accountList: state.accountList, updater: state.updater, errorText: 'error_account_exists'.tr());
+      }
+      else if (state.accountList.length >=5) {
+        yield AccountListStateError(accountList: state.accountList, updater: state.updater, errorText: 'error_max_accounts'.tr());
+      }
+        else {
         try {
           Account tempAccount = await repository.getAccountFromInternet(accountName: accountListEvent.accountName);
           state.accountList.insert(0, tempAccount);
@@ -43,15 +48,15 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
           await repository.saveUpdater(updater: state.updater);
           yield AccountListStateLoaded(accountList: state.accountList, updater: state.updater);
         } on NoTriesLeftException {
-          state.accountList.insert(0, Repository.getDummyAccount(userName: accountListEvent.accountName, fullName: 'info not loaded'));
+          state.accountList.insert(0, Repository.getDummyAccount(userName: accountListEvent.accountName, fullName: 'error_info_not_loaded'.tr()));
           await repository.saveAccountListToSharedprefs(accountList: state.accountList);
           yield AccountListStateError(
-              accountList: state.accountList, updater: state.updater, errorText: 'Oops! No tries left, please try again later');
+              accountList: state.accountList, updater: state.updater, errorText: 'error_no_tries_left'.tr());
         } on NoAccountException {
           yield AccountListStateError(
-              accountList: state.accountList, updater: state.updater, errorText: 'Account not found: ${accountListEvent.accountName}');
+              accountList: state.accountList, updater: state.updater, errorText: 'error_account_not_found'.tr(args: [accountListEvent.accountName]));
         } on ConnectionException {
-          yield AccountListStateError(accountList: state.accountList, updater: state.updater, errorText: 'Network error');
+          yield AccountListStateError(accountList: state.accountList, updater: state.updater, errorText: 'error_network'.tr());
         }
       }
     }
@@ -75,7 +80,7 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
           String stringImage = await ImageConverter.convertUriImageToString(hdPicUri);
           await ImageGallerySaver.saveImage(Uint8List.fromList(stringImage.codeUnits),
               quality: 100, name: 'instasnitch_avatar_hd_${accountListEvent.account.username}');
-          yield AccountListStateDownloaded(accountList: state.accountList, updater: state.updater, snackbarText: 'Image saved');
+          yield AccountListStateDownloaded(accountList: state.accountList, updater: state.updater, snackbarText: 'info_image_saved'.tr());
         } catch (e) {
           //если в hd не получается скачать, то сохраняем аватар в низком разрешении из строки, сохраненной в account
           Uint8List imageData = Uint8List.fromList(accountListEvent.account.savedProfilePic.codeUnits);
@@ -83,9 +88,9 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
               quality: 100, name: 'instasnitch_avatar_${accountListEvent.account.username}');
           if (result['error'] != null) {
             yield AccountListStateError(
-                accountList: state.accountList, updater: state.updater, errorText: 'Image was not saved: ${result['error'].toString()}');
+                accountList: state.accountList, updater: state.updater, errorText: 'error_image_not_saved'.tr(args: [result['error'].toString()]));
           } else {
-            yield AccountListStateDownloaded(accountList: state.accountList, updater: state.updater, snackbarText: 'Image saved');
+            yield AccountListStateDownloaded(accountList: state.accountList, updater: state.updater, snackbarText: 'info_image_saved'.tr());
           }
         }
       } else {
@@ -93,7 +98,7 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
         if (permissionStatus.isGranted) {
           add(AccountListEventDownload(account: accountListEvent.account));
         } else {
-          yield AccountListStateError(accountList: state.accountList, updater: state.updater, errorText: 'Permission to storage not granted');
+          yield AccountListStateError(accountList: state.accountList, updater: state.updater, errorText: 'error_permission_storage'.tr());
         }
       }
     }
@@ -115,12 +120,12 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
         await repository.saveAccountListToSharedprefs(accountList: state.accountList);
         yield AccountListStateLoaded(accountList: state.accountList, updater: state.updater);
       } on NoTriesLeftException {
-        yield AccountListStateError(accountList: state.accountList, updater: state.updater, errorText: 'Oops! No tries left, please try again later');
+        yield AccountListStateError(accountList: state.accountList, updater: state.updater, errorText: 'error_no_tries_left'.tr());
       } on NoAccountException {
         yield AccountListStateError(
-            accountList: state.accountList, updater: state.updater, errorText: 'Account not found: ${accountListEvent.account.username}');
+            accountList: state.accountList, updater: state.updater, errorText: 'error_account_not_found'.tr(args: [accountListEvent.account.username]));
       } on ConnectionException {
-        yield AccountListStateError(accountList: state.accountList, updater: state.updater, errorText: 'Network error');
+        yield AccountListStateError(accountList: state.accountList, updater: state.updater, errorText: 'error_network'.tr());
       }
     }
 
@@ -145,18 +150,16 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
           await repository.saveUpdater(updater: state.updater);
         } on NoTriesLeftException {
           yield AccountListStateError(
-              accountList: state.accountList, updater: state.updater, errorText: 'Oops! No tries left, please try again later');
+              accountList: state.accountList, updater: state.updater, errorText: 'error_no_tries_left'.tr());
           break;
         } on NoAccountException {
           yield AccountListStateError(
-              accountList: state.accountList, updater: state.updater, errorText: 'Account not found: ${currentAccount.username}');
+              accountList: state.accountList, updater: state.updater, errorText: 'error_account_not_found'.tr(args: [currentAccount.username]));
         } on ConnectionException {
-          yield AccountListStateError(accountList: state.accountList, updater: state.updater, errorText: 'Network error');
+          yield AccountListStateError(accountList: state.accountList, updater: state.updater, errorText: 'error_network'.tr());
           break;
         }
       }
-      print('===state.accountList===');
-      print(state.accountList);
       yield AccountListStateLoaded(accountList: state.accountList, updater: state.updater);
     }
 
@@ -176,10 +179,11 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
       state.updater = Updater(refreshPeriod: accountListEvent.period!, isDark: state.updater.isDark);
       await repository.saveUpdater(updater: state.updater);
       BgUpdater(refreshPeriod: accountListEvent.period!);
-      Workmanager.cancelAll();
+      await Workmanager().cancelAll();
       if (accountListEvent.period! > 0) {
-        await Workmanager.initialize(callbackDispatcher, isInDebugMode: false); //todo сделать false перед релизом
-        await Workmanager.registerPeriodicTask('instasnitch_task', 'instasnitch_task',
+        await Workmanager().initialize(callbackDispatcher, isInDebugMode: true); //todo сделать false перед релизом
+        print('refresh period in bloc: ${accountListEvent.period! / 60000000}');
+        await Workmanager().registerPeriodicTask('instasnitch_task', 'instasnitch_task',
             inputData: {},
             frequency: Duration(microseconds: accountListEvent.period!),
             initialDelay: Duration(microseconds: accountListEvent.period!));

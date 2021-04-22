@@ -4,6 +4,11 @@
 <dict>
     <key>NSPhotoLibraryUsageDescription</key>
     <string>Save profile pictures from internet</string>
+    <key>CFBundleLocalizations</key>
+    <array>
+    	<string>en</string>
+    	<string>ru</string>
+    </array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
