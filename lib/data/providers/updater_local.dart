@@ -10,7 +10,7 @@ class UpdaterLocal {
     try {
       refreshPeriod = prefs.getInt('refreshPeriod')!;
     } catch (e) {
-      refreshPeriod = 900000000; //по-умолчанию стоит 1 час
+      refreshPeriod = 3600000000; //по-умолчанию стоит 1 час
     }
     try {
       isDark = prefs.getBool('isDark')!;

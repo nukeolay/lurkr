@@ -12,7 +12,9 @@ import 'package:Instasnitch/presentation/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import '../widgets/bottom_sheet_add.dart';
+import 'package:Instasnitch/presentation/widgets/bottom_sheet_add.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({
@@ -21,7 +23,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DateFormat formatter = DateFormat('dd.MM.yy HH:mm');
+    final DateFormat formatter = DateFormat('date_formatter'.tr());
 
     print('state: ${context.watch<AccountListBloc>().state}');
     //print('updated on: ${formatter.format(DateTime.fromMicrosecondsSinceEpoch(context.watch<AccountListBloc>().state.updater.lastTimeUpdated))}');
@@ -64,7 +66,7 @@ class HomeScreen extends StatelessWidget {
                         Container(
                           child: GestureDetector(
                             child: IconButton(
-                              tooltip: 'Settings',
+                              tooltip: 'hint_settings'.tr(),
                               splashRadius: 22,
                               splashColor: Colors.purple,
                               highlightColor: Colors.deepPurple,
@@ -132,11 +134,11 @@ class HomeScreen extends StatelessWidget {
                                   title: Text(state.accountList[index].username),
                                   subtitle: tempLoadedAccount.fullName ==
                                           'error' //todo посмотреть в каком случае может быть fullName error, может быть это удалить
-                                      ? Text('error getting info', style: TextStyle(color: Colors.red))
+                                      ? Text('error_getting_info'.tr(), style: TextStyle(color: Colors.red))
                                       : tempLoadedAccount.lastTimeUpdated == 0
-                                          ? Text('info does not loaded')
+                                          ? Text('error_info_not_loaded'.tr())
                                           : Text(
-                                              'updated ${formatter.format(DateTime.fromMicrosecondsSinceEpoch(tempLoadedAccount.lastTimeUpdated))}'),
+                                              'info_updated'.tr(args: [formatter.format(DateTime.fromMicrosecondsSinceEpoch(tempLoadedAccount.lastTimeUpdated))])),
                                   trailing: Icon(
                                     state.accountList[index].isChanged ? Icons.new_releases_rounded : null,
                                     size: 30,
@@ -145,7 +147,6 @@ class HomeScreen extends StatelessWidget {
                                             ? Colors.red
                                             : Colors.green
                                         : Colors.purple,
-                                    semanticLabel: 'profile status changed',
                                   ),
                                 ),
                               );
@@ -169,14 +170,14 @@ class HomeScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 IconButton(
-                    tooltip: 'Refresh',
+                    tooltip: 'button_refresh'.tr(),
                     splashRadius: 22,
                     splashColor: Colors.purple,
                     highlightColor: Colors.deepPurple,
                     icon: RotatingRefreshIcon(),
                     onPressed: null),
                 IconButton(
-                  tooltip: 'Add account',
+                  tooltip: 'button_add'.tr(),
                   splashRadius: 22,
                   splashColor: Colors.purple,
                   highlightColor: Colors.deepPurple,
@@ -190,7 +191,7 @@ class HomeScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               IconButton(
-                  tooltip: 'Refresh',
+                  tooltip: 'button_refresh'.tr(),
                   splashRadius: 22,
                   splashColor: Colors.purple,
                   highlightColor: Colors.deepPurple,
@@ -199,7 +200,7 @@ class HomeScreen extends StatelessWidget {
                     BlocProvider.of<AccountListBloc>(context).add(AccountListEventRefreshAll());
                   }),
               IconButton(
-                tooltip: 'Add account',
+                tooltip: 'button_add'.tr(),
                 splashRadius: 22,
                 splashColor: Colors.purple,
                 highlightColor: Colors.deepPurple,

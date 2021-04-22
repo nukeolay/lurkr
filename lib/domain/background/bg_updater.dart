@@ -2,6 +2,9 @@ import 'package:Instasnitch/data/models/account.dart';
 import 'package:Instasnitch/data/models/exceptions.dart';
 import 'package:Instasnitch/data/models/updater.dart';
 import 'package:Instasnitch/data/repositories/repositiory.dart';
+import 'package:workmanager/workmanager.dart';
+
+import 'notification.dart';
 
 //это класс синглтон для обновления информации в фоновом режиме
 class BgUpdater {
@@ -50,5 +53,76 @@ class BgUpdater {
       } on NoAccountException {} on ConnectionException {} //если аккаунт не найден, тогда просто перехоим к следущему, но обновление не прекращаем
     }
     return notificationAccountList;
+  }
+  static void callbackDispatcher() {
+    Workmanager().executeTask((taskName, inputData) async {
+      List<Account> accountList = await BgUpdater.updateAccounts(); //обновляем в фоне данные аккаунтов
+      print('accountList fetched in background: $accountList');
+      String result;
+      switch (accountList.length) {
+        case 0:
+          return Future.value(true);
+        case 1:
+          {
+            result = '${accountList[0].username} is ${accountList[0].isPrivate ? 'private now' : 'public now'}';
+            await LocalNotification.initializer();
+            LocalNotification.showOneTimeNotification(title: 'Instasnitch', text: result);
+            return Future.value(true);
+          }
+        case 2:
+          {
+            result =
+            '${accountList[0].username} is ${accountList[0].isPrivate ? 'private now' : 'public now'} and ${accountList[1].username} is ${accountList[1].isPrivate ? 'private now' : 'public now'}';
+            await LocalNotification.initializer();
+            LocalNotification.showOneTimeNotification(title: 'Instasnitch', text: result);
+            return Future.value(true);
+          }
+        default:
+          {
+            result =
+            '${accountList[0].username} is ${accountList[0].isPrivate ? 'private now' : 'public now'} and ${accountList.length - 1} accounts changed their private status';
+            await LocalNotification.initializer();
+            LocalNotification.showOneTimeNotification(title: 'Instasnitch', text: result);
+            return Future.value(true);
+          }
+      }
+    });
+  }
+}
+
+class BgUpdaterStatic {
+  static void callbackDispatcher() {
+    Workmanager().executeTask((taskName, inputData) async {
+      List<Account> accountList = await BgUpdater.updateAccounts(); //обновляем в фоне данные аккаунтов
+      print('accountList fetched in background: $accountList');
+      String result;
+      switch (accountList.length) {
+        case 0:
+          return Future.value(true);
+        case 1:
+          {
+            result = '${accountList[0].username} is ${accountList[0].isPrivate ? 'private now' : 'public now'}';
+            await LocalNotification.initializer();
+            LocalNotification.showOneTimeNotification(title: 'Instasnitch', text: result);
+            return Future.value(true);
+          }
+        case 2:
+          {
+            result =
+            '${accountList[0].username} is ${accountList[0].isPrivate ? 'private now' : 'public now'} and ${accountList[1].username} is ${accountList[1].isPrivate ? 'private now' : 'public now'}';
+            await LocalNotification.initializer();
+            LocalNotification.showOneTimeNotification(title: 'Instasnitch', text: result);
+            return Future.value(true);
+          }
+        default:
+          {
+            result =
+            '${accountList[0].username} is ${accountList[0].isPrivate ? 'private now' : 'public now'} and ${accountList.length - 1} accounts changed their private status';
+            await LocalNotification.initializer();
+            LocalNotification.showOneTimeNotification(title: 'Instasnitch', text: result);
+            return Future.value(true);
+          }
+      }
+    });
   }
 }

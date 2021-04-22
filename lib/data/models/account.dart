@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class Account {
   final String username;
   final Uri profilePicUrl;
@@ -58,7 +60,7 @@ class Account {
 
   @override
   String toString() {
-    return 'name: $username, fullName: $fullName, isPrivate: $isPrivate, isChanged: $isChanged';
+    return 'name: $username, fullName: $fullName, isPrivate: $isPrivate, isChanged: $isChanged, updated: ${DateFormat('dd.MM.yy HH:mm').format(DateTime.fromMicrosecondsSinceEpoch(lastTimeUpdated))}';
   }
 
   Map<String, dynamic> toJson() {

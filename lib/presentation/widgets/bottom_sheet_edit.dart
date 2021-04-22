@@ -5,6 +5,7 @@ import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_events.d
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class BottomSheetEdit extends StatelessWidget {
   final Account account;
@@ -64,7 +65,7 @@ class BottomSheetEdit extends StatelessWidget {
                           children: [
                             Icon(Icons.download_rounded, size: 30.0, color: Colors.white),
                             SizedBox(width: 20.0),
-                            Text('Save avatar picture',
+                            Text('button_download_avatar'.tr(),
                                 style: TextStyle(color: Colors.white, fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
                           ],
                         ),
@@ -92,7 +93,7 @@ class BottomSheetEdit extends StatelessWidget {
                     children: [
                       Icon(Icons.refresh_rounded, size: 30.0, color: Colors.white),
                       SizedBox(width: 20.0),
-                      Text('Refresh', style: TextStyle(color: Colors.white, fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
+                      Text('button_refresh'.tr(), style: TextStyle(color: Colors.white, fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
                     ],
                   ),
                 ),
@@ -119,7 +120,7 @@ class BottomSheetEdit extends StatelessWidget {
                     children: [
                       Icon(Icons.delete_outline_rounded, size: 30.0, color: Colors.white),
                       SizedBox(width: 20.0),
-                      Text('Delete', style: TextStyle(color: Colors.white, fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
+                      Text('button_delete'.tr(), style: TextStyle(color: Colors.white, fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
                     ],
                   ),
                 ),

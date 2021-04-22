@@ -3,6 +3,7 @@ import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_bloc.dar
 import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_events.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class BottomSheetAdd extends StatefulWidget {
   //сделал StatefulWidget потому, что иначе textEditingController обнуляется при сворачивании клавиатуры при каждом build
@@ -48,8 +49,19 @@ class _BottomSheetAddState extends State<BottomSheetAdd> {
               _textFieldController.clear();
               Navigator.pop(context);
             },
-            decoration: InputDecoration.collapsed(
-              hintText: 'Enter account name',
+            textAlignVertical: TextAlignVertical.center,
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              errorBorder: InputBorder.none,
+              disabledBorder: InputBorder.none,
+              isCollapsed: true,
+              prefixIcon: Icon(Icons.alternate_email_rounded, color: Colors.purple),
+              prefixIconConstraints: BoxConstraints.expand(width: 28),
+              //prefixText: '@',
+              //prefixStyle: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold, fontFamily: 'Montserrat', fontSize: 16.0),
+              hintText: 'hint_enter_account'.tr(),
             ),
           ),
         ),
@@ -66,7 +78,7 @@ class _BottomSheetAddState extends State<BottomSheetAdd> {
                 height: 50,
                 alignment: Alignment.center,
                 child:
-                    Text('Add account', style: TextStyle(color: Colors.white, fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
+                    Text('button_add'.tr(), style: TextStyle(color: Colors.white, fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
               ),
               onPressed: () {
                 BlocProvider.of<AccountListBloc>(context).add(AccountListEventAdd(accountName: _textFieldController.value.text));
