@@ -7,6 +7,7 @@ class UpdaterLocal {
     await prefs.reload(); //добавил, чтобы получить актульные записи после обновления в фоне
     int? refreshPeriod;
     bool isDark;
+    bool isFirstTime;
     try {
       refreshPeriod = prefs.getInt('refreshPeriod')!;
     } catch (e) {
@@ -17,7 +18,12 @@ class UpdaterLocal {
     } catch (e) {
       isDark = false;
     }
-    return Updater(refreshPeriod: refreshPeriod, isDark: isDark); //todo когда получаю результат проверять на null
+    try {
+      isFirstTime = prefs.getBool('isFirstTime')!;
+    } catch (e) {
+      isFirstTime = true;
+    }
+    return Updater(refreshPeriod: refreshPeriod, isDark: isDark, isFirstTime: isFirstTime); //todo когда получаю результат проверять на null
   }
 
   Future<void> setUpdater({required int refreshPeriod}) async {

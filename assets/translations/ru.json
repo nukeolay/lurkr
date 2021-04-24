@@ -1,6 +1,7 @@
 {
   "date_formatter": "dd.MM.yy HH:mm",
   "title_settings": "Настройки",
+  "title_battery_optimization": "Управление оптимизацией потребления энергии",
   "title_refresh_period": "Период автоматического обновления",
   "hint_settings": "Настройки",
   "hint_enter_account": "Введите название аккаунта",
@@ -9,6 +10,7 @@
   "button_download_avatar": "Сохранить аватар в галерею",
   "button_back": "Назад",
   "button_delete": "Удалить",
+  "button_battery_optimization": "Разрешить приложению обновлять информацию в фоновом режиме",
   "error_account_exists": "Такой аккаунт уже дбавлен в список",
   "error_no_tries_left": "Ой! Исчерпан лимит запросов к серверу, попробуйте позже",
   "error_account_not_found": "Аккаунт не найден: {}",
@@ -30,6 +32,7 @@
   "period_6hours": "6 часов",
   "period_12hours": "12 часов",
   "period_24hours": "24 часа",
-  "msg_private": "теперь приватный",
-  "msg_public": "теперь открытый"
+  "msg_is": "теперь",
+  "msg_private": "приватный",
+  "msg_public": "открытый"
 }

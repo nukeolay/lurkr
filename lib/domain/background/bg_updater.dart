@@ -15,10 +15,6 @@ class BgUpdater {
     return _instance;
   }
 
-  // void setRefreshPeriod(int refreshPeriod) {
-  //   this.refreshPeriod = refreshPeriod;
-  // }
-
   static Future<List<Account>> updateAccounts() async {
     Repository repository = Repository();
     List<Account> oldAccountList = await repository.getAccountListFromSharedprefs();
@@ -42,7 +38,7 @@ class BgUpdater {
           updatedAccountList[accountNumber] = updatedAccount;
         }
         await repository.saveAccountListToSharedprefs(accountList: updatedAccountList);
-        updater = Updater(refreshPeriod: updater.refreshPeriod, isDark: updater.isDark); //todo разобраться зачем это делать
+        updater = Updater(refreshPeriod: updater.refreshPeriod, isDark: updater.isDark, isFirstTime: updater.isFirstTime); //todo разобраться зачем это делать
         await repository.saveUpdater(updater: updater); //todo разобраться зачем это делать
       } on NoTriesLeftException {
         //если не осталось попыток для обновления, то прерываем цикл и не обновляем больше

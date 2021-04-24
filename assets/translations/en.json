@@ -1,6 +1,7 @@
 {
   "date_formatter": "MM.dd.yy HH:mm",
   "title_settings": "Settings",
+  "title_battery_optimization": "Device battery optimization",
   "title_refresh_period": "Automatic refresh period",
   "hint_settings": "Settings",
   "hint_enter_account": "Enter account name",
@@ -9,6 +10,7 @@
   "button_download_avatar": "Save avatar picture",
   "button_back": "Back",
   "button_delete": "Delete",
+  "button_battery_optimization": "Allow app to work in background",
   "error_account_exists": "Account already added",
   "error_no_tries_left": "Oops! No tries left, please try again later",
   "error_account_not_found": "Account not found: {}",
@@ -30,6 +32,7 @@
   "period_6hours": "6 hours",
   "period_12hours": "12 hours",
   "period_24hours": "24 hours",
+  "msg_is": "is",
   "msg_private": "private now",
   "msg_public": "public now"
 }
