@@ -14,51 +14,62 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:workmanager/workmanager.dart';
 
+//import 'package:flutter_native_timezone/flutter_native_timezone.dart';
+//import 'package:timezone/timezone.dart' as tz;
+//import 'package:timezone/data/latest_all.dart' as tz;
+
 //todo для ios нужно настоить podfile, но он появится только на Маке, инструкция по настройке тут https://github.com/fluttercommunity/flutter_workmanager/blob/master/IOS_SETUP.md
 //todo для ios нужно настроить AppDelegate.swift, инструкция по настройке тут https://pub.dev/packages/flutter_local_notifications#custom-notification-icons-and-sounds
 
 void callbackDispatcher() {
   Workmanager().executeTask((taskName, inputData) async {
     List<Account> accountList = await BgUpdater.updateAccounts(); //обновляем в фоне данные аккаунтов
-
     String result;
     switch (accountList.length) {
       case 0:
-        return Future.value(true);
+        break;
       case 1:
         {
           result = '${accountList[0].username} is ${accountList[0].isPrivate ? 'private now' : 'public now'}';
           await LocalNotification.initializer();
-          LocalNotification.showOneTimeNotification(title: 'Instasnitch', text: result);
-          return Future.value(true);
+          await LocalNotification.showOneTimeNotification(title: 'Instasnitch', text: result);
+          break;
         }
       case 2:
         {
           result =
               '${accountList[0].username} is ${accountList[0].isPrivate ? 'private now' : 'public now'} and ${accountList[1].username} is ${accountList[1].isPrivate ? 'private now' : 'public now'}';
           await LocalNotification.initializer();
-          LocalNotification.showOneTimeNotification(title: 'Instasnitch', text: result);
-          return Future.value(true);
+          await LocalNotification.showOneTimeNotification(title: 'Instasnitch', text: result);
+          break;
         }
       default:
         {
           result =
               '${accountList[0].username} is ${accountList[0].isPrivate ? 'private now' : 'public now'} and ${accountList.length - 1} accounts changed their private status';
           await LocalNotification.initializer();
-          LocalNotification.showOneTimeNotification(title: 'Instasnitch', text: result);
-          return Future.value(true);
+          await LocalNotification.showOneTimeNotification(title: 'Instasnitch', text: result);
+          break;
         }
     }
+    return Future.value(true);
   });
 }
 
+// Future<void> _configureLocalTimeZone() async {
+//   tz.initializeTimeZones();
+//   final String? timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
+//   tz.setLocalLocation(tz.getLocation(timeZoneName!));
+// }
+
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  //await _configureLocalTimeZone();
   await EasyLocalization.ensureInitialized();
   int refreshPeriod = (await Repository().getUpdater()).refreshPeriod;
   BgUpdater bgUpdater = BgUpdater(refreshPeriod: refreshPeriod);
   print('refreshPeriod in main: ${bgUpdater.refreshPeriod / 60000000}');
-  await Workmanager().initialize(callbackDispatcher, isInDebugMode: true); //todo сделать false
+  await Workmanager().initialize(callbackDispatcher, isInDebugMode: false); //todo сделать false
   await Workmanager().registerPeriodicTask('instasnitch_task', 'instasnitch_task',
       inputData: {}, frequency: Duration(microseconds: bgUpdater.refreshPeriod), initialDelay: Duration(microseconds: bgUpdater.refreshPeriod));
   SystemChrome.setSystemUIOverlayStyle(

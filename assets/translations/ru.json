@@ -19,6 +19,7 @@
   "error_permission_storage": "Отсутствует доступ к хранилищу",
   "error_getting_info": "ошибка при загрузке информации",
   "error_max_accounts": "Превышен лимит количества добавленных аккаунтов (не более 5)",
+  "error_connection_timeout": "Превышен интервал ожидания соединения",
   "info_updated": "обновлено {}",
   "period_off": "Отключено",
   "period_15minutes": "15 минут",
@@ -28,5 +29,7 @@
   "period_2hour": "2 часа",
   "period_6hours": "6 часов",
   "period_12hours": "12 часов",
-  "period_24hours": "24 часа"
+  "period_24hours": "24 часа",
+  "msg_private": "теперь приватный",
+  "msg_public": "теперь открытый"
 }

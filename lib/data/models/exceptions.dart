@@ -26,3 +26,5 @@ class ConnectionException implements Exception {
     return "Connection error: $errorText";
   }
 }
+
+class ConnectionTimeoutException implements Exception {}

@@ -11,7 +11,7 @@ import 'package:Instasnitch/presentation/widgets/custom_scroll_behavoir.dart';
 import 'package:Instasnitch/presentation/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart'; //todo убрал, чтобы проверить, достаточно ли easy_localization? или форматтер берется только из intl
 import 'package:Instasnitch/presentation/widgets/bottom_sheet_add.dart';
 import 'package:easy_localization/easy_localization.dart';
 

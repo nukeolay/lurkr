@@ -19,6 +19,7 @@
   "error_permission_storage": "Permission to storage not granted",
   "error_getting_info": "error getting info",
   "error_max_accounts": "Account limit exceeded (no more than 5)",
+  "error_connection_timeout": "Connection timeout",
   "info_updated": "updated {}",
   "period_off": "Never (off)",
   "period_15minutes": "15 minutes",
@@ -28,5 +29,7 @@
   "period_2hour": "2 hour",
   "period_6hours": "6 hours",
   "period_12hours": "12 hours",
-  "period_24hours": "24 hours"
+  "period_24hours": "24 hours",
+  "msg_private": "private now",
+  "msg_public": "public now"
 }

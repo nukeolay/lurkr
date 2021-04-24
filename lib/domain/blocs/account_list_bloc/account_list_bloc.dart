@@ -36,10 +36,10 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
       if (state.accountList.contains(Repository.getDummyAccount(userName: accountListEvent.accountName))) {
         yield AccountListStateError(accountList: state.accountList, updater: state.updater, errorText: 'error_account_exists'.tr());
       }
-      else if (state.accountList.length >=5) {
+      //если уже 5 аккаунтов добавлено, то выводим ошибку
+      else if (state.accountList.length >= 5) {
         yield AccountListStateError(accountList: state.accountList, updater: state.updater, errorText: 'error_max_accounts'.tr());
-      }
-        else {
+      } else {
         try {
           Account tempAccount = await repository.getAccountFromInternet(accountName: accountListEvent.accountName);
           state.accountList.insert(0, tempAccount);
@@ -50,13 +50,14 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
         } on NoTriesLeftException {
           state.accountList.insert(0, Repository.getDummyAccount(userName: accountListEvent.accountName, fullName: 'error_info_not_loaded'.tr()));
           await repository.saveAccountListToSharedprefs(accountList: state.accountList);
-          yield AccountListStateError(
-              accountList: state.accountList, updater: state.updater, errorText: 'error_no_tries_left'.tr());
+          yield AccountListStateError(accountList: state.accountList, updater: state.updater, errorText: 'error_no_tries_left'.tr());
         } on NoAccountException {
           yield AccountListStateError(
               accountList: state.accountList, updater: state.updater, errorText: 'error_account_not_found'.tr(args: [accountListEvent.accountName]));
         } on ConnectionException {
           yield AccountListStateError(accountList: state.accountList, updater: state.updater, errorText: 'error_network'.tr());
+        } on ConnectionTimeoutException {
+          yield AccountListStateError(accountList: state.accountList, updater: state.updater, errorText: 'error_connection_timeout'.tr());
         }
       }
     }
@@ -123,9 +124,13 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
         yield AccountListStateError(accountList: state.accountList, updater: state.updater, errorText: 'error_no_tries_left'.tr());
       } on NoAccountException {
         yield AccountListStateError(
-            accountList: state.accountList, updater: state.updater, errorText: 'error_account_not_found'.tr(args: [accountListEvent.account.username]));
+            accountList: state.accountList,
+            updater: state.updater,
+            errorText: 'error_account_not_found'.tr(args: [accountListEvent.account.username]));
       } on ConnectionException {
         yield AccountListStateError(accountList: state.accountList, updater: state.updater, errorText: 'error_network'.tr());
+      } on ConnectionTimeoutException {
+        yield AccountListStateError(accountList: state.accountList, updater: state.updater, errorText: 'error_connection_timeout'.tr());
       }
     }
 
@@ -149,8 +154,7 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
           state.updater = Updater(refreshPeriod: state.updater.refreshPeriod, isDark: state.updater.isDark);
           await repository.saveUpdater(updater: state.updater);
         } on NoTriesLeftException {
-          yield AccountListStateError(
-              accountList: state.accountList, updater: state.updater, errorText: 'error_no_tries_left'.tr());
+          yield AccountListStateError(accountList: state.accountList, updater: state.updater, errorText: 'error_no_tries_left'.tr());
           break;
         } on NoAccountException {
           yield AccountListStateError(
@@ -158,6 +162,8 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
         } on ConnectionException {
           yield AccountListStateError(accountList: state.accountList, updater: state.updater, errorText: 'error_network'.tr());
           break;
+        } on ConnectionTimeoutException {
+          yield AccountListStateError(accountList: state.accountList, updater: state.updater, errorText: 'error_connection_timeout'.tr());
         }
       }
       yield AccountListStateLoaded(accountList: state.accountList, updater: state.updater);
@@ -176,17 +182,14 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
 
     //--------------- ВЫБИРАЕМ ПЕРИОД ОБНОВЛЕНИЯ ---------------//
     if (accountListEvent is AccountListEventSetPeriod) {
-      state.updater = Updater(refreshPeriod: accountListEvent.period!, isDark: state.updater.isDark);
+      state.updater = Updater(refreshPeriod: accountListEvent.period, isDark: state.updater.isDark);
       await repository.saveUpdater(updater: state.updater);
-      BgUpdater(refreshPeriod: accountListEvent.period!);
+      BgUpdater(refreshPeriod: accountListEvent.period);
       await Workmanager().cancelAll();
-      if (accountListEvent.period! > 0) {
-        await Workmanager().initialize(callbackDispatcher, isInDebugMode: true); //todo сделать false перед релизом
-        print('refresh period in bloc: ${accountListEvent.period! / 60000000}');
+      if (accountListEvent.period > 0) {
+        await Workmanager().initialize(callbackDispatcher, isInDebugMode: false); //todo сделать false перед релизом
         await Workmanager().registerPeriodicTask('instasnitch_task', 'instasnitch_task',
-            inputData: {},
-            frequency: Duration(microseconds: accountListEvent.period!),
-            initialDelay: Duration(microseconds: accountListEvent.period!));
+            inputData: {}, frequency: Duration(microseconds: accountListEvent.period), initialDelay: Duration(microseconds: accountListEvent.period));
       }
       yield AccountListStateLoaded(accountList: state.accountList, updater: state.updater);
     }

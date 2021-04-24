@@ -81,18 +81,18 @@ class SettingsScreen extends StatelessWidget {
                             child: Text('title_refresh_period'.tr(),
                                 style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.bold)),
                           ),
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //   children: [
-                          //     Text('period_off'.tr(), style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
-                          //     Radio(
-                          //         value: getPeriod(Period.off),
-                          //         groupValue: _groupValue,
-                          //         onChanged: (int? value) {
-                          //           BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value));
-                          //         }),
-                          //   ],
-                          // ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('period_off'.tr(), style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
+                              Radio(
+                                  value: getPeriod(Period.off),
+                                  groupValue: _groupValue,
+                                  onChanged: (int? value) {
+                                    BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value!));
+                                  }),
+                            ],
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -101,7 +101,7 @@ class SettingsScreen extends StatelessWidget {
                                   value: getPeriod(Period.minutes15),
                                   groupValue: _groupValue,
                                   onChanged: (int? value) {
-                                    BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value));
+                                    BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value!));
                                   }),
                             ],
                           ),
@@ -113,7 +113,7 @@ class SettingsScreen extends StatelessWidget {
                           //         value: getPeriod(Period.minutes20),
                           //         groupValue: _groupValue,
                           //         onChanged: (int? value) {
-                          //           BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value));
+                          //           BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value!));
                           //         }),
                           //   ],
                           // ),
@@ -125,7 +125,7 @@ class SettingsScreen extends StatelessWidget {
                                   value: getPeriod(Period.minutes30),
                                   groupValue: _groupValue,
                                   onChanged: (int? value) {
-                                    BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value));
+                                    BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value!));
                                   }),
                             ],
                           ),
@@ -137,7 +137,7 @@ class SettingsScreen extends StatelessWidget {
                                   value: getPeriod(Period.hour1),
                                   groupValue: _groupValue,
                                   onChanged: (int? value) {
-                                    BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value));
+                                    BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value!));
                                   }),
                             ],
                           ),
@@ -149,7 +149,7 @@ class SettingsScreen extends StatelessWidget {
                                   value: getPeriod(Period.hour2),
                                   groupValue: _groupValue,
                                   onChanged: (int? value) {
-                                    BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value));
+                                    BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value!));
                                   }),
                             ],
                           ),
@@ -161,7 +161,7 @@ class SettingsScreen extends StatelessWidget {
                                   value: getPeriod(Period.hour6),
                                   groupValue: _groupValue,
                                   onChanged: (int? value) {
-                                    BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value));
+                                    BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value!));
                                   }),
                             ],
                           ),
@@ -173,7 +173,7 @@ class SettingsScreen extends StatelessWidget {
                                   value: getPeriod(Period.hour12),
                                   groupValue: _groupValue,
                                   onChanged: (int? value) {
-                                    BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value));
+                                    BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value!));
                                   }),
                             ],
                           ),
@@ -185,7 +185,7 @@ class SettingsScreen extends StatelessWidget {
                                   value: getPeriod(Period.hour24),
                                   groupValue: _groupValue,
                                   onChanged: (int? value) {
-                                    BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value));
+                                    BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value!));
                                   }),
                             ],
                           )
