@@ -34,7 +34,7 @@ class AccountListEventUnCheck extends AccountListEvent {
 }
 
 class AccountListEventSetPeriod extends AccountListEvent {
-  int? period;
+  int period;
   AccountListEventSetPeriod({required this.period});
 }
 

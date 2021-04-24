@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:Instasnitch/data/models/exceptions.dart';
 import 'package:flutter/services.dart';
 
 class ApiAddress {
@@ -23,8 +26,14 @@ class ApiAddress {
 class ImageConverter {
   static Future<String> convertUriImageToString(String stringUri) async {
     final Uri imageUri = Uri.parse(stringUri);
-    final ByteData imageData = await NetworkAssetBundle(imageUri).load('');
-    final String imageSavedAsString = String.fromCharCodes(imageData.buffer.asUint8List());
-    return imageSavedAsString;
+    try {
+      final ByteData imageData = await NetworkAssetBundle(imageUri).load('').timeout(Duration(seconds: 20));
+      final String imageSavedAsString = String.fromCharCodes(imageData.buffer.asUint8List());
+      return imageSavedAsString;
+    } on TimeoutException {
+      throw ConnectionTimeoutException();
+    } catch (e) {
+      throw ConnectionException('error: $e');
+    }
   }
 }
