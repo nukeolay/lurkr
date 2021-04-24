@@ -1,7 +1,4 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-//import 'package:flutter_native_timezone/flutter_native_timezone.dart';
-//import 'package:timezone/data/latest_all.dart' as tz;
-//import 'package:timezone/timezone.dart' as tz;
 
 class LocalNotification {
   static late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
@@ -19,13 +16,6 @@ class LocalNotification {
 
   static showOneTimeNotification({required String title, required String text}) async {
     NotificationDetails notificationDetails = NotificationDetails(android: androidSettings);
-    // print('===begin of getting tz: yyyy-mm-dd hh:mm:ss');
-    // tz.initializeTimeZones();
-    // final String timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
-    // print('===tz: ${tz.TZDateTime.now(tz.getLocation(timeZoneName)).add(const Duration(seconds: 20))}');
-    // await flutterLocalNotificationsPlugin.zonedSchedule(
-    //     1, title, text, tz.TZDateTime.now(tz.getLocation(timeZoneName)).add(const Duration(seconds: 20)), notificationDetails,
-    //     androidAllowWhileIdle: true, uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime);
     await flutterLocalNotificationsPlugin.show(1, title, text, notificationDetails);
   }
 

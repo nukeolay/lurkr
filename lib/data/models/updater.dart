@@ -1,11 +1,14 @@
 class Updater {
   final int refreshPeriod;
   final bool isDark;
+  final bool isFirstTime;
 
-  Updater({required this.refreshPeriod, required this.isDark});
+  Updater({required this.refreshPeriod, required this.isDark, required this.isFirstTime});
 
   factory Updater.fromSharedPrefs(Map<String, dynamic> inputJson) {
-    return Updater(refreshPeriod: inputJson['refreshPeriod'] as int, isDark: inputJson['isDark'] == 'true' ? true : false);
+    return Updater(refreshPeriod: inputJson['refreshPeriod'] as int,
+        isDark: inputJson['isDark'] == 'true' ? true : false,
+        isFirstTime: inputJson['isFirstTime'] == 'true' ? true : false);
   }
 }
 
