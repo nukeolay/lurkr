@@ -17,7 +17,7 @@ List<SlideModel> getSlides() {
   SlideModel slideModel1 = new SlideModel(
     imagePath: 'onb_img1'.tr(),
     title: 'onb_title1'.tr(),
-    instruction: [Text('onb_text1'.tr(), style: TextStyle(color: Colors.grey.shade600))],
+    instruction: [Text('onb_text1'.tr(), style: TextStyle(color: Colors.grey.shade600, fontSize: 15.0))],
   );
   slides.add(slideModel1);
   //-----------------------------------------------------------------------------
@@ -25,7 +25,7 @@ List<SlideModel> getSlides() {
   SlideModel slideModel2 = new SlideModel(
     imagePath: 'onb_img2'.tr(),
     title: 'onb_title2'.tr(),
-    instruction: [Text('onb_text2'.tr(), style: TextStyle(color: Colors.grey.shade600))],
+    instruction: [Text('onb_text2'.tr(), style: TextStyle(color: Colors.grey.shade600, fontSize: 15.0))],
   );
   slides.add(slideModel2);
   //-----------------------------------------------------------------------------
@@ -33,7 +33,7 @@ List<SlideModel> getSlides() {
   SlideModel slideModel3 = new SlideModel(
     imagePath: 'onb_img3'.tr(),
     title: 'onb_title3'.tr(),
-    instruction: [Text('onb_text3'.tr(), style: TextStyle(color: Colors.grey.shade600))],
+    instruction: [Text('onb_text3'.tr(), style: TextStyle(color: Colors.grey.shade600, fontSize: 15.0))],
   );
   slides.add(slideModel3);
   //-----------------------------------------------------------------------------
@@ -42,7 +42,7 @@ List<SlideModel> getSlides() {
     imagePath: 'onb_img4'.tr(),
     title: 'onb_title4'.tr(),
     instruction: [
-      Text('onb_text4'.tr(), style: TextStyle(color: Colors.grey.shade600)),
+      Text('onb_text4'.tr(), style: TextStyle(color: Colors.grey.shade600, fontSize: 15.0)),
       Container(
         height: 50,
         alignment: Alignment.center,
