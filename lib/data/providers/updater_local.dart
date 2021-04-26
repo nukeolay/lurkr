@@ -26,8 +26,10 @@ class UpdaterLocal {
     return Updater(refreshPeriod: refreshPeriod, isDark: isDark, isFirstTime: isFirstTime); //todo когда получаю результат проверять на null
   }
 
-  Future<void> setUpdater({required int refreshPeriod}) async {
+  Future<void> setUpdater({required int refreshPeriod, required isDark, required isFirstTime}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setInt('refreshPeriod', refreshPeriod);
+    await prefs.setBool('isDark', isDark);
+    await prefs.setBool('isFirstTime', isFirstTime);
   }
 }

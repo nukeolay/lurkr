@@ -16,6 +16,8 @@ class CustomTheme {
         elevation: 0,
         color: Colors.white,
       ),
+        bottomSheetTheme: BottomSheetThemeData(
+            backgroundColor: Colors.white.withOpacity(0)),
     );
   }
 
