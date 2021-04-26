@@ -93,10 +93,11 @@ class _OnBoardingState extends State<OnBoardingScreen> {
           ),
         ),
         bottomSheet: Container(
+          padding: EdgeInsets.symmetric(horizontal: 40.0),
           color: Colors.transparent,
           height: Platform.isIOS ? 70.0 : 60.0,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

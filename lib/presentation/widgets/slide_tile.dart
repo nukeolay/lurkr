@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:io';
-
 import 'custom_scroll_behavoir.dart';
 
 class SlideTile extends StatelessWidget {
@@ -16,13 +14,12 @@ class SlideTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
 
     return Column(
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 20.0),
-          child: Image.asset(imagePath, height: 300.0),
+          child: Image.asset(imagePath, height: 280.0),
         ),
         Expanded(
           child: Container(
@@ -47,14 +44,8 @@ class SlideTile extends StatelessWidget {
                     height: 10.0,
                   ),
                   //Text(
-                  ScrollConfiguration(
-                    behavior: CustomScrollBehavior(),
-                    child: SingleChildScrollView(
-                      physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                      child: Column(
-                        children: instruction,
-                      ),
-                    ),
+                  Column(
+                    children: instruction,
                   ),
                 ],
               ),
