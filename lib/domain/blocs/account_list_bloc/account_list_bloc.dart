@@ -11,7 +11,7 @@ import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_states.d
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:workmanager/workmanager.dart' as Workmanager;
+import 'package:workmanager/workmanager.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
@@ -26,6 +26,7 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
     if (accountListEvent is AccountListEventStart) {
       List<Account> tempAccountList = await repository.getAccountListFromSharedprefs();
       Updater updater = await repository.getUpdater();
+      await Future.delayed(Duration(seconds: 1));
       yield AccountListStateLoaded(accountList: tempAccountList, updater: updater);
     }
 
@@ -185,20 +186,19 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
       state.updater = Updater(refreshPeriod: accountListEvent.period, isDark: state.updater.isDark, isFirstTime: state.updater.isFirstTime);
       await repository.saveUpdater(updater: state.updater);
       BgUpdater(refreshPeriod: accountListEvent.period);
-      await Workmanager.Workmanager().cancelAll();
+      await Workmanager().cancelAll();
       if (accountListEvent.period > 0) {
-        //await Workmanager.Workmanager().initialize(callbackDispatcher, isInDebugMode: false); //todo сделать false перед релизом, отключил, мне кажется что достаточно в main
-        await Workmanager.Workmanager().registerPeriodicTask('instasnitch_task', 'instasnitch_task',
-            inputData: {},
-            frequency: Duration(microseconds: accountListEvent.period),
-            initialDelay: Duration(microseconds: accountListEvent.period),
-            constraints: Workmanager.Constraints(
-                networkType: Workmanager.NetworkType.unmetered,
-                requiresBatteryNotLow: false,
-                requiresCharging: false,
-                requiresDeviceIdle: false,
-                requiresStorageNotLow: false));
+        //await Workmanager().initialize(callbackDispatcher, isInDebugMode: false); //todo сделать false перед релизом, отключил, мне кажется что достаточно в main
+        await Workmanager().registerPeriodicTask('instasnitch_task', 'instasnitch_task',
+            inputData: {}, frequency: Duration(microseconds: accountListEvent.period), initialDelay: Duration(microseconds: accountListEvent.period));
       }
+      yield AccountListStateLoaded(accountList: state.accountList, updater: state.updater);
+    }
+
+    //--------------- ЗАВЕРШАЕМ ПРОСМОТР ИНСТРУКЦИИ ---------------//
+    if (accountListEvent is AccountListEventInstructionOk) {
+      state.updater = Updater(refreshPeriod: state.updater.refreshPeriod, isDark: state.updater.isDark, isFirstTime: false);
+      await repository.saveUpdater(updater: state.updater);
       yield AccountListStateLoaded(accountList: state.accountList, updater: state.updater);
     }
 

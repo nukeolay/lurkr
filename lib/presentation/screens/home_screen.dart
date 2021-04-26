@@ -53,36 +53,38 @@ class HomeScreen extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  Container(
-                    padding: EdgeInsets.only(left: 10.0, right: 10.0, top: 50.0, bottom: 5.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          height: 30,
-                          color: Colors.white,
-                          child: Image.asset('assets/top_logo.png'),
-                        ),
-                        Container(
-                          child: GestureDetector(
-                            child: IconButton(
-                              tooltip: 'hint_settings'.tr(),
-                              splashRadius: 22,
-                              splashColor: Colors.purple,
-                              highlightColor: Colors.deepPurple,
-                              icon: const Icon(Icons.settings, size: 25),
-                              onPressed: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (settingsContext) => BlocProvider.value(
-                                          value: BlocProvider.of<AccountListBloc>(context),
-                                          child: SettingsScreen(),
-                                        )));
-                              },
-                            ),
-                            onTap: () {},
+                  SafeArea(
+                    child: Container(
+                      padding: EdgeInsets.only(left: 10.0, right: 10.0, top: 0.0, bottom: 0.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            height: 30,
+                            color: Colors.white,
+                            child: Image.asset('assets/top_logo.png'),
                           ),
-                        ),
-                      ],
+                          Container(
+                            child: GestureDetector(
+                              child: IconButton(
+                                tooltip: 'hint_settings'.tr(),
+                                splashRadius: 22,
+                                splashColor: Colors.purple,
+                                highlightColor: Colors.deepPurple,
+                                icon: const Icon(Icons.settings, size: 25),
+                                onPressed: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (settingsContext) => BlocProvider.value(
+                                            value: BlocProvider.of<AccountListBloc>(context),
+                                            child: SettingsScreen(),
+                                          )));
+                                },
+                              ),
+                              onTap: () {},
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   Expanded(

@@ -68,6 +68,10 @@ flutter:
   assets:
     - assets/
     - assets/translations/
+    - assets/on_boarding/
+    - assets/on_boarding/en/
+    - assets/on_boarding/ru/
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

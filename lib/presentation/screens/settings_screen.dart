@@ -27,39 +27,41 @@ class SettingsScreen extends StatelessWidget {
                 children: [
                   Column(
                     children: [
-                      Container(
-                        padding: EdgeInsets.only(left: 10.0, right: 10.0, top: 50.0, bottom: 5.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              child: GestureDetector(
-                                child: IconButton(
-                                  tooltip: 'button_back'.tr(),
-                                  splashRadius: 22,
-                                  splashColor: Colors.purple,
-                                  highlightColor: Colors.deepPurple,
-                                  icon: const Icon(Icons.arrow_back_rounded, size: 25),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                                onTap: () {},
-                              ),
-                            ),
-                            Expanded(
-                              child: Container(
-                                margin: EdgeInsets.only(right: 48.0),
-                                alignment: Alignment.center,
-                                height: 30,
-                                color: Colors.white,
-                                child: Text(
-                                  'title_settings'.tr(),
-                                  style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0, fontWeight: FontWeight.bold),
+                      SafeArea(
+                        child: Container(
+                          padding: EdgeInsets.only(left: 10.0, right: 10.0, top: 0.0, bottom: 0.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                child: GestureDetector(
+                                  child: IconButton(
+                                    tooltip: 'button_back'.tr(),
+                                    splashRadius: 22,
+                                    splashColor: Colors.purple,
+                                    highlightColor: Colors.deepPurple,
+                                    icon: const Icon(Icons.arrow_back_rounded, size: 25),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  onTap: () {},
                                 ),
                               ),
-                            ),
-                          ],
+                              Expanded(
+                                child: Container(
+                                  margin: EdgeInsets.only(right: 48.0),
+                                  alignment: Alignment.center,
+                                  height: 30,
+                                  color: Colors.white,
+                                  child: Text(
+                                    'title_settings'.tr(),
+                                    style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0, fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       Expanded(

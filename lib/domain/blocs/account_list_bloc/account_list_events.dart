@@ -38,6 +38,10 @@ class AccountListEventSetPeriod extends AccountListEvent {
   AccountListEventSetPeriod({required this.period});
 }
 
+class AccountListEventInstructionOk extends AccountListEvent {
+  AccountListEventInstructionOk();
+}
+
 class AccountListEventSetTheme extends AccountListEvent {
   bool isDark;
   AccountListEventSetTheme({required this.isDark});

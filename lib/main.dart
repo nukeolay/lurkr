@@ -1,6 +1,7 @@
 import 'package:Instasnitch/data/repositories/repositiory.dart';
 import 'package:Instasnitch/domain/background/bg_updater.dart';
 import 'package:Instasnitch/presentation/screens/home_screen.dart';
+import 'package:Instasnitch/presentation/screens/on_boarding_screen.dart';
 import 'package:Instasnitch/presentation/screens/splash_screen.dart';
 import 'package:Instasnitch/presentation/theme/theme.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -13,13 +14,13 @@ import 'domain/blocs/account_list_bloc/account_list_states.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:workmanager/workmanager.dart' as Workmanager;
+import 'package:workmanager/workmanager.dart';
 
 //todo для ios нужно настоить podfile, но он появится только на Маке, инструкция по настройке тут https://github.com/fluttercommunity/flutter_workmanager/blob/master/IOS_SETUP.md
 //todo для ios нужно настроить AppDelegate.swift, инструкция по настройке тут https://pub.dev/packages/flutter_local_notifications#custom-notification-icons-and-sounds
 
 void callbackDispatcher() {
-  Workmanager.Workmanager().executeTask((taskName, inputData) async {
+  Workmanager().executeTask((taskName, inputData) async {
     List<Account> accountList = await BgUpdater.updateAccounts(); //обновляем в фоне данные аккаунтов
     String result;
     switch (accountList.length) {
@@ -36,7 +37,7 @@ void callbackDispatcher() {
           break;
         }
     }
-    return true;
+    return Future.value(true); //todo проверить, когда все булет работать без future
   });
 }
 
@@ -46,17 +47,9 @@ main() async {
   int refreshPeriod = (await Repository().getUpdater()).refreshPeriod;
   BgUpdater bgUpdater = BgUpdater(refreshPeriod: refreshPeriod); //todo разобраться зачем это делать
   print('refreshPeriod in main: ${bgUpdater.refreshPeriod / 60000000}');
-  await Workmanager.Workmanager().initialize(callbackDispatcher, isInDebugMode: false); //todo сделать false
-  await Workmanager.Workmanager().registerPeriodicTask('instasnitch_task', 'instasnitch_task',
-      inputData: {},
-      frequency: Duration(microseconds: bgUpdater.refreshPeriod),
-      initialDelay: Duration(microseconds: bgUpdater.refreshPeriod),
-      constraints: Workmanager.Constraints(
-          networkType: Workmanager.NetworkType.unmetered,
-          requiresBatteryNotLow: false,
-          requiresCharging: false,
-          requiresDeviceIdle: false,
-          requiresStorageNotLow: false));
+  await Workmanager().initialize(callbackDispatcher, isInDebugMode: false); //todo сделать false
+  await Workmanager().registerPeriodicTask('instasnitch_task', 'instasnitch_task',
+      inputData: {}, frequency: Duration(microseconds: bgUpdater.refreshPeriod), initialDelay: Duration(microseconds: bgUpdater.refreshPeriod));
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
@@ -107,6 +100,7 @@ class _InstasnitchAppState extends State<InstasnitchApp> with WidgetsBindingObse
 
   @override
   Widget build(BuildContext context) {
+    bool isOnBoardingLoaded = false; //костыль чтобы перестроить экран, после просмотра OnBoardingScreen
     return MultiBlocProvider(
         providers: [
           BlocProvider<AccountListBloc>(create: (context) => AccountListBloc()),
@@ -123,10 +117,14 @@ class _InstasnitchAppState extends State<InstasnitchApp> with WidgetsBindingObse
           home: BlocBuilder<AccountListBloc, AccountListState>(
             buildWhen: (previousState, state) {
               // а то при каждом стейте будем перестраивать весь HomePage, а надо только те куски, которые я внутри определил
-              bool isNeedToRebuild = previousState is AccountListStateStarting || _appLifecycleState == AppLifecycleState.resumed;
+              print('isFirstTime: ${state.updater.isFirstTime}');
+              bool isNeedToRebuild =
+                  previousState is AccountListStateStarting || _appLifecycleState == AppLifecycleState.resumed || isOnBoardingLoaded;
+              isOnBoardingLoaded = false;
               return isNeedToRebuild;
             },
             builder: (context, state) {
+              print('state: $state');
               if (_appLifecycleState == AppLifecycleState.resumed) {
                 //если приложение было свернуто, а теперь открыто, то для обвления списка (если в фоне было обновление), нужно как бы заново запустить приложение,
                 print('_appLifecycleState: $_appLifecycleState');
@@ -135,6 +133,13 @@ class _InstasnitchAppState extends State<InstasnitchApp> with WidgetsBindingObse
               }
               if (state is AccountListStateStarting) {
                 return SplashScreen();
+              }
+              if (state.updater.isFirstTime) {
+                isOnBoardingLoaded = true;
+                return MediaQuery(
+                  data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                  child: OnBoardingScreen(),
+                );
               }
               return HomeScreen();
             },
