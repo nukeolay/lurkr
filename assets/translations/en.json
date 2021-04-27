@@ -27,7 +27,7 @@
   "error_connection_timeout": "Connection timeout",
   "info_updated": "updated {}",
   "period_off": "Never (off)",
-  "period_15minutes": "15 minutes (increases battery consumption)",
+  "period_15minutes": "15 minutes",
   "period_20minutes": "20 minutes",
   "period_30minutes": "30 minutes",
   "period_1hour": "1 hour (recommended)",

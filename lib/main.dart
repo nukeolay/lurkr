@@ -117,7 +117,6 @@ class _InstasnitchAppState extends State<InstasnitchApp> with WidgetsBindingObse
           home: BlocBuilder<AccountListBloc, AccountListState>(
             buildWhen: (previousState, state) {
               // а то при каждом стейте будем перестраивать весь HomePage, а надо только те куски, которые я внутри определил
-              print('isFirstTime: ${state.updater.isFirstTime}');
               bool isNeedToRebuild =
                   previousState is AccountListStateStarting || _appLifecycleState == AppLifecycleState.resumed || isOnBoardingLoaded;
               isOnBoardingLoaded = false;
@@ -127,7 +126,6 @@ class _InstasnitchAppState extends State<InstasnitchApp> with WidgetsBindingObse
               print('state: $state');
               if (_appLifecycleState == AppLifecycleState.resumed) {
                 //если приложение было свернуто, а теперь открыто, то для обвления списка (если в фоне было обновление), нужно как бы заново запустить приложение,
-                print('_appLifecycleState: $_appLifecycleState');
                 _appLifecycleState = null;
                 BlocProvider.of<AccountListBloc>(context).add(AccountListEventStart());
               }
