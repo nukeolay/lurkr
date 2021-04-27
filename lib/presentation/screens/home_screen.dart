@@ -99,7 +99,8 @@ class HomeScreen extends StatelessWidget {
                           if (state.accountList.isEmpty) {
                             return Center(
                               child: Text(
-                                'давай @ добавляй',
+                                'blank_text'.tr(),
+                                textAlign: TextAlign.center,
                                 style: TextStyle(color: Colors.purple, fontSize: 28.0, fontFamily: 'Montserrat', fontWeight: FontWeight.w400),
                               ),
                             );

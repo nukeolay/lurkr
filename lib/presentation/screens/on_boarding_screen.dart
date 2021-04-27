@@ -31,16 +31,15 @@ class _OnBoardingState extends State<OnBoardingScreen> {
     );
   }
 
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   slides = getSlides();
-  // }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    slides = getSlides(context);
+  }
 
   @override
   void initState() {
     super.initState();
-    slides = getSlides();
   }
 
   @override
@@ -66,6 +65,7 @@ class _OnBoardingState extends State<OnBoardingScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                SizedBox(height: 5.0),
                 Image.asset(
                   'assets/on_boarding/on_boarding_logo.png',
                   height: 40,
@@ -84,6 +84,7 @@ class _OnBoardingState extends State<OnBoardingScreen> {
                         title: slides[index].title,
                         imagePath: slides[index].imagePath,
                         instruction: slides[index].instruction,
+                        height: size.height,
                       );
                     },
                   ),

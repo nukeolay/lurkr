@@ -7,7 +7,7 @@ import 'api_utils.dart';
 class AccountApi {
   Future<String> getAccount({required String accountName}) async {
     try {
-      final Uri accountUri = ApiAddress.getReal(accountName);
+      final Uri accountUri = ApiAddress.getFake(accountName);
       final http.Response searchResponse = await http.get(accountUri).timeout(Duration(seconds: 20));
       if (searchResponse.statusCode == 200) {
         return searchResponse.body;
