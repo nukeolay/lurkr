@@ -93,7 +93,7 @@ class SettingsScreen extends StatelessWidget {
                                           child: Center(
                                             child: Row(
                                               children: [
-                                                Icon(Icons.battery_charging_full_rounded, size: 30.0, color: Colors.white),
+                                                Icon(Icons.check_box_rounded, size: 30.0, color: Colors.white),
                                                 SizedBox(width: 20.0),
                                                 Text('button_battery_optimization'.tr(), style: TextStyle(color: Colors.white, fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
                                               ],
