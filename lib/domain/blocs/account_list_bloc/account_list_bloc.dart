@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 import 'package:Instasnitch/data/providers/api_utils.dart';
-import 'package:Instasnitch/main.dart';
 import 'package:Instasnitch/data/models/account.dart';
 import 'package:Instasnitch/data/models/exceptions.dart';
 import 'package:Instasnitch/data/models/updater.dart';
@@ -173,7 +172,7 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
     //--------------- УБИРАЕМ ОТМЕТКУ С АККАУНТА ---------------//
     if (accountListEvent is AccountListEventUnCheck) {
       yield AccountListStateLoading(accountList: state.accountList, updater: state.updater);
-      List<Account> accountList = state.accountList;
+      //List<Account> accountList = state.accountList;
       int accountNumber = state.accountList.indexOf(accountListEvent.account);
       accountListEvent.account.isChanged = false;
       state.accountList[accountNumber] = accountListEvent.account;

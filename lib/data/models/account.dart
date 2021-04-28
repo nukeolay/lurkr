@@ -81,4 +81,8 @@ class Account {
   void change() {
     isChanged = true;
   }
+
+  @override
+  int get hashCode => super.hashCode;
+
 }
