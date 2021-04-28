@@ -29,7 +29,8 @@ void callbackDispatcher() {
         break;
       default:
         {
-          result = '${accountList[0].username} is ${accountList[0].isPrivate ? 'private now' : 'public now'}';
+          result =
+              '${accountList[0].username} is ${accountList[0].isPrivate ? 'private now' : 'public now'}';
           for (int i = 1; i < accountList.length; i++) {
             result = result +
                 ', ${accountList[i].username} is ${accountList[i].isPrivate ? 'private now' : 'public now'}';
