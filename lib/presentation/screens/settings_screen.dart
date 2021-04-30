@@ -81,7 +81,6 @@ class SettingsScreen extends StatelessWidget {
                                   child: Container(
                                     height: 50,
                                     alignment: Alignment.center,
-                                    //margin: const EdgeInsets.only(top: 0.0, bottom: 5.0, left: 10.0, right: 10.0),
                                     decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(10.0)),
                                     child: MaterialButton(
                                         shape: RoundedRectangleBorder(
@@ -105,19 +104,6 @@ class SettingsScreen extends StatelessWidget {
                                         }),
                                   ),
                                 ),
-                                // Padding(
-                                //   padding: const EdgeInsets.symmetric(vertical: 14.5),
-                                //   child: Text('Theme', style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.bold)),
-                                // ),
-                                // Row(
-                                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                //   children: [
-                                //     Text('Dark mode', style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
-                                //     Switch.adaptive(value: _isDark, onChanged: (value) {
-                                //       BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetTheme(isDark: value));
-                                //     }),
-                                //   ],
-                                // ),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(vertical: 14.5),
                                   child: Text('title_refresh_period'.tr(),
@@ -147,18 +133,6 @@ class SettingsScreen extends StatelessWidget {
                                         }),
                                   ],
                                 ),
-                                // Row(
-                                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                //   children: [
-                                //     Text('period_20minutes'.tr(), style: TextStyle(fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
-                                //     Radio(
-                                //         value: getPeriod(Period.minutes20),
-                                //         groupValue: _groupValue,
-                                //         onChanged: (int? value) {
-                                //           BlocProvider.of<AccountListBloc>(context).add(AccountListEventSetPeriod(period: value!));
-                                //         }),
-                                //   ],
-                                // ),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [

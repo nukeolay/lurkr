@@ -20,7 +20,7 @@ class BgUpdater {
     List<Account> oldAccountList = await repository.getAccountListFromSharedprefs();
     List<Account> updatedAccountList = []..addAll(oldAccountList); //клонирю список чтобы можно было его обновлять, не трогая оригинальный список
     List<Account> notificationAccountList = []; //создаем пустой список для уведомлений
-    Updater updater = await repository.getUpdater(); //todo разобраться зачем это делать
+    Updater updater = await repository.getUpdater(); //TODO разобраться зачем это делать
     _instance.refreshPeriod = updater.refreshPeriod; //установил тот период обновления, который был выбран и сохранен в sharedprefs //todo разобраться зачем это делать
     for (Account currentAccount in oldAccountList) {
       try {
@@ -38,8 +38,8 @@ class BgUpdater {
           updatedAccountList[accountNumber] = updatedAccount;
         }
         await repository.saveAccountListToSharedprefs(accountList: updatedAccountList);
-        updater = Updater(refreshPeriod: updater.refreshPeriod, isDark: updater.isDark, isFirstTime: updater.isFirstTime); //todo разобраться зачем это делать
-        await repository.saveUpdater(updater: updater); //todo разобраться зачем это делать
+        updater = Updater(refreshPeriod: updater.refreshPeriod, isDark: updater.isDark, isFirstTime: updater.isFirstTime); //TODO разобраться зачем это делать
+        await repository.saveUpdater(updater: updater); //TODO разобраться зачем это делать
       } on NoTriesLeftException {
         //если не осталось попыток для обновления, то прерываем цикл и не обновляем больше
         break;
