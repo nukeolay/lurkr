@@ -11,7 +11,7 @@ class SlideModel {
 }
 
 List<SlideModel> getSlides(BuildContext context) {
-  final double height = MediaQuery.of(context).size.height; // todo если не будет переводдить, то в конструктор добавить BuildContext context
+  final double height = MediaQuery.of(context).size.height; //TODO если не будет переводдить, то в конструктор добавить BuildContext context
   List<SlideModel> slides = [];
 
   SlideModel slideModel1 = new SlideModel(

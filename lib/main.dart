@@ -16,7 +16,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:workmanager/workmanager.dart';
 
-//todo для ios нужно настоить podfile, но он появится только на Маке, инструкция по настройке тут https://github.com/fluttercommunity/flutter_workmanager/blob/master/IOS_SETUP.md
+//todo для ios нужно настроить podfile, но он появится только на Маке, инструкция по настройке тут https://github.com/fluttercommunity/flutter_workmanager/blob/master/IOS_SETUP.md
 //todo для ios нужно настроить AppDelegate.swift, инструкция по настройке тут https://pub.dev/packages/flutter_local_notifications#custom-notification-icons-and-sounds
 
 void callbackDispatcher() {
@@ -42,7 +42,7 @@ void callbackDispatcher() {
         }
     }
     return Future.value(
-        true); //todo проверить, когда все булет работать без future
+        true); //TODOTODO проверить, когда все булет работать без future
   });
 }
 
@@ -51,10 +51,11 @@ main() async {
   await EasyLocalization.ensureInitialized();
   int refreshPeriod = (await Repository().getUpdater()).refreshPeriod;
   BgUpdater bgUpdater = BgUpdater(
-      refreshPeriod: refreshPeriod); //todo разобраться зачем это делать
-  print('refreshPeriod in main: ${bgUpdater.refreshPeriod / 60000000}');
+      refreshPeriod:
+          refreshPeriod); //TODO разобраться зачем это делать, если можно сразу передавать дольше refreshPeriod без bgUpdater
+  //print('refreshPeriod in main: ${bgUpdater.refreshPeriod / 60000000}');
   await Workmanager().initialize(callbackDispatcher,
-      isInDebugMode: false); //todo сделать false
+      isInDebugMode: false); //TODO сделать false
   await Workmanager().registerPeriodicTask(
       'instasnitch_task', 'instasnitch_task',
       inputData: {},

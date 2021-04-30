@@ -187,7 +187,7 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
       BgUpdater(refreshPeriod: accountListEvent.period);
       await Workmanager().cancelAll();
       if (accountListEvent.period > 0) {
-        //await Workmanager().initialize(callbackDispatcher, isInDebugMode: false); //todo сделать false перед релизом, отключил, мне кажется что достаточно в main
+        //await Workmanager().initialize(callbackDispatcher, isInDebugMode: false); //TODO сделать false перед релизом, отключил, мне кажется что достаточно в main
         await Workmanager().registerPeriodicTask('instasnitch_task', 'instasnitch_task',
             inputData: {}, frequency: Duration(microseconds: accountListEvent.period), initialDelay: Duration(microseconds: accountListEvent.period));
       }
