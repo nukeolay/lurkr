@@ -16,8 +16,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:workmanager/workmanager.dart';
 
-//todo для ios нужно настроить podfile, но он появится только на Маке, инструкция по настройке тут https://github.com/fluttercommunity/flutter_workmanager/blob/master/IOS_SETUP.md
-//todo для ios нужно настроить AppDelegate.swift, инструкция по настройке тут https://pub.dev/packages/flutter_local_notifications#custom-notification-icons-and-sounds
+//TODO для ios нужно настроить podfile, но он появится только на Маке, инструкция по настройке тут https://github.com/fluttercommunity/flutter_workmanager/blob/master/IOS_SETUP.md
+//TODO для ios нужно настроить AppDelegate.swift, инструкция по настройке тут https://pub.dev/packages/flutter_local_notifications#custom-notification-icons-and-sounds
 
 void callbackDispatcher() {
   Workmanager().executeTask((taskName, inputData) async {
@@ -42,7 +42,7 @@ void callbackDispatcher() {
         }
     }
     return Future.value(
-        true); //TODOTODO проверить, когда все булет работать без future
+        true); //TODO проверить, когда все булет работать без future
   });
 }
 
@@ -52,7 +52,7 @@ main() async {
   int refreshPeriod = (await Repository().getUpdater()).refreshPeriod;
   BgUpdater bgUpdater = BgUpdater(
       refreshPeriod:
-          refreshPeriod); //TODO разобраться зачем это делать, если можно сразу передавать дольше refreshPeriod без bgUpdater
+          refreshPeriod); //TODO разобраться зачем это делать, если можно сразу передавать дальше refreshPeriod без bgUpdater
   //print('refreshPeriod in main: ${bgUpdater.refreshPeriod / 60000000}');
   await Workmanager().initialize(callbackDispatcher,
       isInDebugMode: false); //TODO сделать false

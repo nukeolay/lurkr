@@ -11,7 +11,7 @@ class ApiAddress {
   }
 
   static Uri getFake(String username) {
-    const authority = "192.168.1.60:3000";
+    const authority = "192.168.3.7:3000";
     const unencodedPath = "/users";
     return Uri.http(authority, unencodedPath, {'query': '$username'});
   }
