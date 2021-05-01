@@ -2,7 +2,7 @@ import 'package:Instasnitch/data/models/updater.dart';
 import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_bloc.dart';
 import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_events.dart';
 import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_states.dart';
-import 'package:Instasnitch/presentation/widgets/custom_scroll_behavoir.dart';
+import 'package:Instasnitch/presentation/widgets/account_list/custom_scroll_behavoir.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';

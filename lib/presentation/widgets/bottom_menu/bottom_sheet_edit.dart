@@ -20,12 +20,15 @@ class BottomSheetEdit extends StatelessWidget {
       children: <Widget>[
         Container(
           margin: EdgeInsets.only(top: 10.0),
-          decoration: BoxDecoration(color: Colors.grey[600], borderRadius: BorderRadius.circular(10.0)),
+          decoration: BoxDecoration(
+              color: Colors.grey[600],
+              borderRadius: BorderRadius.circular(10.0)),
           child: SizedBox(width: 40.0, height: 5.0),
         ),
         Container(
           height: 50,
-          margin: const EdgeInsets.only(top: 5.0, bottom: 0.0, left: 0.0, right: 34.0),
+          margin: const EdgeInsets.only(
+              top: 5.0, bottom: 0.0, left: 0.0, right: 34.0),
           child: Container(
             height: 50,
             alignment: Alignment.center,
@@ -40,19 +43,27 @@ class BottomSheetEdit extends StatelessWidget {
                   ),
                   SizedBox(width: 10.0),
                   Text(account.username,
-                      style: TextStyle(color: Colors.grey[600], fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
+                      style: TextStyle(
+                          color: Colors.grey[600],
+                          fontFamily: 'Montserrat',
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w400)),
                 ],
               ),
             ),
           ),
         ),
-        (account.hasAnonymousProfilePicture || account.savedProfilePic.toString() == '')
+        (account.hasAnonymousProfilePicture ||
+                account.savedProfilePic.toString() == '')
             ? SizedBox()
             : Container(
                 height: 50,
                 alignment: Alignment.center,
-                margin: const EdgeInsets.only(top: 0.0, bottom: 10.0, left: 10.0, right: 10.0),
-                decoration: BoxDecoration(color: Colors.grey[600], borderRadius: BorderRadius.circular(10.0)),
+                margin: const EdgeInsets.only(
+                    top: 0.0, bottom: 10.0, left: 10.0, right: 10.0),
+                decoration: BoxDecoration(
+                    color: Colors.grey[600],
+                    borderRadius: BorderRadius.circular(10.0)),
                 child: MaterialButton(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
@@ -63,24 +74,33 @@ class BottomSheetEdit extends StatelessWidget {
                       child: Center(
                         child: Row(
                           children: [
-                            Icon(Icons.download_rounded, size: 30.0, color: Colors.white),
+                            Icon(Icons.download_rounded,
+                                size: 30.0, color: Colors.white),
                             SizedBox(width: 20.0),
                             Text('button_download_avatar'.tr(),
-                                style: TextStyle(color: Colors.white, fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'Montserrat',
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w400)),
                           ],
                         ),
                       ),
                     ),
                     onPressed: () {
-                      BlocProvider.of<AccountListBloc>(context).add(AccountListEventDownload(account: account));
+                      BlocProvider.of<AccountListBloc>(context)
+                          .add(AccountListEventDownload(account: account));
                       Navigator.pop(context);
                     }),
               ),
         Container(
           height: 50,
           alignment: Alignment.center,
-          margin: const EdgeInsets.only(top: 0.0, bottom: 5.0, left: 10.0, right: 10.0),
-          decoration: BoxDecoration(color: Colors.grey[600], borderRadius: BorderRadius.circular(10.0)),
+          margin: const EdgeInsets.only(
+              top: 0.0, bottom: 5.0, left: 10.0, right: 10.0),
+          decoration: BoxDecoration(
+              color: Colors.grey[600],
+              borderRadius: BorderRadius.circular(10.0)),
           child: MaterialButton(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
@@ -91,23 +111,35 @@ class BottomSheetEdit extends StatelessWidget {
                 child: Center(
                   child: Row(
                     children: [
-                      Icon(Icons.refresh_rounded, size: 30.0, color: Colors.white),
+                      Icon(Icons.refresh_rounded,
+                          size: 30.0, color: Colors.white),
                       SizedBox(width: 20.0),
-                      Text('button_refresh'.tr(), style: TextStyle(color: Colors.white, fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
+                      Text('button_refresh'.tr(),
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'Montserrat',
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w400)),
                     ],
                   ),
                 ),
               ),
               onPressed: () {
-                BlocProvider.of<AccountListBloc>(context).add(AccountListEventRefresh(account: account));
+                BlocProvider.of<AccountListBloc>(context)
+                    .add(AccountListEventRefresh(account: account));
                 Navigator.pop(context);
               }),
         ),
         Container(
           height: 50,
           alignment: Alignment.center,
-          margin: EdgeInsets.only(top: 5.0, bottom: Platform.isIOS ? 50.0 : 10.0, left: 10.0, right: 10.0),
-          decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(10.0)),
+          margin: EdgeInsets.only(
+              top: 5.0,
+              bottom: Platform.isIOS ? 50.0 : 10.0,
+              left: 10.0,
+              right: 10.0),
+          decoration: BoxDecoration(
+              color: Colors.red, borderRadius: BorderRadius.circular(10.0)),
           child: MaterialButton(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
@@ -118,15 +150,22 @@ class BottomSheetEdit extends StatelessWidget {
                 child: Center(
                   child: Row(
                     children: [
-                      Icon(Icons.delete_outline_rounded, size: 30.0, color: Colors.white),
+                      Icon(Icons.delete_outline_rounded,
+                          size: 30.0, color: Colors.white),
                       SizedBox(width: 20.0),
-                      Text('button_delete'.tr(), style: TextStyle(color: Colors.white, fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.w400)),
+                      Text('button_delete'.tr(),
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'Montserrat',
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w400)),
                     ],
                   ),
                 ),
               ),
               onPressed: () {
-                BlocProvider.of<AccountListBloc>(context).add(AccountListEventDelete(account: account));
+                BlocProvider.of<AccountListBloc>(context)
+                    .add(AccountListEventDelete(account: account));
                 Navigator.pop(context);
               }),
         )

@@ -1,16 +1,14 @@
 import 'dart:ui';
 import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_bloc.dart';
-import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_events.dart';
 import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_states.dart';
 import 'package:Instasnitch/presentation/screens/settings_screen.dart';
-import 'package:Instasnitch/presentation/widgets/account_list.dart';
-import 'package:Instasnitch/presentation/widgets/rotating_icon.dart';
-import 'package:Instasnitch/presentation/widgets/custom_scroll_behavoir.dart';
+import 'package:Instasnitch/presentation/widgets/account_list/account_list.dart';
+import 'package:Instasnitch/presentation/widgets/account_list/custom_scroll_behavoir.dart';
+import 'package:Instasnitch/presentation/widgets/bottom_menu/bottom_menu.dart';
 import 'package:Instasnitch/presentation/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart'; //TODO убрал, чтобы проверить, достаточно ли easy_localization? или форматтер берется только из intl
-import 'package:Instasnitch/presentation/widgets/bottom_sheet_add.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -104,71 +102,8 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
-        elevation: 0.0,
-        child: BlocBuilder<AccountListBloc, AccountListState>(
-            builder: (context, state) {
-          if (state is AccountListStateLoading) {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                IconButton(
-                    tooltip: 'button_refresh'.tr(),
-                    splashRadius: 22,
-                    splashColor: Colors.purple,
-                    highlightColor: Colors.deepPurple,
-                    icon: RotatingRefreshIcon(),
-                    onPressed: null),
-                IconButton(
-                  tooltip: 'button_add'.tr(),
-                  splashRadius: 22,
-                  splashColor: Colors.purple,
-                  highlightColor: Colors.deepPurple,
-                  icon: const Icon(Icons.add_box_rounded,
-                      size: 30, color: Colors.grey),
-                  onPressed: null,
-                ),
-              ],
-            );
-          }
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              IconButton(
-                  tooltip: 'button_refresh'.tr(),
-                  splashRadius: 22,
-                  splashColor: Colors.purple,
-                  highlightColor: Colors.deepPurple,
-                  icon: Icon(Icons.refresh_rounded, size: 30),
-                  onPressed: () {
-                    BlocProvider.of<AccountListBloc>(context)
-                        .add(AccountListEventRefreshAll());
-                  }),
-              IconButton(
-                tooltip: 'button_add'.tr(),
-                splashRadius: 22,
-                splashColor: Colors.purple,
-                highlightColor: Colors.deepPurple,
-                icon: const Icon(Icons.add_box_rounded, size: 30),
-                onPressed: () {
-                  showModalBottomSheet<void>(
-                    context: context,
-                    backgroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(15.0),
-                          topRight: Radius.circular(15.0)),
-                    ),
-                    builder: (BuildContext context) {
-                      return BottomSheetAdd();
-                    },
-                  );
-                },
-              ),
-            ],
-          );
-        }),
-      ),
+      bottomNavigationBar: BottomMenu(),
     );
   }
 }
+

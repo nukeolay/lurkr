@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_bloc.dart';
 import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_events.dart';
 import 'package:Instasnitch/presentation/models/slider.dart';
-import 'package:Instasnitch/presentation/widgets/slide_tile.dart';
+import 'package:Instasnitch/presentation/widgets/on_boarding/slide_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
