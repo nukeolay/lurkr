@@ -1,11 +1,12 @@
+import 'dart:async';
 import 'dart:convert';
-import 'package:Instasnitch/data/models/account.dart';
-import 'package:Instasnitch/data/models/exceptions.dart';
-import 'package:Instasnitch/data/models/updater.dart';
-import 'package:Instasnitch/data/providers/account_api.dart';
-import 'package:Instasnitch/data/providers/account_list_local.dart';
-import 'package:Instasnitch/data/providers/api_utils.dart';
-import 'package:Instasnitch/data/providers/updater_local.dart';
+import 'package:lurkr/data/models/account.dart';
+import 'package:lurkr/data/models/exceptions.dart';
+import 'package:lurkr/data/models/updater.dart';
+import 'package:lurkr/data/providers/account_api.dart';
+import 'package:lurkr/data/providers/account_list_local.dart';
+import 'package:lurkr/data/providers/api_utils.dart';
+import 'package:lurkr/data/providers/updater_local.dart';
 
 class Repository {
   List<Account> _accountList = [];
@@ -41,10 +42,54 @@ class Repository {
   }
 
   Future<String> getHdPicUri({required String accountName}) async {
-    final String apiAccountString = await _accountApi.getGraphQl(accountName: accountName);
+    final String hdPicUriString = await _accountApi.getGraphQlUser(accountName: accountName);
     try {
-      return jsonDecode(apiAccountString)['graphql']['user']['profile_pic_url_hd'] as String;
+      return jsonDecode(hdPicUriString)['graphql']['user']['profile_pic_url_hd'] as String;
     } catch (e) {
+      throw NoTriesLeftException();
+    }
+  }
+
+  Future<String> getMediaUri({required String mediaRawUrl}) async {
+    final String mediaUriString = await _accountApi.getGraphQlMedia(mediaRawUrl: mediaRawUrl);
+    final bool isVideo;
+    try {
+      isVideo = jsonDecode(mediaUriString)['graphql']['shortcode_media']['is_video'];
+      if (isVideo) {
+        return jsonDecode(mediaUriString)['graphql']['shortcode_media']['video_url'];
+      } else {
+        return jsonDecode(mediaUriString)['graphql']['shortcode_media']['display_url'];
+      }
+    } catch (e) {
+      throw NoTriesLeftException();
+    }
+  }
+
+  Future<List<String>> getAllMediaUri({required String mediaRawUrl}) async {
+    final String mediaUriString = await _accountApi.getGraphQlMedia(mediaRawUrl: mediaRawUrl);
+    List<String> uriList = [];
+    try {
+      Map<String, dynamic> graphQLResponce = jsonDecode(mediaUriString)['graphql']['shortcode_media'];
+      if (graphQLResponce.containsKey('edge_sidecar_to_children')) {
+        //если в посте несколько фото или видео
+        for (dynamic element in graphQLResponce['edge_sidecar_to_children']['edges']) {
+          if ((element['node']).containsKey('video_url')) {
+            uriList.add(element['node']['video_url']);
+          } else {
+            uriList.add(element['node']['display_url']);
+          }
+        }
+      } else {
+        //если в посте одно фото или видео
+        if ((jsonDecode(mediaUriString)['graphql']['shortcode_media']).containsKey('video_url')) {
+          uriList.add(jsonDecode(mediaUriString)['graphql']['shortcode_media']['video_url']);
+        } else {
+          uriList.add(jsonDecode(mediaUriString)['graphql']['shortcode_media']['display_url']);
+        }
+      }
+      return uriList;
+    } catch (e) {
+      print('=========================$e');
       throw NoTriesLeftException();
     }
   }
@@ -74,6 +119,17 @@ class Repository {
 
   Future<void> saveAccountListToSharedprefs({required List<Account> accountList}) async {
     await _accountListLocal.setAccountListLocal(accountList: jsonEncode(accountList));
+  }
+
+  Future<void> downloadMedia(String stringUri, String filepath) async {
+    final Uri mediaUri = Uri.parse(stringUri);
+    try {
+      await _accountApi.downloadMediaApi(mediaUri, filepath);
+    } on ConnectionException {} on TimeoutException {
+      throw ConnectionTimeoutException();
+    } catch (e) {
+      throw ConnectionException('error: $e');
+    }
   }
 
   static Account getDummyAccount(

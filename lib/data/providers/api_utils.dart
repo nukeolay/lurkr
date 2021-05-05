@@ -1,6 +1,7 @@
 import 'dart:async';
+import 'dart:typed_data';
 
-import 'package:Instasnitch/data/models/exceptions.dart';
+import 'package:lurkr/data/models/exceptions.dart';
 import 'package:flutter/services.dart';
 
 class ApiAddress {
@@ -11,15 +12,22 @@ class ApiAddress {
   }
 
   static Uri getFake(String username) {
-    const authority = "192.168.1.60:3000";
+    const authority = "192.168.3.7:3000";
     const unencodedPath = "/users";
     return Uri.http(authority, unencodedPath, {'query': '$username'});
   }
 
-  static Uri getGraphQl(String username) {
+  static Uri getGraphQlUserUrl(String username) {
     const authority = "instagram.com";
     String unencodedPath = "/$username";
     return Uri.https(authority, unencodedPath, {'__a': '1'});
+  }
+
+  static Uri getGraphQlMediaUrl(String mediaRawUrl) {
+    Uri url = Uri.parse(mediaRawUrl);
+    String authority = url.host;
+    String path = url.path;
+    return Uri.https(authority, path, {'__a': '1'});
   }
 }
 

@@ -1,5 +1,5 @@
-name: Instasnitch
-description: Just Instasnitch.
+name: lurkr
+description: lurk for profiles.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -37,14 +37,7 @@ dependencies:
   workmanager: ^0.4.0
   flutter_local_notifications: ^5.0.0+1
   easy_localization: ^3.0.0
-  #timezone: ^0.7.0
-  #flutter_native_timezone: ^1.0.10
-
-#dependency_overrides:
-#  workmanager:
-#    git:
-#      url: https://github.com/parthdave93/flutter_workmanager.git
-#      ref: parthdave93/null_safety_migration
+  path_provider: ^2.0.1
 
 dev_dependencies:
   flutter_test:
@@ -69,7 +62,7 @@ flutter:
     - assets/
     - assets/translations/
     - assets/on_boarding/
-
+    - assets/images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

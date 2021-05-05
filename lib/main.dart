@@ -1,9 +1,9 @@
-import 'package:Instasnitch/data/repositories/repositiory.dart';
-import 'package:Instasnitch/domain/background/bg_updater.dart';
-import 'package:Instasnitch/presentation/screens/home_screen.dart';
-import 'package:Instasnitch/presentation/screens/on_boarding_screen.dart';
-import 'package:Instasnitch/presentation/screens/splash_screen.dart';
-import 'package:Instasnitch/presentation/theme/theme.dart';
+import 'package:lurkr/data/repositories/repositiory.dart';
+import 'package:lurkr/domain/background/bg_updater.dart';
+import 'package:lurkr/presentation/screens/home_screen.dart';
+import 'package:lurkr/presentation/screens/on_boarding_screen.dart';
+import 'package:lurkr/presentation/screens/splash_screen.dart';
+import 'package:lurkr/presentation/theme/theme.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/rendering.dart';
 import 'data/models/account.dart';
@@ -16,8 +16,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:workmanager/workmanager.dart';
 
-//todo для ios нужно настроить podfile, но он появится только на Маке, инструкция по настройке тут https://github.com/fluttercommunity/flutter_workmanager/blob/master/IOS_SETUP.md
-//todo для ios нужно настроить AppDelegate.swift, инструкция по настройке тут https://pub.dev/packages/flutter_local_notifications#custom-notification-icons-and-sounds
+//TODO для ios нужно настроить podfile, но он появится только на Маке, инструкция по настройке тут https://github.com/fluttercommunity/flutter_workmanager/blob/master/IOS_SETUP.md
+//TODO для ios нужно настроить AppDelegate.swift, инструкция по настройке тут https://pub.dev/packages/flutter_local_notifications#custom-notification-icons-and-sounds
 
 void callbackDispatcher() {
   Workmanager().executeTask((taskName, inputData) async {
@@ -37,12 +37,12 @@ void callbackDispatcher() {
           }
           await LocalNotification.initializer();
           await LocalNotification.showOneTimeNotification(
-              title: 'Instasnitch', text: result);
+              title: 'Lurkr', text: result);
           break;
         }
     }
     return Future.value(
-        true); //TODOTODO проверить, когда все булет работать без future
+        true);
   });
 }
 
@@ -52,12 +52,12 @@ main() async {
   int refreshPeriod = (await Repository().getUpdater()).refreshPeriod;
   BgUpdater bgUpdater = BgUpdater(
       refreshPeriod:
-          refreshPeriod); //TODO разобраться зачем это делать, если можно сразу передавать дольше refreshPeriod без bgUpdater
+          refreshPeriod); //TODO разобраться зачем это делать, если можно сразу передавать дальше refreshPeriod без bgUpdater
   //print('refreshPeriod in main: ${bgUpdater.refreshPeriod / 60000000}');
   await Workmanager().initialize(callbackDispatcher,
       isInDebugMode: false); //TODO сделать false
   await Workmanager().registerPeriodicTask(
-      'instasnitch_task', 'instasnitch_task',
+      'lurkr_task', 'lurkr_task',
       inputData: {},
       frequency: Duration(microseconds: bgUpdater.refreshPeriod),
       initialDelay: Duration(microseconds: bgUpdater.refreshPeriod));
@@ -77,17 +77,17 @@ main() async {
       path: 'assets/translations',
       fallbackLocale: Locale('en'),
       useOnlyLangCode: true,
-      child: InstasnitchApp(),
+      child: LurkrApp(),
     ));
   });
 }
 
-class InstasnitchApp extends StatefulWidget {
+class LurkrApp extends StatefulWidget {
   @override
-  _InstasnitchAppState createState() => _InstasnitchAppState();
+  _LurkrAppState createState() => _LurkrAppState();
 }
 
-class _InstasnitchAppState extends State<InstasnitchApp>
+class _LurkrAppState extends State<LurkrApp>
     with WidgetsBindingObserver {
   @override
   void initState() {
@@ -120,7 +120,7 @@ class _InstasnitchAppState extends State<InstasnitchApp>
           BlocProvider<AccountListBloc>(create: (context) => AccountListBloc()),
         ],
         child: MaterialApp(
-          title: 'Instasnitch',
+          title: 'Lurkr',
           debugShowCheckedModeBanner: false,
           theme: CustomTheme.lightTheme,
           //darkTheme: CustomTheme.darkTheme,

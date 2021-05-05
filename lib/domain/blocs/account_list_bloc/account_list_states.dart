@@ -1,5 +1,5 @@
-import 'package:Instasnitch/data/models/account.dart';
-import 'package:Instasnitch/data/models/updater.dart';
+import 'package:lurkr/data/models/account.dart';
+import 'package:lurkr/data/models/updater.dart';
 
 abstract class AccountListState {
   List<Account> accountList;

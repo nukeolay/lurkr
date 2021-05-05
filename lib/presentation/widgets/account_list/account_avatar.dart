@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 import 'dart:ui';
-import 'package:Instasnitch/data/models/account.dart';
+import 'package:lurkr/data/models/account.dart';
 import 'package:flutter/material.dart';
 
 class AccountAvatar extends StatelessWidget {

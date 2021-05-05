@@ -1,14 +1,15 @@
 import 'dart:typed_data';
-import 'package:Instasnitch/data/providers/api_utils.dart';
-import 'package:Instasnitch/data/models/account.dart';
-import 'package:Instasnitch/data/models/exceptions.dart';
-import 'package:Instasnitch/data/models/updater.dart';
-import 'package:Instasnitch/data/repositories/repositiory.dart';
-import 'package:Instasnitch/domain/background/bg_updater.dart';
-import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_events.dart';
-import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_states.dart';
+import 'package:lurkr/data/providers/api_utils.dart';
+import 'package:lurkr/data/models/account.dart';
+import 'package:lurkr/data/models/exceptions.dart';
+import 'package:lurkr/data/models/updater.dart';
+import 'package:lurkr/data/repositories/repositiory.dart';
+import 'package:lurkr/domain/background/bg_updater.dart';
+import 'package:lurkr/domain/blocs/account_list_bloc/account_list_events.dart';
+import 'package:lurkr/domain/blocs/account_list_bloc/account_list_states.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:workmanager/workmanager.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -71,7 +72,7 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
     }
 
     //--------------- СОХРАНЕМ АВАТАРКУ ---------------//
-    if (accountListEvent is AccountListEventDownload) {
+    if (accountListEvent is AccountListEventDownloadHdPic) {
       yield AccountListStateLoading(accountList: state.accountList, updater: state.updater);
       bool isPermissionGranted = await Permission.storage.status.isGranted;
       if (isPermissionGranted) {
@@ -80,26 +81,62 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
           String hdPicUri = await repository.getHdPicUri(accountName: accountListEvent.account.username);
           String stringImage = await ImageConverter.convertUriImageToString(hdPicUri);
           await ImageGallerySaver.saveImage(Uint8List.fromList(stringImage.codeUnits),
-              quality: 100, name: 'instasnitch_avatar_hd_${accountListEvent.account.username}');
-          yield AccountListStateDownloaded(accountList: state.accountList, updater: state.updater, snackbarText: 'info_image_saved'.tr());
+              quality: 100, name: 'lurkr_avatar_hd_${accountListEvent.account.username}');
+          yield AccountListStateDownloaded(accountList: state.accountList, updater: state.updater, snackbarText: 'info_file_saved'.tr());
         } catch (e) {
           //если в hd не получается скачать, то сохраняем аватар в низком разрешении из строки, сохраненной в account
           Uint8List imageData = Uint8List.fromList(accountListEvent.account.savedProfilePic.codeUnits);
-          dynamic result = await ImageGallerySaver.saveImage(Uint8List.fromList(imageData),
-              quality: 100, name: 'instasnitch_avatar_${accountListEvent.account.username}');
+          dynamic result =
+              await ImageGallerySaver.saveImage(Uint8List.fromList(imageData), quality: 100, name: 'lurkr_avatar_${accountListEvent.account.username}');
           if (result['error'] != null) {
             yield AccountListStateError(
                 accountList: state.accountList, updater: state.updater, errorText: 'error_image_not_saved'.tr(args: [result['error'].toString()]));
           } else {
-            yield AccountListStateDownloaded(accountList: state.accountList, updater: state.updater, snackbarText: 'info_image_saved'.tr());
+            yield AccountListStateDownloaded(accountList: state.accountList, updater: state.updater, snackbarText: 'info_file_saved'.tr());
           }
         }
       } else {
         PermissionStatus permissionStatus = await Permission.storage.request();
         if (permissionStatus.isGranted) {
-          add(AccountListEventDownload(account: accountListEvent.account));
+          add(AccountListEventDownloadHdPic(account: accountListEvent.account));
         } else {
           yield AccountListStateError(accountList: state.accountList, updater: state.updater, errorText: 'error_permission_storage'.tr());
+        }
+      }
+    }
+
+    //--------------- СОХРАНЯЕМ МЕДИА (ФОТО/ВИДЕО) ---------------//
+    if (accountListEvent is AccountListEventDownloadMedia) {
+      yield AccountListStateLoading(accountList: state.accountList, updater: state.updater);
+      if (accountListEvent.mediaRawUrl.isEmpty) {
+        //если пользователь не ввел ссылку
+        yield AccountListStateError(accountList: state.accountList, updater: state.updater, errorText: 'error_empty_input'.tr());
+      } else {
+        bool isPermissionGranted = await Permission.storage.status.isGranted;
+        if (isPermissionGranted) {
+          try {
+            List<String> uriList = await repository.getAllMediaUri(mediaRawUrl: accountListEvent.mediaRawUrl);
+            var appDocDir = await getTemporaryDirectory();
+            for (String mediaUri in uriList) {
+              String savePath = appDocDir.path + 'lurkr_${DateTime.now().millisecondsSinceEpoch.toString()}.${mediaUri.contains('.mp4') ? 'mp4' : 'jpg'}';
+              await repository.downloadMedia(mediaUri, savePath);
+              await ImageGallerySaver.saveFile(savePath);
+            }
+            yield AccountListStateDownloaded(accountList: state.accountList, updater: state.updater, snackbarText: 'info_file_saved'.tr());
+          } on NoTriesLeftException {
+            yield AccountListStateError(accountList: state.accountList, updater: state.updater, errorText: 'error_no_tries_left'.tr());
+          } on ConnectionException {
+            yield AccountListStateError(accountList: state.accountList, updater: state.updater, errorText: 'error_network'.tr());
+          } on ConnectionTimeoutException {
+            yield AccountListStateError(accountList: state.accountList, updater: state.updater, errorText: 'error_connection_timeout'.tr());
+          }
+        } else {
+          PermissionStatus permissionStatus = await Permission.storage.request();
+          if (permissionStatus.isGranted) {
+            add(AccountListEventDownloadMedia(mediaRawUrl: accountListEvent.mediaRawUrl));
+          } else {
+            yield AccountListStateError(accountList: state.accountList, updater: state.updater, errorText: 'error_permission_storage'.tr());
+          }
         }
       }
     }
@@ -124,9 +161,7 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
         yield AccountListStateError(accountList: state.accountList, updater: state.updater, errorText: 'error_no_tries_left'.tr());
       } on NoAccountException {
         yield AccountListStateError(
-            accountList: state.accountList,
-            updater: state.updater,
-            errorText: 'error_account_not_found'.tr(args: [accountListEvent.account.username]));
+            accountList: state.accountList, updater: state.updater, errorText: 'error_account_not_found'.tr(args: [accountListEvent.account.username]));
       } on ConnectionException {
         yield AccountListStateError(accountList: state.accountList, updater: state.updater, errorText: 'error_network'.tr());
       } on ConnectionTimeoutException {
@@ -188,7 +223,7 @@ class AccountListBloc extends Bloc<AccountListEvent, AccountListState> {
       await Workmanager().cancelAll();
       if (accountListEvent.period > 0) {
         //await Workmanager().initialize(callbackDispatcher, isInDebugMode: false); //TODO сделать false перед релизом, отключил, мне кажется что достаточно в main
-        await Workmanager().registerPeriodicTask('instasnitch_task', 'instasnitch_task',
+        await Workmanager().registerPeriodicTask('lurkr_task', 'lurkr_task',
             inputData: {}, frequency: Duration(microseconds: accountListEvent.period), initialDelay: Duration(microseconds: accountListEvent.period));
       }
       yield AccountListStateLoaded(accountList: state.accountList, updater: state.updater);
