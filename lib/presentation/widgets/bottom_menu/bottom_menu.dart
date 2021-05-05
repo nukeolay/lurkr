@@ -1,8 +1,8 @@
-import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_bloc.dart';
-import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_events.dart';
-import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_states.dart';
-import 'package:Instasnitch/presentation/widgets/bottom_menu/bottom_sheet_add.dart';
-import 'package:Instasnitch/presentation/widgets/bottom_menu/bottom_sheet_download.dart';
+import 'package:lurkr/domain/blocs/account_list_bloc/account_list_bloc.dart';
+import 'package:lurkr/domain/blocs/account_list_bloc/account_list_states.dart';
+import 'package:lurkr/presentation/widgets/account_list/rotating_icon.dart';
+import 'package:lurkr/presentation/widgets/bottom_menu/bottom_sheet_add.dart';
+import 'package:lurkr/presentation/widgets/bottom_menu/bottom_sheet_download.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -27,8 +27,7 @@ class BottomMenu extends StatelessWidget {
                 splashRadius: 22,
                 splashColor: Colors.purple,
                 highlightColor: Colors.deepPurple,
-                icon: const Icon(Icons.save_alt_rounded,
-                    size: 30, color: Colors.grey),
+                icon: RotatingRefreshIcon(),
                 onPressed: null,
               ),
               IconButton(

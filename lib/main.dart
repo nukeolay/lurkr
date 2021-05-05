@@ -1,9 +1,9 @@
-import 'package:Instasnitch/data/repositories/repositiory.dart';
-import 'package:Instasnitch/domain/background/bg_updater.dart';
-import 'package:Instasnitch/presentation/screens/home_screen.dart';
-import 'package:Instasnitch/presentation/screens/on_boarding_screen.dart';
-import 'package:Instasnitch/presentation/screens/splash_screen.dart';
-import 'package:Instasnitch/presentation/theme/theme.dart';
+import 'package:lurkr/data/repositories/repositiory.dart';
+import 'package:lurkr/domain/background/bg_updater.dart';
+import 'package:lurkr/presentation/screens/home_screen.dart';
+import 'package:lurkr/presentation/screens/on_boarding_screen.dart';
+import 'package:lurkr/presentation/screens/splash_screen.dart';
+import 'package:lurkr/presentation/theme/theme.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/rendering.dart';
 import 'data/models/account.dart';
@@ -37,12 +37,12 @@ void callbackDispatcher() {
           }
           await LocalNotification.initializer();
           await LocalNotification.showOneTimeNotification(
-              title: 'Instasnitch', text: result);
+              title: 'Lurkr', text: result);
           break;
         }
     }
     return Future.value(
-        true); //TODO проверить, когда все булет работать без future
+        true);
   });
 }
 
@@ -57,7 +57,7 @@ main() async {
   await Workmanager().initialize(callbackDispatcher,
       isInDebugMode: false); //TODO сделать false
   await Workmanager().registerPeriodicTask(
-      'instasnitch_task', 'instasnitch_task',
+      'lurkr_task', 'lurkr_task',
       inputData: {},
       frequency: Duration(microseconds: bgUpdater.refreshPeriod),
       initialDelay: Duration(microseconds: bgUpdater.refreshPeriod));
@@ -77,17 +77,17 @@ main() async {
       path: 'assets/translations',
       fallbackLocale: Locale('en'),
       useOnlyLangCode: true,
-      child: InstasnitchApp(),
+      child: LurkrApp(),
     ));
   });
 }
 
-class InstasnitchApp extends StatefulWidget {
+class LurkrApp extends StatefulWidget {
   @override
-  _InstasnitchAppState createState() => _InstasnitchAppState();
+  _LurkrAppState createState() => _LurkrAppState();
 }
 
-class _InstasnitchAppState extends State<InstasnitchApp>
+class _LurkrAppState extends State<LurkrApp>
     with WidgetsBindingObserver {
   @override
   void initState() {
@@ -120,7 +120,7 @@ class _InstasnitchAppState extends State<InstasnitchApp>
           BlocProvider<AccountListBloc>(create: (context) => AccountListBloc()),
         ],
         child: MaterialApp(
-          title: 'Instasnitch',
+          title: 'Lurkr',
           debugShowCheckedModeBanner: false,
           theme: CustomTheme.lightTheme,
           //darkTheme: CustomTheme.darkTheme,

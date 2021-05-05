@@ -1,11 +1,11 @@
 import 'dart:ui';
-import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_bloc.dart';
-import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_states.dart';
-import 'package:Instasnitch/presentation/screens/settings_screen.dart';
-import 'package:Instasnitch/presentation/widgets/account_list/account_list.dart';
-import 'package:Instasnitch/presentation/widgets/account_list/custom_scroll_behavoir.dart';
-import 'package:Instasnitch/presentation/widgets/bottom_menu/bottom_menu.dart';
-import 'package:Instasnitch/presentation/widgets/snackbar.dart';
+import 'package:lurkr/domain/blocs/account_list_bloc/account_list_bloc.dart';
+import 'package:lurkr/domain/blocs/account_list_bloc/account_list_states.dart';
+import 'package:lurkr/presentation/screens/settings_screen.dart';
+import 'package:lurkr/presentation/widgets/account_list/account_list.dart';
+import 'package:lurkr/presentation/widgets/account_list/custom_scroll_behavoir.dart';
+import 'package:lurkr/presentation/widgets/bottom_menu/bottom_menu.dart';
+import 'package:lurkr/presentation/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart'; //TODO убрал, чтобы проверить, достаточно ли easy_localization? или форматтер берется только из intl
@@ -58,7 +58,8 @@ class HomeScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Container(
-                            height: 30,
+                            padding: const EdgeInsets.only(left: 20.0),
+                            height: 20,
                             color: Colors.white,
                             child: Image.asset('assets/top_logo.png'),
                           ),

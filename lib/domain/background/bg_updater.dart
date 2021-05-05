@@ -1,7 +1,7 @@
-import 'package:Instasnitch/data/models/account.dart';
-import 'package:Instasnitch/data/models/exceptions.dart';
-import 'package:Instasnitch/data/models/updater.dart';
-import 'package:Instasnitch/data/repositories/repositiory.dart';
+import 'package:lurkr/data/models/account.dart';
+import 'package:lurkr/data/models/exceptions.dart';
+import 'package:lurkr/data/models/updater.dart';
+import 'package:lurkr/data/repositories/repositiory.dart';
 
 //это класс синглтон для обновления информации в фоновом режиме
 class BgUpdater {

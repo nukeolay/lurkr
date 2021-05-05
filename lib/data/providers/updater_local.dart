@@ -1,4 +1,4 @@
-import 'package:Instasnitch/data/models/updater.dart';
+import 'package:lurkr/data/models/updater.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UpdaterLocal {

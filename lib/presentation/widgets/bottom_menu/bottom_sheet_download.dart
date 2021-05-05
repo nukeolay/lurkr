@@ -1,7 +1,7 @@
 import 'dart:io';
-import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_bloc.dart';
-import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_events.dart';
-import 'package:Instasnitch/presentation/screens/download_instruction_screen.dart';
+import 'package:lurkr/domain/blocs/account_list_bloc/account_list_bloc.dart';
+import 'package:lurkr/domain/blocs/account_list_bloc/account_list_events.dart';
+import 'package:lurkr/presentation/screens/download_instruction_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -117,8 +117,8 @@ class _BottomSheetDownloadState extends State<BottomSheetDownload> {
               ),
               onPressed: () {
                 BlocProvider.of<AccountListBloc>(context).add(
-                    AccountListEventAdd(
-                        accountName: _textFieldController.value.text));
+                    AccountListEventDownloadMedia(
+                        mediaRawUrl: _textFieldController.value.text));
                 _textFieldController.clear();
                 Navigator.pop(context);
               }),

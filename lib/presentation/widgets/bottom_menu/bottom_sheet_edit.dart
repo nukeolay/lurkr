@@ -1,7 +1,7 @@
 import 'dart:io';
-import 'package:Instasnitch/data/models/account.dart';
-import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_bloc.dart';
-import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_events.dart';
+import 'package:lurkr/data/models/account.dart';
+import 'package:lurkr/domain/blocs/account_list_bloc/account_list_bloc.dart';
+import 'package:lurkr/domain/blocs/account_list_bloc/account_list_events.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -89,7 +89,7 @@ class BottomSheetEdit extends StatelessWidget {
                     ),
                     onPressed: () {
                       BlocProvider.of<AccountListBloc>(context)
-                          .add(AccountListEventDownload(account: account));
+                          .add(AccountListEventDownloadHdPic(account: account));
                       Navigator.pop(context);
                     }),
               ),
