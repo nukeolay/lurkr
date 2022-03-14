@@ -1,4 +1,9 @@
-import 'dart:ui';
+// import 'dart:ui';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:intl/intl.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 import 'package:lurkr/domain/blocs/account_list_bloc/account_list_bloc.dart';
 import 'package:lurkr/domain/blocs/account_list_bloc/account_list_states.dart';
 import 'package:lurkr/presentation/screens/settings_screen.dart';
@@ -6,10 +11,7 @@ import 'package:lurkr/presentation/widgets/account_list/account_list.dart';
 import 'package:lurkr/presentation/widgets/account_list/custom_scroll_behavoir.dart';
 import 'package:lurkr/presentation/widgets/bottom_menu/bottom_menu.dart';
 import 'package:lurkr/presentation/widgets/snackbar.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart'; //TODO убрал, чтобы проверить, достаточно ли easy_localization? или форматтер берется только из intl
-import 'package:easy_localization/easy_localization.dart';
+
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({
@@ -21,14 +23,12 @@ class HomeScreen extends StatelessWidget {
     final DateFormat formatter = DateFormat('date_formatter'.tr());
 
     print('state: ${context.watch<AccountListBloc>().state}');
-    //print('updated on: ${formatter.format(DateTime.fromMicrosecondsSinceEpoch(context.watch<AccountListBloc>().state.updater.lastTimeUpdated))}');
     print(
         'refresh period in state (minutes): ${context.watch<AccountListBloc>().state.updater.refreshPeriod / 60000000}');
-    //print('isDark: ${context.watch<AccountListBloc>().state.updater.isDark}');
 
     return Scaffold(
       body: BlocListener(
-        //тут выводим сообщения в snackbar в зависимости от state
+        // snackbar message
         bloc: BlocProvider.of<AccountListBloc>(context),
         listener: (BuildContext context, AccountListState state) {
           if (state is AccountListStateDownloaded) {
@@ -44,7 +44,6 @@ class HomeScreen extends StatelessWidget {
           }
         },
         child: ScrollConfiguration(
-          //убираю подсветку границ при скролле
           behavior: CustomScrollBehavior(),
           child: Stack(
             children: [

@@ -1,7 +1,9 @@
 import 'dart:typed_data';
 import 'dart:ui';
-import 'package:lurkr/data/models/account.dart';
+
 import 'package:flutter/material.dart';
+
+import 'package:lurkr/data/models/account.dart';
 
 class AccountAvatar extends StatelessWidget {
   const AccountAvatar({
@@ -30,7 +32,7 @@ class AccountAvatar extends StatelessWidget {
                 image: DecorationImage(
                   image: account.hasAnonymousProfilePicture
                       ? AssetImage('assets/default_avatar.png') as ImageProvider
-                      : MemoryImage(Uint8List.fromList(account.savedProfilePic.codeUnits)), //NetworkImage(account.profilePicUrl.toString())
+                      : MemoryImage(Uint8List.fromList(account.savedProfilePic.codeUnits)),
                   fit: BoxFit.cover,
                 ),
               ),

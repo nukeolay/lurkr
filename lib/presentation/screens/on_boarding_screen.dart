@@ -1,12 +1,14 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 import 'package:lurkr/domain/blocs/account_list_bloc/account_list_bloc.dart';
 import 'package:lurkr/domain/blocs/account_list_bloc/account_list_events.dart';
 import 'package:lurkr/presentation/models/slider.dart';
 import 'package:lurkr/presentation/widgets/on_boarding/slide_tile.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:easy_localization/easy_localization.dart';
+
 
 class OnBoardingScreen extends StatefulWidget {
   @override

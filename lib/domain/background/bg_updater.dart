@@ -3,7 +3,7 @@ import 'package:lurkr/data/models/exceptions.dart';
 import 'package:lurkr/data/models/updater.dart';
 import 'package:lurkr/data/repositories/repositiory.dart';
 
-//это класс синглтон для обновления информации в фоновом режиме
+// this class is used to update data in the background
 class BgUpdater {
   late int refreshPeriod;
   static final BgUpdater _instance = BgUpdater._privateConstructor();
@@ -18,17 +18,16 @@ class BgUpdater {
   static Future<List<Account>> updateAccounts() async {
     Repository repository = Repository();
     List<Account> oldAccountList = await repository.getAccountListFromSharedprefs();
-    List<Account> updatedAccountList = []..addAll(oldAccountList); //клонирю список чтобы можно было его обновлять, не трогая оригинальный список
-    List<Account> notificationAccountList = []; //создаем пустой список для уведомлений
-    Updater updater = await repository.getUpdater(); //TODO разобраться зачем это делать
-    _instance.refreshPeriod = updater.refreshPeriod; //установил тот период обновления, который был выбран и сохранен в sharedprefs //todo разобраться зачем это делать
+    List<Account> updatedAccountList = []..addAll(oldAccountList); // clone list to update it not updating the original one
+    List<Account> notificationAccountList = []; // create empty list to store notification
+    Updater updater = await repository.getUpdater();
+    _instance.refreshPeriod = updater.refreshPeriod; // set update period that was stored in sharedprefs
     for (Account currentAccount in oldAccountList) {
       try {
         Account updatedAccount = await repository.getAccountFromInternet(accountName: currentAccount.username);
         int accountNumber = oldAccountList.indexOf(currentAccount);
         if (updatedAccount.isPrivate != oldAccountList[accountNumber].isPrivate || oldAccountList[accountNumber].isChanged == true) {
-          //ставим isChanged в true, если статус приватности изменился. А отключить его можно только по тапу (включается при изменении статуса, а отключается по тапу)
-          //или если аккаунт уже менял статус приватности до этого обновления, но isChanged у него не отменяли, то его нужно оставить true
+          //set isChanged to true, if privacy status has been changed.
           if (updatedAccount.isPrivate != oldAccountList[accountNumber].isPrivate) {
             notificationAccountList.add(updatedAccount);
           }
@@ -38,12 +37,12 @@ class BgUpdater {
           updatedAccountList[accountNumber] = updatedAccount;
         }
         await repository.saveAccountListToSharedprefs(accountList: updatedAccountList);
-        updater = Updater(refreshPeriod: updater.refreshPeriod, isDark: updater.isDark, isFirstTime: updater.isFirstTime); //TODO разобраться зачем это делать
-        await repository.saveUpdater(updater: updater); //TODO разобраться зачем это делать
+        updater = Updater(refreshPeriod: updater.refreshPeriod, isDark: updater.isDark, isFirstTime: updater.isFirstTime);
+        await repository.saveUpdater(updater: updater);
       } on NoTriesLeftException {
-        //если не осталось попыток для обновления, то прерываем цикл и не обновляем больше
         break;
-      } on NoAccountException {} on ConnectionException {} //если аккаунт не найден, тогда просто перехоим к следущему, но обновление не прекращаем
+      } on NoAccountException {
+      } on ConnectionException {}
     }
     return notificationAccountList;
   }

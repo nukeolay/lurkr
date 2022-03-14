@@ -1,8 +1,7 @@
 import 'dart:async';
-import 'dart:typed_data';
 
-import 'package:lurkr/data/models/exceptions.dart';
 import 'package:flutter/services.dart';
+import 'package:lurkr/data/models/exceptions.dart';
 
 class ApiAddress {
   static Uri getReal(String username) {

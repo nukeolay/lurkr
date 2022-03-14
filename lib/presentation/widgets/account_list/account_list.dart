@@ -1,3 +1,7 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 import 'package:lurkr/data/models/account.dart';
 import 'package:lurkr/domain/blocs/account_list_bloc/account_list_bloc.dart';
 import 'package:lurkr/domain/blocs/account_list_bloc/account_list_events.dart';
@@ -6,10 +10,6 @@ import 'package:lurkr/presentation/widgets/account_list/account_avatar.dart';
 import 'package:lurkr/presentation/widgets/bottom_menu/bottom_sheet_add.dart';
 import 'package:lurkr/presentation/widgets/bottom_menu/bottom_sheet_download.dart';
 import 'package:lurkr/presentation/widgets/bottom_menu/bottom_sheet_edit.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 
 class AccountList extends StatelessWidget {
   const AccountList({
@@ -155,7 +155,7 @@ class AccountList extends StatelessWidget {
                       : null,
                   leading: AccountAvatar(account: tempLoadedAccount),
                   title: Text(state.accountList[index].username),
-                  subtitle: tempLoadedAccount.fullName == 'error' //TODO посмотреть в каком случае может быть fullName error, может быть это удалить
+                  subtitle: tempLoadedAccount.fullName == 'error'
                       ? Text('error_getting_info'.tr(), style: TextStyle(color: Colors.red))
                       : tempLoadedAccount.lastTimeUpdated == 0
                           ? Text('error_info_not_loaded'.tr())

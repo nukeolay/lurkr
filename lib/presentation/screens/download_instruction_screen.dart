@@ -1,6 +1,7 @@
-import 'package:lurkr/presentation/widgets/account_list/custom_scroll_behavoir.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+
+import 'package:lurkr/presentation/widgets/account_list/custom_scroll_behavoir.dart';
 
 class DownloadInstructionScreen extends StatelessWidget {
   const DownloadInstructionScreen({

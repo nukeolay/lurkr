@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class BottomSheetAdd extends StatefulWidget {
-  //сделал StatefulWidget потому, что иначе textEditingController обнуляется при сворачивании клавиатуры при каждом build
   @override
   _BottomSheetAddState createState() => _BottomSheetAddState();
 }

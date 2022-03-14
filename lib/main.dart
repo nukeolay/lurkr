@@ -5,7 +5,6 @@ import 'package:lurkr/presentation/screens/on_boarding_screen.dart';
 import 'package:lurkr/presentation/screens/splash_screen.dart';
 import 'package:lurkr/presentation/theme/theme.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/rendering.dart';
 import 'data/models/account.dart';
 import 'domain/background/notification.dart';
 import 'domain/blocs/account_list_bloc/account_list_bloc.dart';
@@ -16,33 +15,25 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:workmanager/workmanager.dart';
 
-//TODO для ios нужно настроить podfile, но он появится только на Маке, инструкция по настройке тут https://github.com/fluttercommunity/flutter_workmanager/blob/master/IOS_SETUP.md
-//TODO для ios нужно настроить AppDelegate.swift, инструкция по настройке тут https://pub.dev/packages/flutter_local_notifications#custom-notification-icons-and-sounds
-
 void callbackDispatcher() {
   Workmanager().executeTask((taskName, inputData) async {
-    List<Account> accountList =
-        await BgUpdater.updateAccounts(); //обновляем в фоне данные аккаунтов
+    List<Account> accountList = await BgUpdater.updateAccounts(); // update privacy status in the background
     String result;
     switch (accountList.length) {
       case 0:
         break;
       default:
         {
-          result =
-              '${accountList[0].username} is ${accountList[0].isPrivate ? 'private now' : 'public now'}';
+          result = '${accountList[0].username} is ${accountList[0].isPrivate ? 'private now' : 'public now'}';
           for (int i = 1; i < accountList.length; i++) {
-            result = result +
-                ', ${accountList[i].username} is ${accountList[i].isPrivate ? 'private now' : 'public now'}';
+            result = result + ', ${accountList[i].username} is ${accountList[i].isPrivate ? 'private now' : 'public now'}';
           }
           await LocalNotification.initializer();
-          await LocalNotification.showOneTimeNotification(
-              title: 'Lurkr', text: result);
+          await LocalNotification.showOneTimeNotification(title: 'Lurkr', text: result);
           break;
         }
     }
-    return Future.value(
-        true);
+    return Future.value(true);
   });
 }
 
@@ -50,17 +41,11 @@ main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   int refreshPeriod = (await Repository().getUpdater()).refreshPeriod;
-  BgUpdater bgUpdater = BgUpdater(
-      refreshPeriod:
-          refreshPeriod); //TODO разобраться зачем это делать, если можно сразу передавать дальше refreshPeriod без bgUpdater
-  //print('refreshPeriod in main: ${bgUpdater.refreshPeriod / 60000000}');
-  await Workmanager().initialize(callbackDispatcher,
-      isInDebugMode: false); //TODO сделать false
-  await Workmanager().registerPeriodicTask(
-      'lurkr_task', 'lurkr_task',
-      inputData: {},
-      frequency: Duration(microseconds: bgUpdater.refreshPeriod),
-      initialDelay: Duration(microseconds: bgUpdater.refreshPeriod));
+  BgUpdater bgUpdater =
+      BgUpdater(refreshPeriod: refreshPeriod);
+  await Workmanager().initialize(callbackDispatcher, isInDebugMode: false);
+  await Workmanager().registerPeriodicTask('lurkr_task', 'lurkr_task',
+      inputData: {}, frequency: Duration(microseconds: bgUpdater.refreshPeriod), initialDelay: Duration(microseconds: bgUpdater.refreshPeriod));
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
@@ -69,8 +54,7 @@ main() async {
       systemNavigationBarIconBrightness: Brightness.dark,
     ),
   );
-  SystemChrome.setPreferredOrientations(
-          [DeviceOrientation.portraitUp]) // всегда портретная ориентация экрана
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
     runApp(EasyLocalization(
       supportedLocales: [Locale('ru'), Locale('en')],
@@ -87,8 +71,7 @@ class LurkrApp extends StatefulWidget {
   _LurkrAppState createState() => _LurkrAppState();
 }
 
-class _LurkrAppState extends State<LurkrApp>
-    with WidgetsBindingObserver {
+class _LurkrAppState extends State<LurkrApp> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
@@ -113,8 +96,7 @@ class _LurkrAppState extends State<LurkrApp>
 
   @override
   Widget build(BuildContext context) {
-    bool isOnBoardingLoaded =
-        false; //костыль чтобы перестроить экран, после просмотра OnBoardingScreen
+    bool isOnBoardingLoaded = false; // to rebuild screen after OnBoardingScreen
     return MultiBlocProvider(
         providers: [
           BlocProvider<AccountListBloc>(create: (context) => AccountListBloc()),
@@ -123,28 +105,20 @@ class _LurkrAppState extends State<LurkrApp>
           title: 'Lurkr',
           debugShowCheckedModeBanner: false,
           theme: CustomTheme.lightTheme,
-          //darkTheme: CustomTheme.darkTheme,
-          //themeMode: ThemeMode.light,
           localizationsDelegates: context.localizationDelegates,
           supportedLocales: context.supportedLocales,
           locale: context.locale,
           home: BlocBuilder<AccountListBloc, AccountListState>(
             buildWhen: (previousState, state) {
-              // а то при каждом стейте будем перестраивать весь HomePage, а надо только те куски, которые я внутри определил
-              bool isNeedToRebuild =
-                  previousState is AccountListStateStarting ||
-                      _appLifecycleState == AppLifecycleState.resumed ||
-                      isOnBoardingLoaded;
+              bool isNeedToRebuild = previousState is AccountListStateStarting || _appLifecycleState == AppLifecycleState.resumed || isOnBoardingLoaded;
               isOnBoardingLoaded = false;
               return isNeedToRebuild;
             },
             builder: (context, state) {
               print('state: $state');
               if (_appLifecycleState == AppLifecycleState.resumed) {
-                //если приложение было свернуто, а теперь открыто, то для обвления списка (если в фоне было обновление), нужно как бы заново запустить приложение,
                 _appLifecycleState = null;
-                BlocProvider.of<AccountListBloc>(context)
-                    .add(AccountListEventStart());
+                BlocProvider.of<AccountListBloc>(context).add(AccountListEventStart());
               }
               if (state is AccountListStateStarting) {
                 return SplashScreen();

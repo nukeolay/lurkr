@@ -4,14 +4,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 class UpdaterLocal {
   Future<Updater> getUpdater() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.reload(); //добавил, чтобы получить актульные записи после обновления в фоне
+    await prefs.reload(); // to get updated data after background update
     int? refreshPeriod;
     bool isDark;
     bool isFirstTime;
     try {
       refreshPeriod = prefs.getInt('refreshPeriod')!;
     } catch (e) {
-      refreshPeriod = 3600000000; //по-умолчанию стоит 1 час
+      refreshPeriod = 3600000000; // default value 1 hour
     }
     try {
       isDark = prefs.getBool('isDark')!;
@@ -23,7 +23,7 @@ class UpdaterLocal {
     } catch (e) {
       isFirstTime = true;
     }
-    return Updater(refreshPeriod: refreshPeriod, isDark: isDark, isFirstTime: isFirstTime); //todo когда получаю результат проверять на null
+    return Updater(refreshPeriod: refreshPeriod, isDark: isDark, isFirstTime: isFirstTime);
   }
 
   Future<void> setUpdater({required int refreshPeriod, required isDark, required isFirstTime}) async {

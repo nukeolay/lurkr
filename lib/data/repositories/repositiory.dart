@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:lurkr/data/models/account.dart';
 import 'package:lurkr/data/models/exceptions.dart';
 import 'package:lurkr/data/models/updater.dart';
@@ -29,8 +30,8 @@ class Repository {
       if (element['user']['username'] == accountName) {
         String stringImage;
         if (!(element['user']['has_anonymous_profile_picture'] as bool)) {
-          //если у аккаунта есть аватар, тогда этот параметр false
-          //преобразовываем аватарку в строку, чтобы хранить ее в sharedprefs
+          // if account has avatar, then this parameter false
+          // converts avatar image to string, to save it in sharedprefs
           stringImage = await ImageConverter.convertUriImageToString(element['user']['profile_pic_url']);
         } else {
           stringImage = 'error';
@@ -71,7 +72,7 @@ class Repository {
     try {
       Map<String, dynamic> graphQLResponce = jsonDecode(mediaUriString)['graphql']['shortcode_media'];
       if (graphQLResponce.containsKey('edge_sidecar_to_children')) {
-        //если в посте несколько фото или видео
+        // if there is more than 1 media in this post
         for (dynamic element in graphQLResponce['edge_sidecar_to_children']['edges']) {
           if ((element['node']).containsKey('video_url')) {
             uriList.add(element['node']['video_url']);
@@ -80,7 +81,7 @@ class Repository {
           }
         }
       } else {
-        //если в посте одно фото или видео
+        // if there is 1 media in this post
         if ((jsonDecode(mediaUriString)['graphql']['shortcode_media']).containsKey('video_url')) {
           uriList.add(jsonDecode(mediaUriString)['graphql']['shortcode_media']['video_url']);
         } else {
@@ -106,8 +107,8 @@ class Repository {
   Future<List<Account>> getAccountListFromSharedprefs() async {
     final String? accountListLocalString = await _accountListLocal.getAccountListLocal();
     try {
-      List<dynamic> tempList = jsonDecode(accountListLocalString!); // '!' значит пообещать, то тут не будет null
-      _accountList = []; //обнуляю список, а то он начинает дублироваться
+      List<dynamic> tempList = jsonDecode(accountListLocalString!);
+      _accountList = []; // clear list to avoid dublicate
       for (dynamic element in tempList) {
         _accountList.add(Account.fromSharedPrefs(element));
       }

@@ -34,7 +34,7 @@ class Account {
         username: inputJson['username'] as String,
         profilePicUrl: Uri.parse(inputJson['profile_pic_url']),
         savedProfilePic: stringImage,
-        //тут храним преобразованную в Uint8List в String картинку
+        // storing converted Uint8List to String image
         isPrivate: inputJson['is_private'] as bool,
         pk: inputJson['pk'] as String,
         fullName: inputJson['full_name'] as String,
