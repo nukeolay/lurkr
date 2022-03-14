@@ -1,19 +1,20 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:workmanager/workmanager.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 import 'package:lurkr/data/repositories/repositiory.dart';
 import 'package:lurkr/domain/background/bg_updater.dart';
 import 'package:lurkr/presentation/screens/home_screen.dart';
 import 'package:lurkr/presentation/screens/on_boarding_screen.dart';
 import 'package:lurkr/presentation/screens/splash_screen.dart';
 import 'package:lurkr/presentation/theme/theme.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'data/models/account.dart';
-import 'domain/background/notification.dart';
-import 'domain/blocs/account_list_bloc/account_list_bloc.dart';
-import 'domain/blocs/account_list_bloc/account_list_events.dart';
-import 'domain/blocs/account_list_bloc/account_list_states.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:workmanager/workmanager.dart';
+import 'package:lurkr/data/models/account.dart';
+import 'package:lurkr/domain/background/notification.dart';
+import 'package:lurkr/domain/blocs/account_list_bloc/account_list_bloc.dart';
+import 'package:lurkr/domain/blocs/account_list_bloc/account_list_events.dart';
+import 'package:lurkr/domain/blocs/account_list_bloc/account_list_states.dart';
 
 void callbackDispatcher() {
   Workmanager().executeTask((taskName, inputData) async {
@@ -41,8 +42,7 @@ main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   int refreshPeriod = (await Repository().getUpdater()).refreshPeriod;
-  BgUpdater bgUpdater =
-      BgUpdater(refreshPeriod: refreshPeriod);
+  BgUpdater bgUpdater = BgUpdater(refreshPeriod: refreshPeriod);
   await Workmanager().initialize(callbackDispatcher, isInDebugMode: false);
   await Workmanager().registerPeriodicTask('lurkr_task', 'lurkr_task',
       inputData: {}, frequency: Duration(microseconds: bgUpdater.refreshPeriod), initialDelay: Duration(microseconds: bgUpdater.refreshPeriod));
@@ -54,8 +54,7 @@ main() async {
       systemNavigationBarIconBrightness: Brightness.dark,
     ),
   );
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-      .then((_) {
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_) {
     runApp(EasyLocalization(
       supportedLocales: [Locale('ru'), Locale('en')],
       path: 'assets/translations',
