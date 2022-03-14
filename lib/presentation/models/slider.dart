@@ -1,5 +1,6 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 import 'package:permission_handler/permission_handler.dart';
 
 class SlideModel {
@@ -11,7 +12,7 @@ class SlideModel {
 }
 
 List<SlideModel> getSlides(BuildContext context) {
-  final double height = MediaQuery.of(context).size.height; //TODO если не будет переводдить, то в конструктор добавить BuildContext context
+  final double height = MediaQuery.of(context).size.height;
   List<SlideModel> slides = [];
 
   SlideModel slideModel1 = new SlideModel(

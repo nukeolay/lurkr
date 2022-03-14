@@ -1,4 +1,4 @@
-package com.qumyz.instasnitch
+package com.qumyz.lurkr
 
 import io.flutter.embedding.android.FlutterActivity
 

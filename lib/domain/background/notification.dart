@@ -6,10 +6,10 @@ class LocalNotification {
 
   static initializer() async {
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    androidSettings = AndroidNotificationDetails('111', 'Local_Notification_Channel', 'Channel to send local notification',
+    androidSettings = AndroidNotificationDetails('111', 'Local_Notification_Channel',
         importance: Importance.high, priority: Priority.max);
     AndroidInitializationSettings androidInitialization =
-        AndroidInitializationSettings('notification_icon'); //TODO проверить, может эта строчка и не нужна, если я настройке иконгок уже загрузил файл
+        AndroidInitializationSettings('notification_icon');
     InitializationSettings initializationSettings = InitializationSettings(android: androidInitialization);
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }

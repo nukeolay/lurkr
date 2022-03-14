@@ -1,4 +1,4 @@
-import 'package:Instasnitch/data/models/account.dart';
+import 'package:lurkr/data/models/account.dart';
 
 abstract class AccountListEvent {}
 
@@ -16,9 +16,14 @@ class AccountListEventDelete extends AccountListEvent {
   AccountListEventDelete({required this.account});
 }
 
-class AccountListEventDownload extends AccountListEvent {
+class AccountListEventDownloadHdPic extends AccountListEvent {
   Account account;
-  AccountListEventDownload({required this.account});
+  AccountListEventDownloadHdPic({required this.account});
+}
+
+class AccountListEventDownloadMedia extends AccountListEvent {
+  String mediaRawUrl;
+  AccountListEventDownloadMedia({required this.mediaRawUrl});
 }
 
 class AccountListEventRefresh extends AccountListEvent {

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CustomSnackbar extends SnackBar {
@@ -8,7 +7,7 @@ class CustomSnackbar extends SnackBar {
   CustomSnackbar({required this.text, required this.color})
       : super(
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0), topRight: Radius.circular(10.0)),
+              borderRadius: BorderRadius.all(Radius.circular(5.0)),
             ),
             duration: Duration(seconds: 2),
             backgroundColor: color,

@@ -1,12 +1,14 @@
 import 'dart:io';
 
-import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_bloc.dart';
-import 'package:Instasnitch/domain/blocs/account_list_bloc/account_list_events.dart';
-import 'package:Instasnitch/presentation/models/slider.dart';
-import 'package:Instasnitch/presentation/widgets/slide_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
+
+import 'package:lurkr/domain/blocs/account_list_bloc/account_list_bloc.dart';
+import 'package:lurkr/domain/blocs/account_list_bloc/account_list_events.dart';
+import 'package:lurkr/presentation/models/slider.dart';
+import 'package:lurkr/presentation/widgets/on_boarding/slide_tile.dart';
+
 
 class OnBoardingScreen extends StatefulWidget {
   @override
@@ -68,8 +70,9 @@ class _OnBoardingState extends State<OnBoardingScreen> {
                 SizedBox(height: 5.0),
                 Image.asset(
                   'assets/on_boarding/on_boarding_logo.png',
-                  height: 40,
+                  height: 30,
                 ),
+                SizedBox(height: 5.0),
                 Expanded(
                   child: PageView.builder(
                     controller: pageController,
@@ -108,14 +111,17 @@ class _OnBoardingState extends State<OnBoardingScreen> {
               ),
               currentIndex != slides.length - 1
                   ? GestureDetector(
-                      child:
-                          Text('button_next'.tr(), textAlign: TextAlign.end, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.purple, fontSize: 21.0),),
+                      child: Text(
+                        'button_next'.tr(),
+                        textAlign: TextAlign.end,
+                        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.purple, fontSize: 21.0),
+                      ),
                       onTap: () {
                         pageController.animateToPage(currentIndex + 1, duration: Duration(milliseconds: 500), curve: Curves.linear);
                       })
                   : GestureDetector(
-                      child:
-                          Text('button_start'.tr(), textAlign: TextAlign.end, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green, fontSize: 21.0)),
+                      child: Text('button_start'.tr(),
+                          textAlign: TextAlign.end, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green, fontSize: 21.0)),
                       onTap: () {
                         BlocProvider.of<AccountListBloc>(context).add(AccountListEventInstructionOk());
                       }),

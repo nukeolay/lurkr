@@ -3,10 +3,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AccountListLocal {
   Future<String?> getAccountListLocal() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.reload(); //добавил, чтобы получить актульные записи после обновления в фоне
+    await prefs.reload(); // to get updated data after background update
     String? accountList;
     accountList = prefs.getString('accountList');
-    return accountList;//todo когда получаю результат проверять на null
+    return accountList;
   }
 
   Future<void> setAccountListLocal({required String accountList}) async {
